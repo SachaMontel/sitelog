@@ -1,0 +1,37 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+    <style>
+        body {
+            background-image: url("{% static 'images/photo2.jpeg' %}");
+            background-size: cover;
+    background-position: center;
+        }
+    </style>    
+</head>
+<body>
+    <a href="{% url 'home' %}" class="home-button">Home</a>
+    <div class="login-container">
+        <h1>Connexion</h1>
+
+        <!-- Affiche les messages d'erreur ou autres -->
+        {% for message in messages %}
+            <p class="message">{{ message }}</p>
+        {% endfor %}
+
+        <!-- Formulaire de connexion -->
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+            <button type="submit">Se connecter</button>
+        </form>
+    </div>
+</body>

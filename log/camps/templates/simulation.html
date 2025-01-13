@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/stylean.css' %}?{% now "U" %}">
+    <style>
+        body {
+            background-image: url("{% static 'images/jeu.jpg' %}");
+        }
+        .image-left {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 200px; /* Ajustez la taille selon vos besoins */
+            height: auto;
+        }
+        .image-right {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 100px; /* Ajustez la taille selon vos besoins */
+            height: auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        .home-button {
+            position: fixed; /* Fixé à l'écran, toujours visible */
+            top: 10px; /* Marges depuis le haut */
+            left: 1000px; /* Marges depuis la gauche */
+            background-color: #007bff; /* Couleur de fond */
+            color: white; /* Couleur du texte */
+            text-decoration: none; /* Supprimer le soulignement */
+            font-size: 16px; /* Taille du texte */
+            padding: 10px 20px; /* Espacement interne */
+            border-radius: 5px; /* Coins arrondis */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre */
+            transition: background-color 0.3s ease; /* Animation de survol */
+        }
+        
+        .home-button:hover {
+            background-color: #0056b3; /* Couleur au survol */
+        }
+        
+    </style>
+    <title>Simulation</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<div id="result-modal" style="display: none;">
+    <div id="modal-content">
+        <span id="close-modal">&times;</span>
+        <h2 id="modal-result"></h2>
+    </div>
+</div>
+<body>
+    <img src="{% static 'images/Zadeck.png' %}" alt="Image gauche" class="image-left">
+    <img src="{% static 'images/tyoul.png' %}" alt="Image droite" class="image-right">
+
+    <h1>Prépare ton repas</h1>
+    <form id="data-form">
+        {% csrf_token %}
+        <table border="1">
+            <tr>
+                <th>Tache</th>
+                <th>Priorité (de 1 à 10)</th>
+                <th>Nombre de Zadeck (6 à placer)</th>
+                <th>Nombre d'éclais (15 à placer)</th>
+            </tr>
+            <tr>
+                <td>Allumer et alimenter le feu</td>
+                <td><input type="text" name="pfeu" id="pfeu" placeholder="Valeur "></td>
+                <td><input type="text" name="zfeu" id="zfeu" placeholder="Valeur "></td>
+                <td><input type="text" name="efeu" id="efeu" placeholder="Valeur "></td>
+            </tr>
+            <tr>
+                <td>Faire une corvée d'eau</td>
+                <td><input type="text" name="peau" id="peau" placeholder="Valeur "></td>
+                <td><input type="text" name="zeau" id="zeau" placeholder="Valeur "></td>
+                <td><input type="text" name="eeau" id="eeau" placeholder="Valeur "></td>
+            </tr>
+            <tr>
+                <td>Mettre la table</td>
+                <td><input type="text" name="ptable" id="ptable" placeholder="Valeur "></td>
+                <td><input type="text" name="ztable" id="ztable" placeholder="Valeur "></td>
+                <td><input type="text" name="etable" id="etable" placeholder="Valeur "></td>
+            </tr>
+            <tr>
+                <td>Découper / Éplucher les fruits ou légumes</td>
+                <td><input type="text" name="pdecoupe" id="pdecoupe" placeholder="Valeur "></td>
+                <td><input type="text" name="zdecoupe" id="zdecoupe" placeholder="Valeur "></td>
+                <td><input type="text" name="edecoupe" id="edecoupe" placeholder="Valeur "></td>
+            </tr>
+            <tr>
+                <td>Eteindre le feu </td>
+                <td><input type="text" name="peteindre" id="peteindre" placeholder="Valeur "></td>
+                <td><input type="text" name="zeteindre" id="zeteindre" placeholder="Valeur "></td>
+                <td><input type="text" name="eeteindre" id="eeteindre" placeholder="Valeur "></td>
+            </tr>
+            <tr>
+                <td>Faire une corvée de terre</td>
+                <td><input type="text" name="pterre" id="pterre" placeholder="Valeur "></td>
+                <td><input type="text" name="zterre" id="zterre" placeholder="Valeur "></td>
+                <td><input type="text" name="eterre" id="eterre" placeholder="Valeur "></td>
+            </tr>
+            <tr>
+                <td>Mettre les aliments sur le feu</td>
+                <td><input type="text" name="pcuire" id="pcuire" placeholder="Valeur "></td>
+                <td><input type="text" name="zcuire" id="zcuire" placeholder="Valeur "></td>
+                <td><input type="text" name="ecuire" id="ecuire" placeholder="Valeur "></td>
+            </tr>
+            <tr>
+                <td>Aller chercher la nourriture</td>
+                <td><input type="text" name="pbouffe" id="pbouffe" placeholder="Valeur "></td>
+                <td><input type="text" name="zbouffe" id="zbouffe" placeholder="Valeur "></td>
+                <td><input type="text" name="ebouffe" id="ebouffe" placeholder="Valeur "></td>
+            </tr>
+            <tr>
+                <td>Faire la vaisselle si besoin</td>
+                <td><input type="text" name="pvaisselle" id="pvaisselle" placeholder="Valeur "></td>
+                <td><input type="text" name="zvaisselle" id="zvaisselle" placeholder="Valeur "></td>
+                <td><input type="text" name="evaisselle" id="evaisselle" placeholder="Valeur "></td>
+            </tr>
+            <tr>
+                <td>Faire une corvée de bois</td>
+                <td><input type="text" name="pbois" id="pbois" placeholder="Valeur "></td>
+                <td><input type="text" name="zbois" id="zbois" placeholder="Valeur "></td>
+                <td><input type="text" name="ebois" id="ebois" placeholder="Valeur "></td>
+            </tr>
+        </table>
+        <button type="button" id="submit-button">Envoyer</button>
+    </form>
+    <div id="result">
+        <!-- Résultat affiché ici -->
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#submit-button').click(function () {
+                const pfeu = $('#pfeu').val();
+                const zfeu = $('#zfeu').val();
+                const efeu = $('#efeu').val();
+                const peau = $('#peau').val();
+                const zeau = $('#zeau').val();
+                const eeau = $('#eeau').val();
+                const ptable = $('#ptable').val();
+                const ztable = $('#ztable').val();
+                const etable = $('#etable').val();
+                const pdecoupe = $('#pdecoupe').val();
+                const zdecoupe = $('#zdecoupe').val();
+                const edecoupe = $('#edecoupe').val();
+                const peteindre = $('#peteindre').val();
+                const zeteindre = $('#zeteindre').val();
+                const eeteindre = $('#eeteindre').val();
+                const pterre = $('#pterre').val();
+                const zterre = $('#zterre').val();
+                const eterre = $('#eterre').val();
+                const pcuire = $('#pcuire').val();
+                const zcuire = $('#zcuire').val();
+                const ecuire = $('#ecuire').val();
+                const pbouffe = $('#pbouffe').val();
+                const zbouffe = $('#zbouffe').val();
+                const ebouffe = $('#ebouffe').val();
+                const pvaisselle = $('#pvaisselle').val();
+                const zvaisselle = $('#zvaisselle').val();
+                const evaisselle = $('#evaisselle').val();
+                const pbois = $('#pbois').val();
+                const zbois = $('#zbois').val();
+                const ebois = $('#ebois').val();
+
+
+                $.ajax({
+                    url: '/simulation/', // URL configurée dans urls.py
+                    method: 'POST',
+                    data: {
+                        'pfeu': pfeu,
+                        'zfeu': zfeu,
+                        'efeu': efeu,
+                        'peau': peau,
+                        'zeau': zeau,
+                        'eeau': eeau,
+                        'ptable': ptable,
+                        'ztable': ztable,
+                        'etable': etable,
+                        'pdecoupe': pdecoupe,
+                        'zdecoupe': zdecoupe,
+                        'edecoupe': edecoupe,
+                        'peteindre': peteindre,
+                        'zeteindre': zeteindre,
+                        'eeteindre': eeteindre,
+                        'pterre': pterre,
+                        'zterre': zterre,
+                        'eterre': eterre,
+                        'pcuire': pcuire,
+                        'zcuire': zcuire,
+                        'ecuire': ecuire,
+                        'pbouffe': pbouffe,
+                        'zbouffe': zbouffe,
+                        'ebouffe': ebouffe,
+                        'pvaisselle': pvaisselle,
+                        'zvaisselle': zvaisselle,
+                        'evaisselle': evaisselle,
+                        'pbois': pbois,
+                        'zbois': zbois,
+                        'ebois': ebois,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (response) {
+                        // Afficher le résultat dans la modale
+                        $('#modal-result').html('Votre repas sera prêt en ' + response.result + ' minutes.');
+                        $('#result-modal').css('display', 'flex'); // Afficher la modale
+                    },
+                    error: function () {
+                        $('#modal-result').html('Erreur lors du traitement des données.');
+                        $('#result-modal').css('display', 'flex'); // Afficher la modale même en cas d'erreur
+                    }
+                });
+            });
+        
+            // Gestion du clic sur la croix
+            $('#close-modal').click(function (e) {
+                e.stopPropagation(); // Empêcher la propagation du clic vers les autres éléments
+                $('#result-modal').css('display', 'none'); // Cacher la modale
+            });
+        
+            // Gestion du clic en dehors de la boîte modale
+            $('#result-modal').click(function (e) {
+                // Ne fermer la modale que si le clic est spécifiquement sur le fond semi-transparent
+                if ($(e.target).is('#result-modal')) {
+                    $('#result-modal').css('display', 'none');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,432 @@
+:root {
+    --primary-color: #0056b3;
+    --secondary-color: #ff6b00;
+    --text-color: #333;
+    --background-color: #f8f9fa;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url("../images/photo2.jpeg");
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Header Styling */
+header {
+    display: flex;
+    justify-content: space-between; /* Espacement entre logo et navigation */
+    align-items: center;
+    padding: 0 20px; /* Marges internes pour respirer */
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky; /* Garde le header visible au défilement */
+    top: 0;
+    z-index: 10;
+    height: 70px; /* Hauteur fixe */
+    box-sizing: border-box;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: auto;
+}
+.logo img {
+    height: 70px; /* Ajustez la taille globale */
+    width: 70px; /* Assurez que la largeur est égale à la hauteur */
+    border-radius: 50%; /* Forme circulaire */
+    background-color: white; /* Fond blanc pour le contraste */
+    padding: 5px; /* Ajoute un espace intérieur */
+    border: 3px solid #f0f0f0; /* Bordure légère pour le contraste */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Ombre subtile */
+    object-fit: cover; /* Permet de zoomer et remplir le cercle */
+    object-position: center; /* Centre l'image dans le cercle */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+nav {
+    display: flex;
+    flex: 1; /* Occupe l'espace restant entre logo et boutons */
+    justify-content: center; /* Centre les liens horizontalement */
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 30px; /* Espacement entre les liens */
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+nav ul li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px; /* Position sous le texte */
+    left: 0;
+    background-color: var(--secondary-color); /* Couleur orange pour le soulignement */
+    transition: width 0.3s ease; /* Animation de la largeur */
+}
+
+nav ul li a:hover {
+    color: var(--secondary-color); /* Change la couleur du texte au survol */
+}
+
+nav ul li a:hover::after {
+    width: 100%; /* Étend le soulignement sur toute la largeur du lien */
+}
+
+
+.auth-links {
+    display: flex;
+    gap: 15px;
+}
+
+.auth-links a,
+.auth-links button {
+    text-decoration: none;
+    color: white;
+    border: 2px solid white;
+    border-radius: 25px;
+    padding: 8px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.auth-links a:hover,
+.auth-links button:hover {
+    background-color: white;
+    color: var(--primary-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column; /* Passe les liens en colonne sur petits écrans */
+        gap: 10px; /* Réduit l'espacement */
+        align-items: center;
+    }
+
+    .auth-links {
+        flex-direction: column; /* Passe les boutons en colonne */
+        gap: 10px;
+    }
+
+    header {
+        flex-wrap: wrap; /* Permet aux éléments de se placer sur plusieurs lignes */
+        height: auto; /* Ajuste la hauteur selon le contenu */
+    }
+}
+
+
+.don-btn {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.auth-links a:hover, 
+.auth-links button:hover {
+    background-color: white;
+    color: var(--primary-color);
+}
+
+/* Hero Section */
+
+/* Footer */
+footer {
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    height: 80px;
+}
+
+footer .footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 1200px;
+    width: 100%;
+    gap: 30px;
+}
+
+footer .footer-section {
+    flex: 1;
+    min-width: 250px;
+    text-align: center;
+}
+
+footer .footer-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+footer .footer-section p,
+footer .footer-section a {
+    font-size: 0.95rem;
+    color: #f0f0f0;
+    text-decoration: none;
+    margin-bottom: 10px;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+footer .footer-section a:hover {
+    color: #ffdd57;
+}
+
+footer .social-media {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+footer .copyright {
+    font-size: 0.9rem;
+    color: #ddd;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    footer .footer-content {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    footer .footer-section {
+        text-align: center;
+    }
+}
+
+
+
+html, body {
+    height: 100%; /* Assure que le body occupe toute la hauteur de la page */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex : 1;
+}
+
+.social-media a {
+    width: 60px; /* Taille du cercle */
+    height: 60px; /* Taille du cercle */
+    background-color: white; /* Fond blanc pour le contraste */
+    border-radius: 50%; /* Forme circulaire */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Ombre subtile */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.social-media a img {
+    width: 100%; /* L'image remplit tout le cercle */
+    height: 100%; /* L'image remplit tout le cercle */
+    border-radius: 50%; /* S'assure que l'image reste circulaire */
+    object-fit: cover; /* L'image est redimensionnée pour remplir le cercle */
+    object-position: center; /* Centre l'image à l'intérieur du cercle */
+}
+
+.social-media a:hover {
+    transform: scale(1.1); /* Effet de zoom au survol */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); /* Ombre plus marquée au survol */
+}
+.hero {
+    flex: 1; /* Prend toute la hauteur disponible dans le main */
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+    align-items: center; /* Centre verticalement */
+    text-align: center;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    padding: 20px; /* Ajoute un espace intérieur */
+    box-sizing: border-box; /* Inclut le padding dans les dimensions */
+}
+
+.hero-container {
+    display: flex;
+    justify-content: center; /* Centre horizontalement tous les encadrés */
+    align-items: flex-start; /* Aligne verticalement en haut */
+    gap: 40px; /* Augmente l'espace entre les conteneurs */
+    width: 95%; /* Largeur occupée par les conteneurs */
+    max-width: 1600px;
+    max-height: 100%; /* Largeur maximale des conteneurs */
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.9); /* Fond blanc légèrement moins transparent */
+    border-radius: 10px; /* Coins arrondis */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre subtile */
+    display: flex;
+    flex-direction: column; /* Organisation verticale des éléments */
+    align-items: center; /* Centre horizontalement le contenu */
+    text-align: center;
+    padding: 15px;
+    width: 500px; /* Augmente la largeur des conteneurs */
+    max-height: 600px; /* Augmente la hauteur maximale des conteneurs */
+    overflow-y: auto; /* Barre de défilement verticale si nécessaire */
+    scrollbar-width: thin; /* Réduit la largeur de la barre de défilement */
+    scrollbar-color: rgba(0, 0, 0, 0.5) rgba(255, 255, 255, 0.5); /* Couleur personnalisée pour la scrollbar */
+}
+
+.card::-webkit-scrollbar {
+    width: 8px; /* Largeur de la scrollbar */
+}
+
+.card::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.5); /* Fond de la piste de la scrollbar */
+    border-radius: 10px; /* Coins arrondis pour la piste */
+}
+
+.card::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5); /* Couleur de la poignée */
+    border-radius: 10px; /* Coins arrondis pour la poignée */
+    border: 2px solid rgba(255, 255, 255, 0.5); /* Bordure autour de la poignée */
+}
+
+.card img {
+    width: 100%; /* L'image prend toute la largeur */
+    height: auto; /* Ajuste automatiquement la hauteur */
+    border-radius: 10px; /* Coins légèrement arrondis pour l'image */
+    object-fit: cover; /* Remplit l'espace sans déformation */
+    object-position: center; /* Centre l'image */
+    margin-bottom: 5px; /* Espacement entre les images */
+}
+
+.card h2 {
+    font-size: 1.5rem; /* Taille du titre ajustée */
+    margin: -10px 0;
+    color: #333;
+    z-index: 2; /* Met le texte au premier plan */
+    background: rgba(255, 255, 255, 0.8); /* Fond blanc translucide derrière le titre */
+    padding: 5px 15px; /* Ajoute un padding pour le confort visuel */
+    border-radius: 5px; /* Coins arrondis pour le titre */
+    position: sticky; /* Le titre reste visible lors du défilement */
+    top: 0; /* Le titre reste collé en haut du conteneur */
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .hero-container {
+        flex-direction: column; /* Les encadrés passent en colonne */
+        gap: 20px; /* Réduit l'espacement vertical entre les encadrés */
+    }
+
+    .card {
+        width: 100%; /* Les encadrés prennent toute la largeur */
+    }
+}
+
+.resources {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-y: auto;
+    height: 100%; /* Prend toute la hauteur disponible */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.resources h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.9);
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+}
+
+.files-container {
+    display: grid; /* Utilisation de la grille pour un placement dynamique */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Colonnes flexibles */
+    gap: 20px; /* Espacement entre les éléments */
+    width: 100%; /* Prend toute la largeur du conteneur */
+    justify-content: center; /* Centre les fichiers dans le conteneur */
+    align-items: center; /* Centre verticalement si besoin */
+    box-sizing: border-box;
+}
+
+.file-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.file-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.file-item img {
+    width: 100%; /* Ajuste automatiquement la largeur de l'image */
+    height: auto; /* Préserve le ratio */
+    max-width: 60px; /* Largeur maximale pour les icônes */
+    margin-bottom: 10px;
+    object-fit: contain; /* Ajuste l'image sans déformer */
+}
+
+.file-item p {
+    font-size: 0.9rem;
+    color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .files-container {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Réduit la taille minimale des colonnes */
+    }
+
+    .file-item img {
+        max-width: 50px; /* Réduit la taille des icônes sur petits écrans */
+    }
+}

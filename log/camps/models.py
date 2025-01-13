@@ -1,0 +1,284 @@
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+import os
+from django.contrib.auth.models import Group
+
+GL_CHOICES = (
+    ('Aix-en-Provence', 'Aix-en-Provence'),
+    ('Antony', 'Antony'),
+    ('Bar Cokhba', 'Bar Cokhba'),
+    ('Bordeaux', 'Bordeaux'),
+    ('Buffault', 'Buffault'),
+    ('Canada', 'Canada'),
+    ('Cannes', 'Cannes'),
+    ('Colmar-Mulhouse', 'Colmar-Mulhouse'),
+    ('Copernic', 'Copernic'),
+    ('Courbevoie', 'Courbevoie'),
+    ('Dufrénoy', 'Dufrénoy'),
+    ('Golda Meir', 'Golda Meir'),
+    ('Grenoble', 'Grenoble'),
+    ('Henri Schilli', 'Henri Schilli'),
+    ('Israël', 'Israël'),
+    ('Issy-les-Moulineaux', 'Issy-les-Moulineaux'),
+    ('Koumi SLG', 'Koumi SLG'),
+    ('La Victoire', 'La Victoire'),
+    ('Paris 12', 'Paris 12'),
+    ('Lille', 'Lille'),
+    ('Londres', 'Londres'),
+    ('Lyon', 'Lyon'),
+    ('Marseille', 'Marseille'),
+    ('Montpellier', 'Montpellier'),
+    ('Nancy-Metz-Luxembourg', 'Nancy-Metz-Luxembourg'),
+    ('Neuilly Vert', 'Neuilly Vert'),
+    ('Neuilly Rose', 'Neuilly Rose'),
+    ('Nice', 'Nice'),
+    ('Noam', 'Noam'),
+    ('Ori SLG', 'Ori SLG'),
+    ('La Roquette', 'La Roquette'),
+    ('Paris 17', 'Paris 17'),
+    ('Pavillons-sous-Bois', 'Pavillons-sous-Bois'),
+    ('Saint Brice', 'Saint Brice'),
+    ('Ségur', 'Ségur'),
+    ('Shema Israël Bleu', 'Shema Israël Bleu'),
+    ('Shema Israël Noir', 'Shema Israël Noir'),
+    ('Strasbourg', 'Strasbourg'),
+    ('Toulon', 'Toulon'),
+    ('Toulouse', 'Toulouse'),
+    ('Versailles', 'Versailles'),
+    ('Yona', 'Yona'),
+)
+
+NUMERO_CAMP_CHOICES = (
+    ('BB 1', 'BB 1'),
+    ('BB 2', 'BB 2'),
+    ('BB 3', 'BB 3'),
+    ('BB 4', 'BB 4'),
+    ('BB 5', 'BB 5'),
+    ('BC 1', 'BC 1'),
+    ('BC 2', 'BC 2'),
+    ('BC 3', 'BC 3'),
+    ('BC 4', 'BC 4'),
+    ('BC 5', 'BC 5'),
+    ('BC 6', 'BC 6'),
+    ('BC 7', 'BC 7'),
+    ('BC 8', 'BC 8'),
+    ('BC 9', 'BC 9'),
+    ('BC 10', 'BC 10'),
+    ('BC 11', 'BC 11'),
+    ('BC 12', 'BC 12'),
+    ('BC 13', 'BC 13'),
+    ('BC 14', 'BC 14'),
+    ('BC 15', 'BC 15'),
+    ('BC 16', 'BC 16'),
+    ('BC 17', 'BC 17'),
+    ('BC 18', 'BC 18'),
+    ('BC 19', 'BC 19'),
+    ('BC 20', 'BC 20'),
+    ('BC 21', 'BC 21'),
+    ('BC 22', 'BC 22'),
+    ('BC 23', 'BC 23'),
+    ('BC 24', 'BC 24'),
+    ('BC 25', 'BC 25'),
+    # BM
+    ('BM 1', 'BM 1'),
+    ('BM 2', 'BM 2'),
+    ('BM 3', 'BM 3'),
+    ('BM 4', 'BM 4'),
+    ('BM 5', 'BM 5'),
+    ('BM 6', 'BM 6'),
+    ('BM 7', 'BM 7'),
+    ('BM 8', 'BM 8'),
+    ('BM 9', 'BM 9'),
+    ('BM 10', 'BM 10'),
+    ('BM 11', 'BM 11'),
+    ('BM 12', 'BM 12'),
+    ('BM 13', 'BM 13'),
+    ('BM 14', 'BM 14'),
+    ('BM 15', 'BM 15'),
+    ('BM 16', 'BM 16'),
+    ('BM 17', 'BM 17'),
+    ('BM 18', 'BM 18'),
+    ('BM 19', 'BM 19'),
+    ('BM 20', 'BM 20'),
+    ('BM 21', 'BM 21'),
+    ('BM 22', 'BM 22'),
+    ('BM 23', 'BM 23'),
+    ('BM 24', 'BM 24'),
+    ('BM 25', 'BM 25'),
+
+    # BP
+    ('BP 1', 'BP 1'),
+    ('BP 2', 'BP 2'),
+    ('BP 3', 'BP 3'),
+    ('BP 4', 'BP 4'),
+    ('BP 5', 'BP 5'),
+    ('BP 6', 'BP 6'),
+    ('BP 7', 'BP 7'),
+    ('BP 8', 'BP 8'),
+    ('BP 9', 'BP 9'),
+    ('BP 10', 'BP 10'),
+    ('BP 11', 'BP 11'),
+)
+
+ETAT_CHOICES = (
+    ('Rendu', 'Rendu'),
+    ('Validé', 'Validé'),
+    ('Refusé', 'Refusé'),
+    ('Non rendu', 'Non rendu'),
+)
+
+# Create your models here.
+class CustomUser(AbstractUser):
+
+    # Ajoutez vos champs personnalisés ici
+    phone = models.CharField("Numéro de téléphone", max_length=15, blank=True, null=True)
+    gl = models.CharField("Groupe local", max_length=30, choices=GL_CHOICES, blank=True, null=True)
+    camp = models.ForeignKey('Camp', on_delete=models.SET_NULL, null=True, blank=True, related_name='users')
+    group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name='users')    
+
+    def __str__(self):
+        return self.username
+
+class Camp(models.Model):
+
+    numero = models.CharField("Numéro du camp", max_length=30, choices=NUMERO_CAMP_CHOICES, blank=True, null=True, unique=True)
+    branche = models.CharField(max_length=50, blank=True, null=True)
+    adresse = models.CharField(max_length=50, blank=True, null=True)
+    mail = models.EmailField("Adresse e-mail", max_length=254, blank=True, null=True)
+    GL1  = models.CharField("Groupe local 1", max_length=30, choices=GL_CHOICES, blank=True, null=True)
+    GL2  = models.CharField("Groupe local 2", max_length=30, choices=GL_CHOICES, blank=True, null=True)
+    GL3  = models.CharField("Groupe local 3", max_length=30, choices=GL_CHOICES, blank=True, null=True)
+    GL4  = models.CharField("Groupe local 4", max_length=30, choices=GL_CHOICES, blank=True, null=True)
+    GL5  = models.CharField("Groupe local 5", max_length=30, choices=GL_CHOICES, blank=True, null=True)
+    prenomcdc1 = models.CharField("Prénom du chef de camp 1", max_length=50, blank=True, null=True)
+    nomcdc1 = models.CharField("Nom du chef de camp 1", max_length=50, blank=True, null=True)
+    prenomcdc2 = models.CharField("Prénom du chef de camp 2", max_length=50, blank=True, null=True)
+    nomcdc2 = models.CharField("Nom du chef de camp 2", max_length=50, blank=True, null=True)
+    staff1 = models.CharField("Staff 1", max_length=50, blank=True, null=True)
+    staff2 = models.CharField("Staff 2", max_length=50, blank=True, null=True)
+    staff3 = models.CharField("Staff 3", max_length=50, blank=True, null=True)
+
+    fil_rouge = models.FileField(upload_to='media/fichiers_camps/fil_rouge/', blank=True, null=True)
+    fil_rouge_etat = models.CharField("État du fil rouge", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    fil_rouge_commentaire = models.TextField("Commentaire du fil rouge", blank=True, null=True, default='')
+    fil_rouge_deadline = models.DateField("Date limite du fil rouge", blank=True, null=True)
+
+    fil_bleu = models.FileField(upload_to='media/fichiers_camps/fil_bleu/', blank=True, null=True)
+    fil_bleu_etat = models.CharField("État du fil bleu", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    fil_bleu_commentaire = models.TextField("Commentaire du fil bleu", blank=True, null=True, default='')
+    fil_bleu_deadline = models.DateField("Date limite du fil bleu", blank=True, null=True)
+
+    fil_vert = models.FileField(upload_to='media/fichiers_camps/fil_vert/', blank=True, null=True)
+    fil_vert_etat = models.CharField("État du fil vert", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    fil_vert_commentaire = models.TextField("Commentaire du fil vert", blank=True, null=True, default='')
+    fil_vert_deadline = models.DateField("Date limite du fil vert", blank=True, null=True)
+
+    CR_prospe = models.FileField(upload_to='media/fichiers_camps/CR_prospe/', blank=True, null=True)
+    CR_prospe_etat = models.CharField("État du CR prospection", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    CR_prospe_commentaire = models.TextField("Commentaire du CR prospection", blank=True, null=True, default='')
+    CR_prospe_deadline = models.DateField("Date limite du CR prospection", blank=True, null=True)
+
+    contrat_location = models.FileField(upload_to='media/fichiers_camps/contrat_location/', blank=True, null=True)
+    contrat_location_etat = models.CharField("État du contrat de location", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    contrat_location_commentaire = models.TextField("Commentaire du contrat de location", blank=True, null=True, default='')
+    contrat_location_deadline = models.DateField("Date limite du contrat de location", blank=True, null=True)
+
+    Budget = models.FileField(upload_to='media/fichiers_camps/Budget/', blank=True, null=True)
+    Budget_etat = models.CharField("État du budget", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    Budget_commentaire = models.TextField("Commentaire du budget", blank=True, null=True, default='')
+    Budget_deadline = models.DateField("Date limite du budget", blank=True, null=True)
+
+    grille_assurance = models.FileField(upload_to='media/fichiers_camps/grille_assurance/', blank=True, null=True)
+    grille_assurance_etat = models.CharField("État de la grille d'assurance", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    grille_assurance_commentaire = models.TextField("Commentaire de la grille d'assurance", blank=True, null=True, default='')
+    grille_assurance_deadline = models.DateField("Date limite de la grille d'assurance", blank=True, null=True)
+
+    grille_ddcs = models.FileField(upload_to='media/fichiers_camps/grille_ddcs/', blank=True, null=True)
+    grille_ddcs_etat = models.CharField("État de la grille DDCS", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    grille_ddcs_commentaire = models.TextField("Commentaire de la grille DDCS", blank=True, null=True, default='')
+    grille_ddcs_deadline = models.DateField("Date limite de la grille DDCS", blank=True, null=True)
+
+    grille_intendance = models.FileField(upload_to='media/fichiers_camps/grille_intendance/', blank=True, null=True)
+    grille_intendance_etat = models.CharField("État de la grille intendance", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    grille_intendance_commentaire = models.TextField("Commentaire de la grille intendance", blank=True, null=True, default='')
+    grille_intendance_deadline = models.DateField("Date limite de la grille intendance", blank=True, null=True)
+
+    fiche_sncf = models.FileField(upload_to='media/fichiers_camps/fiche_sncf/', blank=True, null=True)
+    fiche_sncf_etat = models.CharField("État de la fiche SNCF", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    fiche_sncf_commentaire = models.TextField("Commentaire de la fiche SNCF", blank=True, null=True, default='')
+    fiche_sncf_deadline = models.DateField("Date limite de la fiche SNCF", blank=True, null=True)
+
+    procuration_banque = models.FileField(upload_to='media/fichiers_camps/procuration_banque/', blank=True, null=True)
+    procuration_banque_etat = models.CharField("État de la procuration bancaire", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    procuration_banque_commentaire = models.TextField("Commentaire de la procuration bancaire", blank=True, null=True, default='')
+    procuration_banque_deadline = models.DateField("Date limite de la procuration bancaire", blank=True, null=True)
+
+    recepisse = models.FileField(upload_to='media/fichiers_camps/recepisse/', blank=True, null=True)
+    recepisse_etat = models.CharField("État du récépissé", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    recepisse_commentaire = models.TextField("Commentaire du récépissé", blank=True, null=True, default='')
+    recepisse_deadline = models.DateField("Date limite du récépissé", blank=True, null=True)
+
+    grille_camp = models.FileField(upload_to='media/fichiers_camps/grille_camp/', blank=True, null=True)
+    grille_camp_etat = models.CharField("État de la grille camp", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    grille_camp_commentaire = models.TextField("Commentaire de la grille camp", blank=True, null=True, default='')
+    grille_camp_deadline = models.DateField("Date limite de la grille camp", blank=True, null=True)
+
+    chemins_explo = models.FileField(upload_to='media/fichiers_camps/chemins_explo/', blank=True, null=True)
+    chemins_explo_etat = models.CharField("État des chemins d'exploitation", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    chemins_explo_commentaire = models.TextField("Commentaire des chemins d'exploitation", blank=True, null=True, default='')
+    chemins_explo_deadline = models.DateField("Date limite des chemins d'exploitation", blank=True, null=True)
+
+    def count_validated_files(self):
+        """Compter le nombre de fichiers validés."""
+        valid_states = ['Validé']
+        fields = [
+            self.fil_rouge_etat,
+            self.fil_bleu_etat,
+            self.fil_vert_etat,
+            self.CR_prospe_etat,
+            self.grille_assurance_etat,
+            self.grille_ddcs_etat,
+            self.grille_intendance_etat,
+            self.fiche_sncf_etat,
+            self.procuration_banque_etat,
+            self.recepisse_etat,
+            self.chemins_explo_etat,
+            self.contrat_location_etat,
+            self.Budget_etat,
+            self.grille_camp_etat,
+        ]
+        return sum(1 for field in fields if field in valid_states)
+
+    def count_rendered_files(self):
+        """Compter le nombre de fichiers rendus."""
+        rendered_states = ['Rendu']
+        fields = [
+            self.fil_rouge_etat,
+            self.fil_bleu_etat,
+            self.fil_vert_etat,
+            self.CR_prospe_etat,
+            self.grille_assurance_etat,
+            self.grille_ddcs_etat,
+            self.grille_intendance_etat,
+            self.fiche_sncf_etat,
+            self.procuration_banque_etat,
+            self.recepisse_etat,
+            self.chemins_explo_etat,
+            self.contrat_location_etat,
+            self.Budget_etat,
+            self.grille_camp_etat,
+        ]
+        return sum(1 for field in fields if field in rendered_states)
+
+    fichiers_valides = property(count_validated_files)
+    fichiers_rendus = property(count_rendered_files)
+
+    def delete_old_file(self, field_name):
+        """Supprime l'ancien fichier avant d'enregistrer un nouveau fichier."""
+        field = getattr(self, field_name, None)
+        if field and os.path.isfile(field.path):
+            os.remove(field.path)
+
+    def __str__(self):
+        return self.numero
+    

@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Association - Accueil</title>
+    <link rel="preload" href="{% static 'images/login.jpg' %}" as="image">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<body>
+    <header>
+        <a href="/" class="logo" aria-label="Retour à l'accueil">
+            <img src="{% static 'images/logo2.jpg' %}" alt="Logo de l'association EEIF">
+        </a>
+        <nav>
+            <ul>
+                    <li><a href="https://eeif.assoconnect.com/page/2043322-accueil" target="_blank" rel="noopener noreferrer">Assoconnect</a></li>
+                    <li><a href="https://www.eeif.org" target="_blank" rel="noopener noreferrer">Site EEIF</a></li>
+                    <li><a href="https://chiourim.com/liste-des-produits-casher-du-rav-wolff-pour-eeif/">Liste Kasher</a></li>
+                    <li><a href="{% static 'files/organigramme.pdf' %}" target="_blank">Contact</a></li>
+                    <li><a href="{% url 'simulation' %}">Jeu Zadeck</a></li>
+                    {% if user.is_authenticated %}
+                        {% if is_superuser%}
+                            <li><a href="{% url 'admin:index' %}">Espace Admin</a></li>
+                            <li><a href="{% url 'logistique' %}">Espace Logistique</a></li>
+                        {% elif is_in_anbm %}
+                            <li><a href="{% url 'anbm' %}">Espace ANBM</a></li>
+                        {% elif is_in_anbc %}
+                            <li><a href="{% url 'anbc' %}">Espace ANBC</a></li>
+                        {% elif is_in_anbp %}
+                            <li><a href="{% url 'anbp' %}">Espace ANBP</a></li>
+                        {% elif is_in_anbb %}
+                            <li><a href="{% url 'anbb' %}">Espace ANBB</a></li>
+                        {% elif is_in_logistique %}
+                            <li><a href="{% url 'logistique' %}">Espace Logistique</a></li>
+                        {% elif is_in_masai %}
+                            <li><a href="{% url 'logistique' %}">Espace Masaï</a></li>
+                        {% else %}
+                            <li><a href="{% url 'cdc' %}">Espace CDC</a></li>
+                        {% endif %}
+                    {% endif %}
+            </ul>
+        </nav>
+
+        <div class="auth-links">
+            {% if user.is_authenticated %}
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">Se déconnecter</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="login-btn">Se connecter</a>
+            {% endif %}
+        </div>
+    </header>
+    <main>
+        <section class="hero">
+            <div class="hero-container">
+                <div class="card">
+                    <h2>Actualités</h2>
+                    <img src="{% static 'images/Sanstitre2.jpg' %}" alt="Image 1">
+                    <img src="{% static 'images/fleg.jpg' %}" alt="Image 1">
+                </div>
+                <div class="card">
+                    <h2>Prochainement</h2>
+                    <img src="{% static 'images/chabat.jpg' %}" alt="Image 2">
+                    <img src="{% static 'images/jaoui.jpg' %}" alt="Image 2">
+                    <img src="{% static 'images/lecture.jpg' %}" alt="Image 1">
+                </div>
+                <div class="card resources">
+                    <h2>Ressources</h2>
+                    <div class="files-container">
+                        <div class="file-item">
+                            <a href="{% static 'files/Referentiel.xlsx' %}" aria-label="Référentiel">
+                                <img src="{% static 'images/camp.jpg' %}" alt="PDF File">
+                                <p>Référentiel</p>
+                            </a>
+                        </div>
+                        <div class="file-item">
+                            <a href="{% static 'files/Sidour.pdf' %}" aria-label="Référentiel">
+                                <img src="{% static 'images/Sidour.jpg' %}" alt="PDF File">
+                                <p>Sidour EEIF</p>
+                            </a>
+                        </div>
+                        <div class="file-item">
+                            <a href="{% static 'files/Guide.pdf' %}" aria-label="Référentiel">
+                                <img src="{% static 'images/Zadeck.png' %}" alt="PDF File">
+                                <p>Guide du Zadeck</p>
+                            </a>
+                        </div>
+                        <div class="file-item">
+                            <a href="{% static 'files/Tyoul.pdf' %}" aria-label="Référentiel">
+                                <img src="{% static 'images/feu.jpg' %}" alt="PDF File">
+                                <p>Fiche Tyoul</p>
+                            </a>
+                        </div>
+                        <!-- Ajoutez plus de fichiers si nécessaire -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+    
+    <footer>
+            <div class="footer-section">
+                <div class="social-media">
+                    <a href="https://www.facebook.com/EclaireusesEclaireursIsraelitesdeFranceEEIF/?locale=fr_FR" aria-label="Facebook">
+                        <img src="{% static 'images/facebook.jpg' %}" alt="Facebook">
+                    </a>
+                    <a href="https://fr.linkedin.com/company/e.e.i.f" aria-label="LinkedIn">
+                        <img src="{% static 'images/linkedin.jpg' %}" alt="LinkedIn">
+                    </a>
+                    <a href="https://www.instagram.com/eeifcentrenational/" aria-label="Instagram">
+                        <img src="{% static 'images/instagram.jpeg' %}" alt="Instagram">
+                    </a>
+                    <a href="https://www.instagram.com/eeifbc/" aria-label="Instagram">
+                        <img src="{% static 'images/instagram.jpeg' %}" alt="Instagram">
+                    </a>
+                    <a href="https://www.instagram.com/eeifbm/" aria-label="Instagram">
+                        <img src="{% static 'images/instagram.jpeg' %}" alt="Instagram">
+                    </a>
+                    <a href="https://www.instagram.com/eeif_bp/" aria-label="Instagram">
+                        <img src="{% static 'images/instagram.jpeg' %}" alt="Instagram">
+                    </a>
+                    <a href="https://www.instagram.com/eeif_animateurs/" aria-label="Instagram">
+                        <img src="{% static 'images/instagram.jpeg' %}" alt="Instagram">
+                    </a>
+                    <a href="#" aria-label="WhatsApp">
+                        <img src="{% static 'images/whatsapp.jpg' %}" alt="WhatsApp">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

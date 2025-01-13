@@ -1,0 +1,717 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails du Camp {{ camp.numero }}</title>
+    <link rel="stylesheet" href="{% static 'css/camp_detail.css' %}">
+</head>
+<style type="text/css">
+    body {
+        background-image: url("{% static 'images/photo2.jpeg' %}");
+        background-size: cover;
+        background-position: center;
+    }
+    .home-button {
+        position: fixed; /* Fixé à l'écran, toujours visible */
+        top: 10px; /* Marges depuis le haut */
+        left: 10px; /* Marges depuis la gauche */
+        background-color: rgb(0,39,152); /* Couleur de fond */
+        color: white; /* Couleur du texte */
+        text-decoration: none; /* Supprimer le soulignement */
+        font-size: 16px; /* Taille du texte */
+        padding: 10px 20px; /* Espacement interne */
+        border-radius: 5px; /* Coins arrondis */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre */
+        transition: background-color 0.3s ease; /* Animation de survol */
+    }
+    
+    .home-button:hover {
+        background-color: #0056b3; /* Couleur au survol */
+    }
+</style>
+<body>
+    <h1>Détails du Camp {{ camp.numero }}</h1>
+    <table border="1">
+        <theader>
+            <tr>
+                <th>Chefs de camps</th>
+                <th>Adresse</th>
+                <th>Groupes locaux</th>
+                <th>Staff</th>
+                <th>Fichiers rendus</th>
+                <th>Fichiers validés</th>
+            </tr>
+        </theader>
+        <tbody>
+            <tr>
+                <td>{{ camp.prenomcdc1|default_if_none:"" }} {{ camp.nomcdc1|default_if_none:"" }}, {{ camp.prenomcdc2|default_if_none:"" }} {{ camp.nomcdc2|default_if_none:"" }}</td>
+                <td>{{ camp.adresse|default_if_none:"Non spécifiée" }}</td>
+                <td>{{ camp.GL1|default_if_none:"" }} {{ camp.GL2|default_if_none:"" }} {{ camp.GL3|default_if_none:"" }} {{ camp.GL4|default_if_none:"" }}</td>
+                <td>{{ camp.staff1|default_if_none:"" }} {{ camp.staff2|default_if_none:"" }} {{ camp.staff3|default_if_none:"" }}</td>
+                <td>{{ camp.fichiers_rendus }}</td>
+                <td>{{ camp.fichiers_valides }}</td>
+            </tr>
+        </tbody>
+    </table>   
+    <table border="1">
+        <theader>
+            <tr>
+                <th>Fichier</th>
+                <th>Deadline</th>
+                <th>Télécharger</th>
+                <th>État</th>
+                <th>Changer l'état</th>
+                <th>Commentaire</th>
+            </tr>
+        </theader>
+        <tbody>
+            <!-- Ligne Fil Rouge -->
+            <tr>
+                <td>Fil Rouge</td>
+                <td>{{ camp.fil_rouge_deadline }}</td>
+                <td>
+                    {% if camp.fil_rouge %}
+                        <a href="{{ camp.fil_rouge.url }}" target="_blank">Télécharger</a>
+                    {% else %}
+                        Aucun fichier disponible
+                    {% endif %}
+                </td>
+                <td class="
+                    {% if camp.fil_rouge_etat == 'Non rendu' %}
+                        etat-non-rendu
+                    {% elif camp.fil_rouge_etat == 'Rendu' %}
+                        etat-rendu
+                    {% elif camp.fil_rouge_etat == 'Validé' %}
+                        etat-valide
+                    {% elif camp.fil_rouge_etat == 'Refusé' %}
+                        etat-refuse
+                    {% endif %}
+                ">{{ camp.fil_rouge_etat }}</td>
+                <td class="file-state-cell">
+                    <form method="post" action="{% url 'update_file_state' 'fil_rouge' camp.numero %}" class="state-form">
+                        {% csrf_token %}
+                        <div class="file-state-actions">
+                            <div class="select-wrapper">
+                                <select name="new_state" class="file-state-select">
+                                    <option value="Non rendu" {% if camp.fil_rouge_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
+                                    <option value="Rendu" {% if camp.fil_rouge_etat == "Rendu" %}selected{% endif %}>Rendu</option>
+                                    <option value="Refusé" {% if camp.fil_rouge_etat == "Refusé" %}selected{% endif %}>Refusé</option>
+                                    <option value="Validé" {% if camp.fil_rouge_etat == "Validé" %}selected{% endif %}>Validé</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="file-state-button">Mettre à jour</button>
+                        </div>
+                    </form>
+                </td>
+                <td>
+                    <form action="{% url 'modifier_commentaire' 'fil_rouge' camp.numero%}" method="POST">
+                        {% csrf_token %}
+                        <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.fil_rouge_commentaire|default:""  }}</textarea>
+                    </form>
+                </td>
+            </tr>
+        
+            <!-- Ligne Fil Bleu -->
+            <tr>
+                <td>Fil Bleu</td>
+                <td>{{ camp.fil_bleu_deadline }}</td>
+                <td>
+                    {% if camp.fil_bleu %}
+                        <a href="{{ camp.fil_bleu.url }}" target="_blank">Télécharger</a>
+                    {% else %}
+                        Aucun fichier disponible
+                    {% endif %}
+                </td>
+                <td class="
+                    {% if camp.fil_bleu_etat == 'Non rendu' %}
+                        etat-non-rendu
+                    {% elif camp.fil_bleu_etat == 'Rendu' %}
+                        etat-rendu
+                    {% elif camp.fil_bleu_etat == 'Validé' %}
+                        etat-valide
+                    {% elif camp.fil_bleu_etat == 'Refusé' %}
+                        etat-refuse
+                    {% endif %}
+                ">{{ camp.fil_bleu_etat }}</td>
+                <td class="file-state-cell">
+                    <form method="post" action="{% url 'update_file_state' 'fil_bleu' camp.numero %}" class="state-form">
+                        {% csrf_token %}
+                        <div class="file-state-actions">
+                            <div class="select-wrapper">
+                                <select name="new_state" class="file-state-select">
+                                    <option value="Non rendu" {% if camp.fil_bleu_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
+                                    <option value="Rendu" {% if camp.fil_bleu_etat == "Rendu" %}selected{% endif %}>Rendu</option>
+                                    <option value="Refusé" {% if camp.fil_bleu_etat == "Refusé" %}selected{% endif %}>Refusé</option>
+                                    <option value="Validé" {% if camp.fil_bleu_etat == "Validé" %}selected{% endif %}>Validé</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="file-state-button">Mettre à jour</button>
+                        </div>
+                    </form>
+                </td>
+                <td> 
+                    <form action="{% url 'modifier_commentaire' 'fil_bleu' camp.numero%}" method="POST">
+                        {% csrf_token %}
+                        <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.fil_bleu_commentaire|default:""  }}</textarea>
+                    </form>
+                </td>
+            </tr>
+        
+            <!-- Ligne Fil Vert -->
+            <tr>
+                <td>Fil Vert</td>
+                <td>{{ camp.fil_vert_deadline }}</td>
+                <td>
+                    {% if camp.fil_vert %}
+                        <a href="{{ camp.fil_vert.url }}" target="_blank">Télécharger</a>
+                    {% else %}
+                        Aucun fichier disponible
+                    {% endif %}
+                </td>
+                <td class="
+                    {% if camp.fil_vert_etat == 'Non rendu' %}
+                        etat-non-rendu
+                    {% elif camp.fil_vert_etat == 'Rendu' %}
+                        etat-rendu
+                    {% elif camp.fil_vert_etat == 'Validé' %}
+                        etat-valide
+                    {% elif camp.fil_vert_etat == 'Refusé' %}
+                        etat-refuse
+                    {% endif %}
+                ">{{ camp.fil_vert_etat }}</td>
+                <td class="file-state-cell">
+                    <form method="post" action="{% url 'update_file_state' 'fil_vert' camp.numero %}" class="state-form">
+                        {% csrf_token %}
+                        <div class="file-state-actions">
+                            <div class="select-wrapper">
+                                <select name="new_state" class="file-state-select">
+                                    <option value="Non rendu" {% if camp.fil_vert_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
+                                    <option value="Rendu" {% if camp.fil_vert_etat == "Rendu" %}selected{% endif %}>Rendu</option>
+                                    <option value="Refusé" {% if camp.fil_vert_etat == "Refusé" %}selected{% endif %}>Refusé</option>
+                                    <option value="Validé" {% if camp.fil_vert_etat == "Validé" %}selected{% endif %}>Validé</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="file-state-button">Mettre à jour</button>
+                        </div>
+                    </form>
+                </td>
+                <td>
+                    <form action="{% url 'modifier_commentaire' 'fil_vert' camp.numero%}" method="POST">
+                        {% csrf_token %}
+                        <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.fil_vert_commentaire|default:""  }}</textarea>
+                    </form>
+                </td>
+            </tr>
+            <!-- Ligne Grille Assurance -->
+<tr>
+    <td>Grille Assurance</td>
+    <td>{{ camp.grille_assurance_deadline }}</td>
+    <td>
+        {% if camp.grille_assurance %}
+            <a href="{{ camp.grille_assurance.url }}" target="_blank">Télécharger</a>
+        {% else %}
+            Aucun fichier disponible
+        {% endif %}
+    </td>
+    <td class="
+        {% if camp.grille_assurance_etat == 'Non rendu' %}
+            etat-non-rendu
+        {% elif camp.grille_assurance_etat == 'Rendu' %}
+            etat-rendu
+        {% elif camp.grille_assurance_etat == 'Validé' %}
+            etat-valide
+        {% elif camp.grille_assurance_etat == 'Refusé' %}
+            etat-refuse
+        {% endif %}
+    ">{{ camp.grille_assurance_etat }}</td>
+    <td class="file-state-cell">
+        <form method="post" action="{% url 'update_file_state' 'grille_assurance' camp.numero %}" class="state-form">
+            {% csrf_token %}
+            <div class="file-state-actions">
+                <div class="select-wrapper">
+                    <select name="new_state" class="file-state-select">
+                        <option value="Non rendu" {% if camp.grille_assurance_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
+                        <option value="Rendu" {% if camp.grille_assurance_etat == "Rendu" %}selected{% endif %}>Rendu</option>
+                        <option value="Refusé" {% if camp.grille_assurance_etat == "Refusé" %}selected{% endif %}>Refusé</option>
+                        <option value="Validé" {% if camp.grille_assurance_etat == "Validé" %}selected{% endif %}>Validé</option>
+                    </select>
+                </div>
+                <button type="submit" class="file-state-button">Mettre à jour</button>
+            </div>
+        </form>
+    </td>
+    <td>
+        <form action="{% url 'modifier_commentaire' 'grille_assurance' camp.numero%}" method="POST">
+            {% csrf_token %}
+            <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.grille_assurance_commentaire|default:""  }}</textarea>
+        </form>
+    </td>
+</tr>
+
+<!-- Ligne Grille DDCS -->
+<tr>
+    <td>Grille DDCS</td>
+    <td>{{ camp.grille_ddcs_deadline }}</td>
+    <td>
+        {% if camp.grille_ddcs %}
+            <a href="{{ camp.grille_ddcs.url }}" target="_blank">Télécharger</a>
+        {% else %}
+            Aucun fichier disponible
+        {% endif %}
+    </td>
+    <td class="
+        {% if camp.grille_ddcs_etat == 'Non rendu' %}
+            etat-non-rendu
+        {% elif camp.grille_ddcs_etat == 'Rendu' %}
+            etat-rendu
+        {% elif camp.grille_ddcs_etat == 'Validé' %}
+            etat-valide
+        {% elif camp.grille_ddcs_etat == 'Refusé' %}
+            etat-refuse
+        {% endif %}
+    ">{{ camp.grille_ddcs_etat }}</td>
+    <td class="file-state-cell">
+        <form method="post" action="{% url 'update_file_state' 'grille_ddcs' camp.numero %}" class="state-form">
+            {% csrf_token %}
+            <div class="file-state-actions">
+                <div class="select-wrapper">
+                    <select name="new_state" class="file-state-select">
+                        <option value="Non rendu" {% if camp.grille_ddcs_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
+                        <option value="Rendu" {% if camp.grille_ddcs_etat == "Rendu" %}selected{% endif %}>Rendu</option>
+                        <option value="Refusé" {% if camp.grille_ddcs_etat == "Refusé" %}selected{% endif %}>Refusé</option>
+                        <option value="Validé" {% if camp.grille_ddcs_etat == "Validé" %}selected{% endif %}>Validé</option>
+                    </select>
+                </div>
+                <button type="submit" class="file-state-button">Mettre à jour</button>
+            </div>
+        </form>
+    </td>
+    <td>
+        <form action="{% url 'modifier_commentaire' 'grille_ddcs' camp.numero%}" method="POST">
+            {% csrf_token %}
+            <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.grille_ddcs_commentaire|default:""  }}</textarea>
+        </form>
+    </td>
+</tr>
+
+<!-- Ligne Budget -->
+<tr>
+    <td>Budget</td>
+    <td>{{ camp.Budget_deadline }}</td>
+    <td>
+        {% if camp.Budget %}
+            <a href="{{ camp.Budget.url }}" target="_blank">Télécharger</a>
+        {% else %}
+            Aucun fichier disponible
+        {% endif %}
+    </td>
+    <td class="
+        {% if camp.Budget_etat == 'Non rendu' %}
+            etat-non-rendu
+        {% elif camp.Budget_etat == 'Rendu' %}
+            etat-rendu
+        {% elif camp.Budget_etat == 'Validé' %}
+            etat-valide
+        {% elif camp.Budget_etat == 'Refusé' %}
+            etat-refuse
+        {% endif %}
+    ">{{ camp.Budget_etat }}</td>
+    <td class="file-state-cell">
+        <form method="post" action="{% url 'update_file_state' 'Budget' camp.numero %}" class="state-form">
+            {% csrf_token %}
+            <div class="file-state-actions">
+                <div class="select-wrapper">
+                    <select name="new_state" class="file-state-select">
+                        <option value="Non rendu" {% if camp.Budget_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
+                        <option value="Rendu" {% if camp.Budget_etat == "Rendu" %}selected{% endif %}>Rendu</option>
+                        <option value="Refusé" {% if camp.Budget_etat == "Refusé" %}selected{% endif %}>Refusé</option>
+                        <option value="Validé" {% if camp.Budget_etat == "Validé" %}selected{% endif %}>Validé</option>
+                    </select>
+                </div>
+                <button type="submit" class="file-state-button">Mettre à jour</button>
+            </div>
+        </form>
+    </td>
+    <td>
+        <form action="{% url 'modifier_commentaire' 'Budget' camp.numero%}" method="POST">
+            {% csrf_token %}
+            <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.Budget_commentaire|default:""  }}</textarea>
+        </form>
+    </td>
+</tr>
+<tr>
+    <td>Grille Intendance</td>
+    <td>{{ camp.grille_intendance_deadline }}</td>
+    <td>
+        {% if camp.grille_intendance %}
+            <a href="{{ camp.grille_intendance.url }}" target="_blank">Télécharger</a>
+        {% else %}
+            Aucun fichier disponible
+        {% endif %}
+    </td>
+    <td class="
+        {% if camp.grille_intendance_etat == 'Non rendu' %}
+            etat-non-rendu
+        {% elif camp.grille_intendance_etat == 'Rendu' %}
+            etat-rendu
+        {% elif camp.grille_intendance_etat == 'Validé' %}
+            etat-valide
+        {% elif camp.grille_intendance_etat == 'Refusé' %}
+            etat-refuse
+        {% endif %}
+    ">{{ camp.grille_intendance_etat }}</td>
+    <td class="file-state-cell">
+        <form method="post" action="{% url 'update_file_state' 'grille_intendance' camp.numero %}" class="state-form">
+            {% csrf_token %}
+            <div class="file-state-actions">
+                <div class="select-wrapper">
+                    <select name="new_state" class="file-state-select">
+                        <option value="Non rendu" {% if camp.grille_intendance_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
+                        <option value="Rendu" {% if camp.grille_intendance_etat == "Rendu" %}selected{% endif %}>Rendu</option>
+                        <option value="Refusé" {% if camp.grille_intendance_etat == "Refusé" %}selected{% endif %}>Refusé</option>
+                        <option value="Validé" {% if camp.grille_intendance_etat == "Validé" %}selected{% endif %}>Validé</option>
+                    </select>
+                </div>
+                <button type="submit" class="file-state-button">Mettre à jour</button>
+            </div>
+        </form>
+    </td>
+    <td>
+        <form action="{% url 'modifier_commentaire' 'grille_intendance' camp.numero%}" method="POST">
+            {% csrf_token %}
+            <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.grille_intendance_commentaire|default:""  }}</textarea>
+        </form>
+    </td>
+</tr>
+
+<!-- Ligne Fiche SNCF -->
+<tr>
+    <td>Fiche SNCF</td>
+    <td>{{ camp.fiche_sncf_deadline }}</td>
+    <td>
+        {% if camp.fiche_sncf %}
+            <a href="{{ camp.fiche_sncf.url }}" target="_blank">Télécharger</a>
+        {% else %}
+            Aucun fichier disponible
+        {% endif %}
+    </td>
+    <td class="
+        {% if camp.fiche_sncf_etat == 'Non rendu' %}
+            etat-non-rendu
+        {% elif camp.fiche_sncf_etat == 'Rendu' %}
+            etat-rendu
+        {% elif camp.fiche_sncf_etat == 'Validé' %}
+            etat-valide
+        {% elif camp.fiche_sncf_etat == 'Refusé' %}
+            etat-refuse
+        {% endif %}
+    ">{{ camp.fiche_sncf_etat }}</td>
+    <td class="file-state-cell">
+        <form method="post" action="{% url 'update_file_state' 'fiche_sncf' camp.numero %}" class="state-form">
+            {% csrf_token %}
+            <div class="file-state-actions">
+                <div class="select-wrapper">
+                    <select name="new_state" class="file-state-select">
+                        <option value="Non rendu" {% if camp.fiche_sncf_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
+                        <option value="Rendu" {% if camp.fiche_sncf_etat == "Rendu" %}selected{% endif %}>Rendu</option>
+                        <option value="Refusé" {% if camp.fiche_sncf_etat == "Refusé" %}selected{% endif %}>Refusé</option>
+                        <option value="Validé" {% if camp.fiche_sncf_etat == "Validé" %}selected{% endif %}>Validé</option>
+                    </select>
+                </div>
+                <button type="submit" class="file-state-button">Mettre à jour</button>
+            </div>
+        </form>
+    </td>
+    <td>
+        <form action="{% url 'modifier_commentaire' 'fiche_sncf' camp.numero%}" method="POST">
+            {% csrf_token %}
+            <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.fiche_sncf_commentaire|default:""  }}</textarea>
+        </form>
+    </td>
+</tr>
+
+<!-- Ligne Récepissé -->
+<tr>
+    <td>Récepissé</td>
+    <td>{{ camp.recepisse_deadline }}</td>
+    <td>
+        {% if camp.recepisse %}
+            <a href="{{ camp.recepisse.url }}" target="_blank">Télécharger</a>
+        {% else %}
+            Aucun fichier disponible
+        {% endif %}
+    </td>
+    <td class="
+        {% if camp.recepisse_etat == 'Non rendu' %}
+            etat-non-rendu
+        {% elif camp.recepisse_etat == 'Rendu' %}
+            etat-rendu
+        {% elif camp.recepisse_etat == 'Validé' %}
+            etat-valide
+        {% elif camp.recepisse_etat == 'Refusé' %}
+            etat-refuse
+        {% endif %}
+    ">{{ camp.recepisse_etat }}</td>
+    <td class="file-state-cell">
+        <form method="post" action="{% url 'update_file_state' 'recepisse' camp.numero %}" class="state-form">
+            {% csrf_token %}
+            <div class="file-state-actions">
+                <div class="select-wrapper">
+                    <select name="new_state" class="file-state-select">
+                        <option value="Non rendu" {% if camp.recepisse_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
+                        <option value="Rendu" {% if camp.recepisse_etat == "Rendu" %}selected{% endif %}>Rendu</option>
+                        <option value="Refusé" {% if camp.recepisse_etat == "Refusé" %}selected{% endif %}>Refusé</option>
+                        <option value="Validé" {% if camp.recepisse_etat == "Validé" %}selected{% endif %}>Validé</option>
+                    </select>
+                </div>
+                <button type="submit" class="file-state-button">Mettre à jour</button>
+            </div>
+        </form>
+    </td>
+    <td>
+        <form action="{% url 'modifier_commentaire' 'recepisse' camp.numero%}" method="POST">
+            {% csrf_token %}
+            <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.recepisse_commentaire|default:""  }}</textarea>
+        </form>
+    </td>
+</tr>
+
+<!-- Ligne Chemins Explo -->
+<tr>
+    <td>Chemins Explo</td>
+    <td>{{ camp.chemins_explo_deadline }}</td>
+    <td>
+        {% if camp.chemins_explo %}
+            <a href="{{ camp.chemins_explo.url }}" target="_blank">Télécharger</a>
+        {% else %}
+            Aucun fichier disponible
+        {% endif %}
+    </td>
+    <td class="
+        {% if camp.chemins_explo_etat == 'Non rendu' %}
+            etat-non-rendu
+        {% elif camp.chemins_explo_etat == 'Rendu' %}
+            etat-rendu
+        {% elif camp.chemins_explo_etat == 'Validé' %}
+            etat-valide
+        {% elif camp.chemins_explo_etat == 'Refusé' %}
+            etat-refuse
+        {% endif %}
+    ">{{ camp.chemins_explo_etat }}</td>
+    <td class="file-state-cell">
+        <form method="post" action="{% url 'update_file_state' 'chemins_explo' camp.numero %}" class="state-form">
+            {% csrf_token %}
+            <div class="file-state-actions">
+                <div class="select-wrapper">
+                    <select name="new_state" class="file-state-select">
+                        <option value="Non rendu" {% if camp.chemins_explo_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
+                        <option value="Rendu" {% if camp.chemins_explo_etat == "Rendu" %}selected{% endif %}>Rendu</option>
+                        <option value="Refusé" {% if camp.chemins_explo_etat == "Refusé" %}selected{% endif %}>Refusé</option>
+                        <option value="Validé" {% if camp.chemins_explo_etat == "Validé" %}selected{% endif %}>Validé</option>
+                    </select>
+                </div>
+                <button type="submit" class="file-state-button">Mettre à jour</button>
+            </div>
+        </form>
+    </td>
+    <td>
+        <form action="{% url 'modifier_commentaire' 'chemins_explo' camp.numero%}" method="POST">
+            {% csrf_token %}
+            <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.chemins_explo_commentaire|default:""  }}</textarea>
+        </form>
+    </td>
+</tr>
+<tr>
+    <td>Contrat de Location</td>
+    <td>{{ camp.contrat_location_deadline }}</td>
+    <td>
+        {% if camp.contrat_location %}
+            <a href="{{ camp.contrat_location.url }}" target="_blank">Télécharger</a>
+        {% else %}
+            Aucun fichier disponible
+        {% endif %}
+    </td>
+    <td class="
+        {% if camp.contrat_location_etat == 'Non rendu' %}
+            etat-non-rendu
+        {% elif camp.contrat_location_etat == 'Rendu' %}
+            etat-rendu
+        {% elif camp.contrat_location_etat == 'Validé' %}
+            etat-valide
+        {% elif camp.contrat_location_etat == 'Refusé' %}
+            etat-refuse
+        {% endif %}
+    ">{{ camp.contrat_location_etat }}</td>
+    <td class="file-state-cell">
+        <form method="post" action="{% url 'update_file_state' 'contrat_location' camp.numero %}" class="state-form">
+            {% csrf_token %}
+            <div class="file-state-actions">
+                <div class="select-wrapper">
+                    <select name="new_state" class="file-state-select">
+                        <option value="Non rendu" {% if camp.contrat_location_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
+                        <option value="Rendu" {% if camp.contrat_location_etat == "Rendu" %}selected{% endif %}>Rendu</option>
+                        <option value="Refusé" {% if camp.contrat_location_etat == "Refusé" %}selected{% endif %}>Refusé</option>
+                        <option value="Validé" {% if camp.contrat_location_etat == "Validé" %}selected{% endif %}>Validé</option>
+                    </select>
+                </div>
+                <button type="submit" class="file-state-button">Mettre à jour</button>
+            </div>
+        </form>
+    </td>
+    <td>
+        <form action="{% url 'modifier_commentaire' 'contrat_location' camp.numero%}" method="POST">
+            {% csrf_token %}
+            <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.contrat_location_commentaire|default:""  }}</textarea>
+        </form>
+    </td>
+</tr>
+<tr>
+    <td>Procuration Banque</td>
+    <td>{{ camp.procuration_banque_deadline }}</td>
+    <td>
+        {% if camp.procuration_banque %}
+            <a href="{{ camp.procuration_banque.url }}" target="_blank">Télécharger</a>
+        {% else %}
+            Aucun fichier disponible
+        {% endif %}
+    </td>
+    <td class="
+        {% if camp.procuration_banque_etat == 'Non rendu' %}
+            etat-non-rendu
+        {% elif camp.procuration_banque_etat == 'Rendu' %}
+            etat-rendu
+        {% elif camp.procuration_banque_etat == 'Validé' %}
+            etat-valide
+        {% elif camp.procuration_banque_etat == 'Refusé' %}
+            etat-refuse
+        {% endif %}
+    ">{{ camp.procuration_banque_etat }}</td>
+    <td class="file-state-cell">
+        <form method="post" action="{% url 'update_file_state' 'procuration_banque' camp.numero %}" class="state-form">
+            {% csrf_token %}
+            <div class="file-state-actions">
+                <div class="select-wrapper">
+                    <select name="new_state" class="file-state-select">
+                        <option value="Non rendu" {% if camp.procuration_banque_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
+                        <option value="Rendu" {% if camp.procuration_banque_etat == "Rendu" %}selected{% endif %}>Rendu</option>
+                        <option value="Refusé" {% if camp.procuration_banque_etat == "Refusé" %}selected{% endif %}>Refusé</option>
+                        <option value="Validé" {% if camp.procuration_banque_etat == "Validé" %}selected{% endif %}>Validé</option>
+                    </select>
+                </div>
+                <button type="submit" class="file-state-button">Mettre à jour</button>
+            </div>
+        </form>
+    </td>
+    <td>
+        <form action="{% url 'modifier_commentaire' 'procuration_banque' camp.numero%}" method="POST">
+            {% csrf_token %}
+            <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.procuration_banque_commentaire|default:""  }}</textarea>
+        </form>
+    </td>
+</tr>
+<!-- Ligne Compte-Rendu Prospection -->
+<tr>
+    <td>Compte-Rendu Prospection</td>
+    <td>{{ camp.CR_prospe_deadline }}</td>
+    <td>
+        {% if camp.CR_prospe %}
+            <a href="{{ camp.CR_prospe.url }}" target="_blank">Télécharger</a>
+        {% else %}
+            Aucun fichier disponible
+        {% endif %}
+    </td>
+    <td class="
+        {% if camp.CR_prospe_etat == 'Non rendu' %}
+            etat-non-rendu
+        {% elif camp.CR_prospe_etat == 'Rendu' %}
+            etat-rendu
+        {% elif camp.CR_prospe_etat == 'Validé' %}
+            etat-valide
+        {% elif camp.CR_prospe_etat == 'Refusé' %}
+            etat-refuse
+        {% endif %}
+    ">{{ camp.CR_prospe_etat }}</td>
+    <td class="file-state-cell">
+        <form method="post" action="{% url 'update_file_state' 'CR_prospe' camp.numero %}" class="state-form">
+            {% csrf_token %}
+            <div class="file-state-actions">
+                <div class="select-wrapper">
+                    <select name="new_state" class="file-state-select">
+                        <option value="Non rendu" {% if camp.CR_prospe_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
+                        <option value="Rendu" {% if camp.CR_prospe_etat == "Rendu" %}selected{% endif %}>Rendu</option>
+                        <option value="Refusé" {% if camp.CR_prospe_etat == "Refusé" %}selected{% endif %}>Refusé</option>
+                        <option value="Validé" {% if camp.CR_prospe_etat == "Validé" %}selected{% endif %}>Validé</option>
+                    </select>
+                </div>
+                <button type="submit" class="file-state-button">Mettre à jour</button>
+            </div>
+        </form>
+    </td>
+    <td>
+        <form action="{% url 'modifier_commentaire' 'CR_prospe' camp.numero%}" method="POST">
+            {% csrf_token %}
+            <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.CR_prospe_commentaire|default:""  }}</textarea>
+        </form>
+    </td>
+</tr>
+<tr>
+    <td>Grille de Camp</td>
+    <td>{{ camp.grille_camp_deadline }}</td>
+    <td>
+        {% if camp.grille_camp %}
+            <a href="{{ camp.grille_camp.url }}" target="_blank">Télécharger</a>
+        {% else %}
+            Aucun fichier disponible
+        {% endif %}
+    </td>
+    <td class="
+        {% if camp.grille_camp_etat == 'Non rendu' %}
+            etat-non-rendu
+        {% elif camp.grille_camp_etat == 'Rendu' %}
+            etat-rendu
+        {% elif camp.grille_camp_etat == 'Validé' %}
+            etat-valide
+        {% elif camp.grille_camp_etat == 'Refusé' %}
+            etat-refuse
+        {% endif %}
+    ">{{ camp.grille_camp_etat }}</td>
+    <td class="file-state-cell">
+        <form method="post" action="{% url 'update_file_state' 'grille_camp' camp.numero %}" class="state-form">
+            {% csrf_token %}
+            <div class="file-state-actions">
+                <div class="select-wrapper">
+                    <select name="new_state" class="file-state-select">
+                        <option value="Non rendu" {% if camp.grille_camp_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
+                        <option value="Rendu" {% if camp.grille_camp_etat == "Rendu" %}selected{% endif %}>Rendu</option>
+                        <option value="Refusé" {% if camp.grille_camp_etat == "Refusé" %}selected{% endif %}>Refusé</option>
+                        <option value="Validé" {% if camp.grille_camp_etat == "Validé" %}selected{% endif %}>Validé</option>
+                    </select>
+                </div>
+                <button type="submit" class="file-state-button">Mettre à jour</button>
+            </div>
+        </form>
+    </td>
+    <td>
+        <form action="{% url 'modifier_commentaire' 'grille_camp' camp.numero%}" method="POST">
+            {% csrf_token %}
+            <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.grille_camp_commentaire|default:""  }}</textarea>
+        </form>
+    </td>
+</tr>
+    
+
+        </tbody>        
+    </table>
+    {% if camp.branche == "BM" %}
+        <a class="home-button" href="{% url 'anbm' %}">Retour à la liste des camps BM </a>
+    {% elif camp.branche == "BB" %}
+        <a class="home-button" href="{% url 'anbb' %}">Retour à la liste des camps BB</a>
+    {% elif camp.branche == "BC" %}
+        <a class="home-button" href="{% url 'anbc' %}">Retour à la liste des camps BC</a>
+    {% elif camp.branche == "BP" %}
+        <a class="home-button" href="{% url 'anbp' %}">Retour à la liste des camps BP</a>
+    {% endif %}
+</body>
+</html>

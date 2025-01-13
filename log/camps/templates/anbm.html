@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Camps BM</title>
+    <link rel="stylesheet" href="{% static 'css/camp_detail.css' %}">
+</head>
+<style type="text/css">
+    body {
+        background-image: url("{% static 'images/photo2.jpeg' %}");
+        background-size: cover;
+        background-position: center;
+    }
+    .home-button {
+        position: fixed; /* Fixé à l'écran, toujours visible */
+        top: 10px; /* Marges depuis le haut */
+        left: 10px; /* Marges depuis la gauche */
+        background-color: rgb(0,39,152); /* Couleur de fond */
+        color: white; /* Couleur du texte */
+        text-decoration: none; /* Supprimer le soulignement */
+        font-size: 16px; /* Taille du texte */
+        padding: 10px 20px; /* Espacement interne */
+        border-radius: 5px; /* Coins arrondis */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre */
+        transition: background-color 0.3s ease; /* Animation de survol */
+    }
+    
+    .home-button:hover {
+        background-color: #0056b3; /* Couleur au survol */
+        text-decoration: none; /* Assure qu'il n'y a pas de soulignement */
+    }
+</style>
+<body>
+    <a href="{% url 'home' %}" class="home-button">Home</a>
+    <header>
+        <h1>Liste des Camps BM</h1>
+    </header>
+    <main>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Numéro</th>
+                    <th>Chefs de Camp</th>
+                    <th>Groupes Locaux</th>
+                    <th>Étapes Rendues</th>
+                    <th>Étapes Validées</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for camp in camps_bm %}
+                <tr>
+                    <td>
+                        <a href="{% url 'camp_detail' camp.numero %}">{{ camp.numero }}</a>
+                    </td>
+                    <td>
+                        {% if camp.prenomcdc1 or camp.nomcdc1 or camp.prenomcdc2 or camp.nomcdc2 %}
+                            {{ camp.prenomcdc1|default_if_none:"" }} {{ camp.nomcdc1|default_if_none:"" }},
+                            {{ camp.prenomcdc2|default_if_none:"" }} {{ camp.nomcdc2|default_if_none:"" }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if camp.GL1 or camp.GL2 or camp.GL3 or camp.GL4 %}
+                        {{ camp.GL1|default_if_none:"" }}&nbsp;&nbsp;&nbsp;{{ camp.GL2|default_if_none:"" }}
+                        &nbsp;&nbsp;&nbsp;{{ camp.GL3|default_if_none:"" }}&nbsp;&nbsp;&nbsp;{{ camp.GL4|default_if_none:"" }}
+                        &nbsp;&nbsp;&nbsp;{{ camp.GL5|default_if_none:"" }}
+                        {% endif %}
+                    </td>
+                    <td class= "
+                    {% if camp.fichiers_rendus > 0 %}
+                    etat-rendu
+                    {% else %}
+                    etat-non-rendu
+                    {% endif %}
+                    ">{{ camp.fichiers_rendus|default_if_none:"" }}</td>
+                    <td class="color-scale" data-value="{{ camp.fichiers_valides }}">
+                        {{ camp.fichiers_valides|default_if_none:"" }}
+                    </td>                    
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="12">Aucun camp BM trouvé.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>

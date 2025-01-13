@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+    <style>
+        body {
+            background-image: url("{% static 'images/photo2.jpeg' %}");
+        }
+    </style>    
+</head>
+<body>
+    <a href="{% url 'home' %}" class="home-button">Home</a>
+    <div class="login-container">
+        <h1>Inscription</h1>
+
+        <!-- Affiche les messages d'erreur -->
+        {% if form.errors %}
+            <div class="form-errors">
+                <ul>
+                {% for field, errors in form.errors.items %}
+                    <li>{{ field }}: {{ errors|join:", " }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <!-- Formulaire d'inscription -->
+        <form action="" method="post">
+            {% csrf_token %}
+            
+            <!-- Contrôle total sur les champs -->
+            <div class="form-group">
+                <label for="{{ form.first_name.id_for_label }}">Prénom :</label>
+                {{ form.first_name }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.last_name.id_for_label }}">Nom :</label>
+                {{ form.last_name }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Nom d'utilisateur :</label>
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.password1.id_for_label }}">Mot de passe :</label>
+                {{ form.password1 }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.password2.id_for_label }}">Confirmez le mot de passe :</label>
+                {{ form.password2 }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}">Adresse e-mail :</label>
+                {{ form.email }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.phone.id_for_label }}">Numéro de téléphone :</label>
+                {{ form.phone }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.group.id_for_label }}">Rôle  :</label>
+                {{ form.group }}
+            </div>
+            <!--<div class="form-group">
+                <label for="{{ form.gl.id_for_label }}">Groupe Local :</label>
+                {{ form.gl }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.camp.id_for_label }}">Numéro de camp :</label>
+                {{ form.camp }}
+            </div>-->
+
+            <!-- Bouton d'inscription -->
+            <button type="submit">S'inscrire</button>
+        </form>
+    </div>
+</body>
+</html>

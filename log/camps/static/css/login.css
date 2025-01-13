@@ -1,0 +1,154 @@
+/* Styles pour le corps de la page */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
+    background-image: url("{% static 'images/login.jpg' %}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Conteneur du formulaire d'inscription */
+.login-container {
+    background-color: rgba(255, 255, 255, 0.95); /* Légère transparence */
+    border-radius: 12px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 40px 30px;
+    width: 400px;
+    max-width: 90%;
+    text-align: center;
+    animation: fadeIn 0.6s ease; /* Animation d'apparition */
+}
+
+/* Animation de fade-in */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Titre de la page */
+.login-container h1 {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+}
+
+/* Messages d'erreur ou autres */
+.message {
+    color: #ff4d4d;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+/* Champs d'entrée */
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #007bff;
+    box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.3);
+    outline: none;
+}
+
+/* Bouton d'inscription */
+.login-container button {
+    width: 100%;
+    padding: 15px;
+    background-color:  rgb(0,39,152);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.login-container button:hover {
+    background-color: #0056b3;
+    transform: scale(1.02);
+}
+
+/* Texte sous les champs */
+.login-container p {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0;
+}
+
+/* Lien supplémentaire (facultatif) */
+.login-container a {
+    display: inline-block;
+    margin-top: 15px;
+    color: rgb(0,39,152);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.login-container a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .login-container {
+        width: 90%;
+        padding: 30px 20px;
+    }
+
+    .login-container h1 {
+        font-size: 24px;
+    }
+
+    .login-container button {
+        font-size: 14px;
+        padding: 12px;
+    }
+}
+.home-button {
+    position: fixed; /* Fixé à l'écran, toujours visible */
+    top: 10px; /* Marges depuis le haut */
+    left: 10px; /* Marges depuis la gauche */
+    background-color: rgb(0,39,152); /* Couleur de fond */
+    color: white; /* Couleur du texte */
+    text-decoration: none; /* Supprimer le soulignement */
+    font-size: 16px; /* Taille du texte */
+    padding: 10px 20px; /* Espacement interne */
+    border-radius: 5px; /* Coins arrondis */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre */
+    transition: background-color 0.3s ease; /* Animation de survol */
+}
+
+.home-button:hover {
+    background-color: #0056b3; /* Couleur au survol */
+}

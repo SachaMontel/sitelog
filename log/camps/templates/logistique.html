@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+{% load static %} 
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Espace QG</title>
+        <style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: rgb(0,39,152);
+    position: relative;
+    overflow: hidden;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("{% static 'images/photo2.jpeg' %}");
+    background-size: cover;
+    background-position: center;
+    opacity: 0.5; /* Ajuste ce niveau d'opacité */
+    z-index: -1;
+}
+
+            h1 {
+                font-size: 2.5rem;
+                margin-bottom: 2rem;
+            }
+    
+            .button-container {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+            }
+    
+            .button {
+                background-color: #007BFF;
+                color: black;
+                padding: 15px 30px;
+                border: none;
+                border-radius: 5px;
+                text-decoration: none;
+                font-size: 1rem;
+                transition: background-color 0.3s ease;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+    
+            .button:hover {
+                background-color: white;
+            }
+            .button-anbc {
+                background-color: rgba(254,235,32,255);
+            }
+        
+            .button-anbm {
+                background-color: rgb(140, 230, 144);
+            }
+        
+            .button-anbp {
+                background-color: rgba(232,47,33,255);
+            }
+            .button-anbb {
+                background-color: rgba(131,202,235,255);
+            }
+            .button-cdp {
+                background-color: rgb(238,130,238);
+            } 
+                .home-button {
+                    position: fixed; /* Fixé à l'écran, toujours visible */
+                    top: 10px; /* Marges depuis le haut */
+                    left: 10px; /* Marges depuis la gauche */
+                    background-color: rgb(0,39,152); /* Couleur de fond */
+                    color: white; /* Couleur du texte */
+                    text-decoration: none; /* Supprimer le soulignement */
+                    font-size: 16px; /* Taille du texte */
+                    padding: 10px 20px; /* Espacement interne */
+                    border-radius: 5px; /* Coins arrondis */
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre */
+                    transition: background-color 0.3s ease; /* Animation de survol */
+                }
+                
+                .home-button:hover {
+                    background-color: #0056b3; /* Couleur au survol */
+                    text-decoration: none; /* Assure qu'il n'y a pas de soulignement */
+                }
+        </style>
+        </head>
+        <body>
+            <a href="{% url 'home' %}" class="home-button">Home</a>
+            <h1>Bienvenue dans l'espace logistique des camps d'été</h1>
+            <div class="button-container">
+                <a href="{% url 'anbb' %}" class="button button-anbb">Camps BB</a>
+                <a href="{% url 'anbc' %}" class="button button-anbc">Camps BC</a>
+                <a href="{% url 'anbm' %}" class="button button-anbm">Camps BM</a>
+                <a href="{% url 'anbp' %}" class="button button-anbp">Camps BP</a>
+            </div>
+        </body>
+        </html>
