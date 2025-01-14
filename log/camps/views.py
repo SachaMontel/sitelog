@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.contrib.auth.decorators import user_passes_test
 
 def logout(request):
     return render(request, 'home.html')
@@ -25,12 +26,15 @@ def signup(request):
         form = CustomUserCreationForm()
     return render(request, 'signup.html', {'form': form})
 
-def group_required(*group_names):
+def group_required(groups):
+    if not isinstance(groups, (list, tuple)):
+        groups = [groups]
+    
     def in_groups(user):
         if user.is_authenticated:
-            if bool(user.groups.filter(name__in=group_names)) or user.is_superuser:
-                return True
+            return user.groups.filter(name__in=groups).exists() or user.is_superuser
         return False
+    
     return user_passes_test(in_groups)
 
 def home(request):
@@ -59,26 +63,26 @@ def cdc(request):
     camp = user.camp  # Récupération du camp associé à l'utilisateur
     return render(request, 'cdc.html', {'camp': camp})
 
-@group_required('logistique' or 'masai' or 'superuser')
+@group_required(['logistique','masai' ,'superuser'])
 def logistique(request):
     return render(request, 'logistique.html')
 
-@group_required('anbb' or 'logistique' or 'superuser' or 'masai')
+@group_required(['anbb', 'logistique', 'superuser', 'masai'])
 def anbb(request):
     camps_bb = Camp.objects.filter(branche="BB")
     return render(request, 'anbb.html', {'camps_bb': camps_bb})
 
-@group_required('anbc' or 'logistique' or 'superuser' or 'masai')
+@group_required(['logistique','masai' ,'superuser','anbc'])
 def anbc(request):
     camps_bc = Camp.objects.filter(branche="BC")
     return render(request, 'anbc.html', {'camps_bc': camps_bc})
 
-@group_required('anbm' or 'logistique' or 'superuser' or 'masai')
+@group_required(['logistique','masai' ,'superuser','anbm'])
 def anbm(request):
     camps_bm = Camp.objects.filter(branche="BM")  # Récupère tous les camps ayant pour branche "BM"
     return render(request, 'anbm.html', {'camps_bm': camps_bm})
 
-@group_required('anbp' or 'logistique' or 'superuser' or 'masai')
+@group_required(['logistique','masai' ,'superuser','anbp'])
 def anbp(request):
     camps_bp = Camp.objects.filter(branche="BP")
     return render(request, 'anbp.html', {'camps_bp': camps_bp})
