@@ -170,7 +170,8 @@ def upload_file(request, file_type, camp_id):
         elif camp.branche == 'BC':
             receveur = ['raphael.jaoui@eeif.org', 'ronel.atlan@eeif.org', 'ben.tubiana@eeif.org', 'chloe.studnia@eeif.org', 'elsa.seksik@eeif.org', 'annaelle.seksik@eeif.org', 'responsablesnational@eeif.org']
         elif camp.branche == 'BM':
-            receveur = ['david.allali@eeif.org', 'noam.tordjman@eeif.org', 'ben.tubiana@eeif.org', 'chloe.studnia@eeif.org', 'elsa.seksik@eeif.org', 'annaelle.seksik@eeif.org', 'responsablesnational@eeif.org']
+            receveur = ['sacha.montel@eeif.org']
+            #receveur = ['david.allali@eeif.org', 'noam.tordjman@eeif.org', 'ben.tubiana@eeif.org', 'chloe.studnia@eeif.org', 'elsa.seksik@eeif.org', 'annaelle.seksik@eeif.org', 'responsablesnational@eeif.org']
         elif camp.branche == 'BP':
             receveur = ['emma.elkaim-weil@eeif.org', 'ben.tubiana@eeif.org', 'chloe.studnia@eeif.org', 'elsa.seksik@eeif.org', 'annaelle.seksik@eeif.org', 'responsablesnational@eeif.org']
         send_mail(

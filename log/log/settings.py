@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
+from pathlib import Path
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,12 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-sh9&9!w*1ts42)e_)=n!=4!^1y2_^z@=!9+-$r0c@gvi3qd8ro'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['eeif.rezel.net', '127.0.0.1', 'localhost']
 
 
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000']
+CSRF_TRUSTED_ORIGINS = ['https://eeif.rezel.net']
 
 
 # Application definition
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'camps',
+    'log',
 ]
 
 MIDDLEWARE = [
@@ -120,6 +122,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'camps.CustomUser'
 # Default primary key field type
