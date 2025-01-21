@@ -174,14 +174,14 @@ def upload_file(request, file_type, camp_id):
         elif camp.branche == 'BC':
             receveur = ['raphael.jaoui@eeif.org', 'ronel.atlan@eeif.org', 'ben.tubiana@eeif.org', 'chloe.studnia@eeif.org', 'elsa.seksik@eeif.org', 'annaelle.seksik@eeif.org', 'responsablesnational@eeif.org']
         elif camp.branche == 'BM':
-            receveur = ['sacha.montel@eeif.org']
-            #receveur = ['david.allali@eeif.org', 'noam.tordjman@eeif.org', 'ben.tubiana@eeif.org', 'chloe.studnia@eeif.org', 'elsa.seksik@eeif.org', 'annaelle.seksik@eeif.org', 'responsablesnational@eeif.org']
+            #receveur = ['sacha.montel@eeif.org']
+            receveur = ['david.allali@eeif.org', 'noam.tordjman@eeif.org', 'ben.tubiana@eeif.org', 'chloe.studnia@eeif.org', 'elsa.seksik@eeif.org', 'annaelle.seksik@eeif.org', 'responsablesnational@eeif.org']
         elif camp.branche == 'BP':
             receveur = ['emma.elkaim-weil@eeif.org', 'ben.tubiana@eeif.org', 'chloe.studnia@eeif.org', 'elsa.seksik@eeif.org', 'annaelle.seksik@eeif.org', 'responsablesnational@eeif.org']
         send_mail(
             subject='Un fichier a été téléversé',
-            message=f'Un fichier de type "{file_label}" a été téléversé pour le camp {camp.numero}. Connectez-vous sur https://eeif.rezel.net/home',
-            from_email='schmontel@gmail.com',  # Remplacez par votre adresse e-mail
+            message=f'Un fichier de type "{file_label}" a été téléversé pour le camp {camp.numero}. Connectez-vous sur https://eeif.rezel.net/home/',
+            from_email='eeif@rezel.net',  # Remplacez par votre adresse e-mail
             recipient_list=receveur,
         )
         return redirect('cdc')
@@ -289,14 +289,16 @@ def update_file_state(request, file_type, camp_id):
             camp.Budget_etat = new_state
         elif file_type == "grille_camp":
             camp.grille_camp_etat = new_state
+        else:
+            return HttpResponse("Type de fichier invalide.", status=400)
         # Sauvegarder les changements
-            send_mail(
+        camp.save()
+        send_mail(
             subject='Retour du QG',
             message=f'L état du fichier {file_type} a été modifié pour le camp {camp.numero}. Connectez-vous sur https://eeif.rezel.net/home',
-            from_email='schmontel@gmail.com',  # Remplacez par votre adresse e-mail
+            from_email='eeif@rezel.net',  # Remplacez par votre adresse e-mail
             recipient_list=[camp.mail],
         )
-        camp.save()
 
         # Rediriger vers la page de détails du camp
         return redirect('camp_detail', numero=camp_id)
@@ -338,14 +340,16 @@ def modifier_commentaire(request, file_type, camp_id):
             camp.Budget_commentaire = nouveau_commentaire
         elif file_type == 'grille_camp':
             camp.grille_camp_commentaire = nouveau_commentaire
+        else:
+            return HttpResponse("Type de fichier invalide.", status=400)
+        # Sauvegarder les changements
+        camp.save()
         send_mail(
             subject='Retour du QG',
-            message=f'Un commentaire a été ajouté concernant le fichier {file_type} pour le camp {camp.numero}. Connectez-vous sur https://eeif.rezel.net/home',
-            from_email='schmontel@gmail.com',  # Remplacez par votre adresse e-mail
+            message=f'Le commentaire concernant le fichier {file_type} a été modifié pour le camp {camp.numero}. Connectez-vous sur https://eeif.rezel.net/home',
+            from_email='eeif@rezel.net',  # Remplacez par votre adresse e-mail
             recipient_list=[camp.mail],
         )
-        # Sauvegarder la modification dans la base de données
-        camp.save()
 
     # Rediriger vers la page principale après la mise à jour
     return redirect('camp_detail', numero=camp_id)

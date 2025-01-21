@@ -71,14 +71,6 @@ NUMERO_CAMP_CHOICES = (
     ('BC 15', 'BC 15'),
     ('BC 16', 'BC 16'),
     ('BC 17', 'BC 17'),
-    ('BC 18', 'BC 18'),
-    ('BC 19', 'BC 19'),
-    ('BC 20', 'BC 20'),
-    ('BC 21', 'BC 21'),
-    ('BC 22', 'BC 22'),
-    ('BC 23', 'BC 23'),
-    ('BC 24', 'BC 24'),
-    ('BC 25', 'BC 25'),
     # BM
     ('BM 1', 'BM 1'),
     ('BM 2', 'BM 2'),
@@ -104,7 +96,6 @@ NUMERO_CAMP_CHOICES = (
     ('BM 22', 'BM 22'),
     ('BM 23', 'BM 23'),
     ('BM 24', 'BM 24'),
-    ('BM 25', 'BM 25'),
 
     # BP
     ('BP 1', 'BP 1'),
@@ -157,6 +148,9 @@ class Camp(models.Model):
     staff1 = models.CharField("Staff 1", max_length=50, blank=True, null=True)
     staff2 = models.CharField("Staff 2", max_length=50, blank=True, null=True)
     staff3 = models.CharField("Staff 3", max_length=50, blank=True, null=True)
+    enfants = models.CharField("Nombre d'enfants", max_length=50, blank=True, null=True)
+    animateurs = models.CharField("Nombre d'animateurs", max_length=50, blank=True, null=True)
+    date_JN = models.DateField("Date des JN", blank=True, null=True)
 
     fil_rouge = models.FileField(upload_to='media/fichiers_camps/fil_rouge/', blank=True, null=True)
     fil_rouge_etat = models.CharField("État du fil rouge", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')

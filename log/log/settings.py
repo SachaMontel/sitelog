@@ -139,8 +139,6 @@ LOGIN_REDIRECT_URL = 'home'  # Remplacez 'home' par le nom de la vue ou URL de r
 LOGOUT_REDIRECT_URL = 'login'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'schmontel@gmail.com'  # Remplacez par votre adresse e-mail
-EMAIL_HOST_PASSWORD = 'bgfy isqf jjwq rqqt'  # Remplacez par votre mot de passe
+EMAIL_HOST = 'smtp.rezel.net'
+EMAIL_PORT = 25
+EMAIL_USE_TLS = False

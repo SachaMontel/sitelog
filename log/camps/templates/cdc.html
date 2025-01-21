@@ -46,7 +46,10 @@
                     <th>Chefs de camps</th>
                     <th>Adresse</th>
                     <th>Groupes locaux</th>
+                    <th>Nombre d'enfants</th>
+                    <th>Nombre d'animateurs</th>
                     <th>Staff</th>
+                    <th>Date de JN</th>
                     <th>Fichiers rendus</th>
                     <th>Fichiers validés</th>
                 </tr>
@@ -54,9 +57,12 @@
             <tbody>
                 <tr>
                     <td>{{ camp.prenomcdc1|default_if_none:"" }} {{ camp.nomcdc1|default_if_none:"" }}, {{ camp.prenomcdc2|default_if_none:"" }} {{ camp.nomcdc2|default_if_none:"" }}</td>
-                    <td>{{ camp.adresse|default_if_none:"Non spécifiée" }}</td>
+                    <td>{{ camp.adresse|default_if_none:"" }}</td>
                     <td>{{ camp.GL1|default_if_none:"" }} {{ camp.GL2|default_if_none:"" }} {{ camp.GL3|default_if_none:"" }} {{ camp.GL4|default_if_none:"" }}</td>
+                    <td>{{ camp.enfants|default_if_none:"" }}</td>
+                    <td>{{ camp.animateurs|default_if_none:"" }}</td>
                     <td>{{ camp.staff1|default_if_none:"" }} {{ camp.staff2|default_if_none:"" }} {{ camp.staff3|default_if_none:"" }}</td>
+                    <td>{{ camp.date_JN|default_if_none:"" }}</td>
                     <td>{{ camp.fichiers_rendus }}</td>
                     <td>{{ camp.fichiers_valides }}</td>
                 </tr>
@@ -350,13 +356,13 @@
                                 {% endif %}
                             </td>
                             <td class="
-                            {% if camp.Budget_etat == 'Non rendu' %}
+                            {% if camp.grille_intendance_etat == 'Non rendu' %}
                                 etat-non-rendu
-                            {% elif camp.Budget_etat == 'Rendu' %}
+                            {% elif camp.grille_intendance_etat == 'Rendu' %}
                                 etat-rendu
-                            {% elif camp.Budget_etat == 'Validé' %}
+                            {% elif camp.grille_intendance_etat == 'Validé' %}
                                 etat-valide
-                            {% elif camp.Budget_etat == 'Refusé' %}
+                            {% elif camp.grille_intendance_etat == 'Refusé' %}
                                 etat-refuse
                             {% endif %}
                         ">{{ camp.grille_intendance_etat }}</td>
