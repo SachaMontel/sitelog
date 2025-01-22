@@ -93,9 +93,20 @@ def camp_detail(request, numero):
 
 @login_required
 def upload_file(request, file_type, camp_id):
+    MAX_FILE_SIZE_MB = 5  # Taille maximale en Mo
+    MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024  # Convertir en octets
+    
     if request.method == "POST" and request.FILES['file']:
         camp = get_object_or_404(Camp, numero=camp_id)
         uploaded_file = request.FILES['file']
+
+        # Vérification de la taille du fichier
+        if uploaded_file.size > MAX_FILE_SIZE_BYTES:
+            return HttpResponse(
+                f"Erreur : Le fichier est trop volumineux. Taille maximale autorisée : {MAX_FILE_SIZE_MB} Mo.",
+                status=400
+            )
+            
         if file_type == 'fil_rouge':
             camp.delete_old_file('fil_rouge')
             camp.fil_rouge = uploaded_file

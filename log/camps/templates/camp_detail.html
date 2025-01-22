@@ -69,6 +69,138 @@
         <tbody>
             <!-- Ligne Fil Rouge -->
             <tr>
+                <td>Demande de prospe</td>
+                <td>{{ camp.demande_prospe_deadline }}</td>
+                <td>
+                    {% if camp.demande_prospe %}
+                        <a href="{{ camp.demande_prospe.url }}" target="_blank">Télécharger</a>
+                    {% else %}
+                        Aucun fichier disponible
+                    {% endif %}
+                </td>
+                <td class="
+                    {% if camp.demande_prospe_etat == 'Non rendu' %}
+                        etat-non-rendu
+                    {% elif camp.demande_prospe_etat == 'Rendu' %}
+                        etat-rendu
+                    {% elif camp.demande_prospe_etat == 'Validé' %}
+                        etat-valide
+                    {% elif camp.demande_prospe_etat == 'Refusé' %}
+                        etat-refuse
+                    {% endif %}
+                ">{{ camp.demande_prospe_etat }}</td>
+                <td class="file-state-cell">
+                    <form method="post" action="{% url 'update_file_state' 'demande_prospe' camp.numero %}" class="state-form">
+                        {% csrf_token %}
+                        <div class="file-state-actions">
+                            <div class="select-wrapper">
+                                <select name="new_state" class="file-state-select">
+                                    <option value="Non rendu" {% if camp.demande_prospe_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
+                                    <option value="Rendu" {% if camp.demande_prospe_etat == "Rendu" %}selected{% endif %}>Rendu</option>
+                                    <option value="Refusé" {% if camp.demande_prospe_etat == "Refusé" %}selected{% endif %}>Refusé</option>
+                                    <option value="Validé" {% if camp.demande_prospe_etat == "Validé" %}selected{% endif %}>Validé</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="file-state-button">Mettre à jour</button>
+                        </div>
+                    </form>
+                </td>
+                <td>
+                    <form action="{% url 'modifier_commentaire' 'demande_prospe' camp.numero%}" method="POST">
+                        {% csrf_token %}
+                        <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.demande_prospe_commentaire|default:""  }}</textarea>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>Compte-Rendu Prospection</td>
+                <td>{{ camp.CR_prospe_deadline }}</td>
+                <td>
+                    {% if camp.CR_prospe %}
+                        <a href="{{ camp.CR_prospe.url }}" target="_blank">Télécharger</a>
+                    {% else %}
+                        Aucun fichier disponible
+                    {% endif %}
+                </td>
+                <td class="
+                    {% if camp.CR_prospe_etat == 'Non rendu' %}
+                        etat-non-rendu
+                    {% elif camp.CR_prospe_etat == 'Rendu' %}
+                        etat-rendu
+                    {% elif camp.CR_prospe_etat == 'Validé' %}
+                        etat-valide
+                    {% elif camp.CR_prospe_etat == 'Refusé' %}
+                        etat-refuse
+                    {% endif %}
+                ">{{ camp.CR_prospe_etat }}</td>
+                <td class="file-state-cell">
+                    <form method="post" action="{% url 'update_file_state' 'CR_prospe' camp.numero %}" class="state-form">
+                        {% csrf_token %}
+                        <div class="file-state-actions">
+                            <div class="select-wrapper">
+                                <select name="new_state" class="file-state-select">
+                                    <option value="Non rendu" {% if camp.CR_prospe_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
+                                    <option value="Rendu" {% if camp.CR_prospe_etat == "Rendu" %}selected{% endif %}>Rendu</option>
+                                    <option value="Refusé" {% if camp.CR_prospe_etat == "Refusé" %}selected{% endif %}>Refusé</option>
+                                    <option value="Validé" {% if camp.CR_prospe_etat == "Validé" %}selected{% endif %}>Validé</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="file-state-button">Mettre à jour</button>
+                        </div>
+                    </form>
+                </td>
+                <td>
+                    <form action="{% url 'modifier_commentaire' 'CR_prospe' camp.numero%}" method="POST">
+                        {% csrf_token %}
+                        <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.CR_prospe_commentaire|default:""  }}</textarea>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>Contrat de Location</td>
+                <td>28 Février</td>
+                <td>
+                    {% if camp.contrat_location %}
+                        <a href="{{ camp.contrat_location.url }}" target="_blank">Télécharger</a>
+                    {% else %}
+                        Aucun fichier disponible
+                    {% endif %}
+                </td>
+                <td class="
+                    {% if camp.contrat_location_etat == 'Non rendu' %}
+                        etat-non-rendu
+                    {% elif camp.contrat_location_etat == 'Rendu' %}
+                        etat-rendu
+                    {% elif camp.contrat_location_etat == 'Validé' %}
+                        etat-valide
+                    {% elif camp.contrat_location_etat == 'Refusé' %}
+                        etat-refuse
+                    {% endif %}
+                ">{{ camp.contrat_location_etat }}</td>
+                <td class="file-state-cell">
+                    <form method="post" action="{% url 'update_file_state' 'contrat_location' camp.numero %}" class="state-form">
+                        {% csrf_token %}
+                        <div class="file-state-actions">
+                            <div class="select-wrapper">
+                                <select name="new_state" class="file-state-select">
+                                    <option value="Non rendu" {% if camp.contrat_location_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
+                                    <option value="Rendu" {% if camp.contrat_location_etat == "Rendu" %}selected{% endif %}>Rendu</option>
+                                    <option value="Refusé" {% if camp.contrat_location_etat == "Refusé" %}selected{% endif %}>Refusé</option>
+                                    <option value="Validé" {% if camp.contrat_location_etat == "Validé" %}selected{% endif %}>Validé</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="file-state-button">Mettre à jour</button>
+                        </div>
+                    </form>
+                </td>
+                <td>
+                    <form action="{% url 'modifier_commentaire' 'contrat_location' camp.numero%}" method="POST">
+                        {% csrf_token %}
+                        <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.contrat_location_commentaire|default:""  }}</textarea>
+                    </form>
+                </td>
+            </tr>
+            <tr>
                 <td>Fil Rouge</td>
                 <td>{{ camp.fil_rouge_deadline }}</td>
                 <td>
@@ -524,50 +656,6 @@
     </td>
 </tr>
 <tr>
-    <td>Contrat de Location</td>
-    <td>{{ camp.contrat_location_deadline }}</td>
-    <td>
-        {% if camp.contrat_location %}
-            <a href="{{ camp.contrat_location.url }}" target="_blank">Télécharger</a>
-        {% else %}
-            Aucun fichier disponible
-        {% endif %}
-    </td>
-    <td class="
-        {% if camp.contrat_location_etat == 'Non rendu' %}
-            etat-non-rendu
-        {% elif camp.contrat_location_etat == 'Rendu' %}
-            etat-rendu
-        {% elif camp.contrat_location_etat == 'Validé' %}
-            etat-valide
-        {% elif camp.contrat_location_etat == 'Refusé' %}
-            etat-refuse
-        {% endif %}
-    ">{{ camp.contrat_location_etat }}</td>
-    <td class="file-state-cell">
-        <form method="post" action="{% url 'update_file_state' 'contrat_location' camp.numero %}" class="state-form">
-            {% csrf_token %}
-            <div class="file-state-actions">
-                <div class="select-wrapper">
-                    <select name="new_state" class="file-state-select">
-                        <option value="Non rendu" {% if camp.contrat_location_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
-                        <option value="Rendu" {% if camp.contrat_location_etat == "Rendu" %}selected{% endif %}>Rendu</option>
-                        <option value="Refusé" {% if camp.contrat_location_etat == "Refusé" %}selected{% endif %}>Refusé</option>
-                        <option value="Validé" {% if camp.contrat_location_etat == "Validé" %}selected{% endif %}>Validé</option>
-                    </select>
-                </div>
-                <button type="submit" class="file-state-button">Mettre à jour</button>
-            </div>
-        </form>
-    </td>
-    <td>
-        <form action="{% url 'modifier_commentaire' 'contrat_location' camp.numero%}" method="POST">
-            {% csrf_token %}
-            <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.contrat_location_commentaire|default:""  }}</textarea>
-        </form>
-    </td>
-</tr>
-<tr>
     <td>Procuration Banque</td>
     <td>{{ camp.procuration_banque_deadline }}</td>
     <td>
@@ -612,50 +700,7 @@
     </td>
 </tr>
 <!-- Ligne Compte-Rendu Prospection -->
-<tr>
-    <td>Compte-Rendu Prospection</td>
-    <td>{{ camp.CR_prospe_deadline }}</td>
-    <td>
-        {% if camp.CR_prospe %}
-            <a href="{{ camp.CR_prospe.url }}" target="_blank">Télécharger</a>
-        {% else %}
-            Aucun fichier disponible
-        {% endif %}
-    </td>
-    <td class="
-        {% if camp.CR_prospe_etat == 'Non rendu' %}
-            etat-non-rendu
-        {% elif camp.CR_prospe_etat == 'Rendu' %}
-            etat-rendu
-        {% elif camp.CR_prospe_etat == 'Validé' %}
-            etat-valide
-        {% elif camp.CR_prospe_etat == 'Refusé' %}
-            etat-refuse
-        {% endif %}
-    ">{{ camp.CR_prospe_etat }}</td>
-    <td class="file-state-cell">
-        <form method="post" action="{% url 'update_file_state' 'CR_prospe' camp.numero %}" class="state-form">
-            {% csrf_token %}
-            <div class="file-state-actions">
-                <div class="select-wrapper">
-                    <select name="new_state" class="file-state-select">
-                        <option value="Non rendu" {% if camp.CR_prospe_etat == "Non rendu" %}selected{% endif %}>Non rendu</option>
-                        <option value="Rendu" {% if camp.CR_prospe_etat == "Rendu" %}selected{% endif %}>Rendu</option>
-                        <option value="Refusé" {% if camp.CR_prospe_etat == "Refusé" %}selected{% endif %}>Refusé</option>
-                        <option value="Validé" {% if camp.CR_prospe_etat == "Validé" %}selected{% endif %}>Validé</option>
-                    </select>
-                </div>
-                <button type="submit" class="file-state-button">Mettre à jour</button>
-            </div>
-        </form>
-    </td>
-    <td>
-        <form action="{% url 'modifier_commentaire' 'CR_prospe' camp.numero%}" method="POST">
-            {% csrf_token %}
-            <textarea name="commentaire" rows="4" cols="30" onchange="this.form.submit()" >{{ camp.CR_prospe_commentaire|default:""  }}</textarea>
-        </form>
-    </td>
-</tr>
+
 <tr>
     <td>Grille de Camp</td>
     <td>{{ camp.grille_camp_deadline }}</td>

@@ -175,7 +175,7 @@ class Camp(models.Model):
     contrat_location = models.FileField(upload_to='media/fichiers_camps/contrat_location/', blank=True, null=True)
     contrat_location_etat = models.CharField("État du contrat de location", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
     contrat_location_commentaire = models.TextField("Commentaire du contrat de location", blank=True, null=True, default='')
-    contrat_location_deadline = models.DateField("Date limite du contrat de location", blank=True, null=True)
+    contrat_location_deadline = models.CharField("Date limite du contrat de location",max_length=50,  blank=True, null=True, default='28 fevrier')
 
     Budget = models.FileField(upload_to='media/fichiers_camps/Budget/', blank=True, null=True)
     Budget_etat = models.CharField("État du budget", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
@@ -222,6 +222,12 @@ class Camp(models.Model):
     chemins_explo_commentaire = models.TextField("Commentaire des chemins d'exploitation", blank=True, null=True, default='')
     chemins_explo_deadline = models.DateField("Date limite des chemins d'exploitation", blank=True, null=True)
 
+    demande_prospe = models.FileField(upload_to='media/fichiers_camps/demande_prospe/', blank=True, null=True)
+    demande_prospe_etat = models.CharField("État de la demande de prospe", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    demande_prospe_commentaire = models.TextField("Commentaire de demande de prospe", blank=True, null=True, default='')
+    demande_prospe_deadline = models.CharField("Date limite demande de prospe", max_length=50, blank=True, null=True, default='30 Janvier')
+
+    
     def count_validated_files(self):
         """Compter le nombre de fichiers validés."""
         valid_states = ['Validé']

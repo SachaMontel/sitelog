@@ -6,14 +6,14 @@ from django.contrib.auth.models import Group
 class CustomUserCreationForm(UserCreationForm):
     group = forms.ModelChoiceField(
         queryset=Group.objects.all(),
-        required=True,
+        required=False,
         label="Groupe",
         help_text="Choisissez le groupe auquel vous appartenez."
     )
     
     class Meta:
         model = CustomUser  # Utilisez votre modèle personnalisé
-        fields = ['first_name', 'last_name', 'username','password1', 'password2', 'phone', 'gl',  'camp', 'email', 'group']  # Ajoutez vos champs ici
+        fields = ['first_name', 'last_name', 'username','password1', 'password2', 'phone', 'gl',  'camp', 'email']  # Ajoutez vos champs ici
 
     def save(self, commit=True):
         user = super().save(commit=False)

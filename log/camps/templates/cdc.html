@@ -81,6 +81,114 @@
                     </theader>
                     <tbody>
                         <tr>
+                            <td>Demande de prospection</td>
+                            <td>{{ camp.demande_prospe_deadline }}</td>
+                            <td>
+                                {% if camp.demande_prospe %}
+                                    <a href="{{ camp.demande_prospe.url }}" target="_blank">Télécharger</a>
+                                {% else %}
+                                    Aucun fichier disponible
+                                {% endif %}
+                            </td>
+                            <td>
+                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'demande_prospe' camp.numero %}" class="inline-form">
+                                    {% csrf_token %}
+                                    <input type="file" name="file" required>
+                                    <button type="submit" class="upload-btn">Téléverser</button>
+                                </form>
+                                {% if camp.demande_prospe %}
+                                    <form method="post" action="{% url 'delete_file' 'demande_prospe' camp.numero %}" class="inline-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="delete-btn">Supprimer</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                            <td class="
+                            {% if camp.demande_prospe_etat == 'Non rendu' %}
+                                etat-non-rendu
+                            {% elif camp.demande_prospe_etat == 'Rendu' %}
+                                etat-rendu
+                            {% elif camp.demande_prospe_etat == 'Validé' %}
+                                etat-valide
+                            {% elif camp.demande_prospe_etat == 'Refusé' %}
+                                etat-refuse
+                            {% endif %}
+                        ">{{ camp.demande_prospe_etat }}</td>
+                        <td>{{ camp.demande_prospe_commentaire|default_if_none:"" }}</td>
+                        </tr>
+                        <tr>
+                            <td>Compte-Rendu Prospection</td>
+                            <td>{{ camp.CR_prospe_deadline }}</td>
+                            <td>
+                                {% if camp.CR_prospe %}
+                                    <a href="{{ camp.CR_prospe.url }}" target="_blank">Télécharger</a>
+                                {% else %}
+                                    Aucun fichier disponible
+                                {% endif %}
+                            </td>
+                            <td>
+                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'CR_prospe' camp.numero %}" class="inline-form">
+                                    {% csrf_token %}
+                                    <input type="file" name="file" required>
+                                    <button type="submit" class="upload-btn">Téléverser</button>
+                                </form>
+                                {% if camp.CR_prospe %}
+                                    <form method="post" action="{% url 'delete_file' 'CR_prospe' camp.numero %}" class="inline-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="delete-btn">Supprimer</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                            <td class="
+                            {% if camp.CR_prospe_etat == 'Non rendu' %}
+                                etat-non-rendu
+                            {% elif camp.CR_prospe_etat == 'Rendu' %}
+                                etat-rendu
+                            {% elif camp.CR_prospe_etat == 'Validé' %}
+                                etat-valide
+                            {% elif camp.CR_prospe_etat == 'Refusé' %}
+                                etat-refuse
+                            {% endif %}
+                        ">{{ camp.CR_prospe_etat }}</td>
+                        <td>{{ camp.CR_prospe_commentaire|default_if_none:"" }}</td>
+                        </tr>
+                        <tr>
+                            <td>Contrat de location</td>
+                            <td>28 Février</td>
+                            <td>
+                                {% if camp.contrat_location %}
+                                    <a href="{{ camp.contrat_location.url }}" target="_blank">Télécharger</a>
+                                {% else %}
+                                    Aucun fichier disponible
+                                {% endif %}
+                            </td>
+                            <td>
+                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'contrat_location' camp.numero %}" class="inline-form">
+                                    {% csrf_token %}
+                                    <input type="file" name="file" required>
+                                    <button type="submit" class="upload-btn">Téléverser</button>
+                                </form>
+                                {% if camp.contrat_location %}
+                                    <form method="post" action="{% url 'delete_file' 'contrat_location' camp.numero %}" class="inline-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="delete-btn">Supprimer</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                            <td class="
+                            {% if camp.contrat_location_etat == 'Non rendu' %}
+                                etat-non-rendu
+                            {% elif camp.contrat_location_etat == 'Rendu' %}
+                                etat-rendu
+                            {% elif camp.contrat_location_etat == 'Validé' %}
+                                etat-valide
+                            {% elif camp.contrat_location_etat == 'Refusé' %}
+                                etat-refuse
+                            {% endif %}
+                        ">{{ camp.contrat_location_etat }}</td>
+                        <td>{{ camp.contrat_location_commentaire|default_if_none:"" }}</td>
+                        </tr>
+                        <tr>
                             <td>Fil Rouge</td>
                             <td>{{ camp.fil_rouge_deadline }}</td>
                             <td>
@@ -187,42 +295,6 @@
                             {% endif %}
                         ">{{ camp.fil_vert_etat }}</td>
                         <td>{{ camp.fil_vert_commentaire|default_if_none:"" }}</td>
-                        </tr>
-                        <tr>
-                            <td>Compte-Rendu Prospection</td>
-                            <td>{{ camp.CR_prospe_deadline }}</td>
-                            <td>
-                                {% if camp.CR_prospe %}
-                                    <a href="{{ camp.CR_prospe.url }}" target="_blank">Télécharger</a>
-                                {% else %}
-                                    Aucun fichier disponible
-                                {% endif %}
-                            </td>
-                            <td>
-                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'CR_prospe' camp.numero %}" class="inline-form">
-                                    {% csrf_token %}
-                                    <input type="file" name="file" required>
-                                    <button type="submit" class="upload-btn">Téléverser</button>
-                                </form>
-                                {% if camp.CR_prospe %}
-                                    <form method="post" action="{% url 'delete_file' 'CR_prospe' camp.numero %}" class="inline-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="delete-btn">Supprimer</button>
-                                    </form>
-                                {% endif %}
-                            </td>
-                            <td class="
-                            {% if camp.CR_prospe_etat == 'Non rendu' %}
-                                etat-non-rendu
-                            {% elif camp.CR_prospe_etat == 'Rendu' %}
-                                etat-rendu
-                            {% elif camp.CR_prospe_etat == 'Validé' %}
-                                etat-valide
-                            {% elif camp.CR_prospe_etat == 'Refusé' %}
-                                etat-refuse
-                            {% endif %}
-                        ">{{ camp.CR_prospe_etat }}</td>
-                        <td>{{ camp.CR_prospe_commentaire|default_if_none:"" }}</td>
                         </tr>
                         <tr>
                             <td>Grille Assurance</td>
