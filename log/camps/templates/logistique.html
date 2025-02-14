@@ -99,7 +99,13 @@ body::before {
         </head>
         <body>
             <a href="{% url 'home' %}" class="home-button">Home</a>
-            <h1>Bienvenue dans l'espace logistique des camps d'été</h1>
+            <div class="button-container">
+                <a href="{% url 'statbb' %}" class="button button-anbb">Stats BB</a>
+                <a href="{% url 'statbc' %}" class="button button-anbc">Stats BC</a>
+                <a href="{% url 'statbm' %}" class="button button-anbm">Stats BM</a>
+                <a href="{% url 'statbp' %}" class="button button-anbp">Stats BP</a>
+            </div>
+            <h1>Bienvenue dans l'espace logistique des camps d'été {{user.first_name}} !</h1>
             <div class="button-container">
                 <a href="{% url 'anbb' %}" class="button button-anbb">Camps BB</a>
                 <a href="{% url 'anbc' %}" class="button button-anbc">Camps BC</a>

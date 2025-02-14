@@ -112,6 +112,9 @@ form input[type="text"], form select {
     background-color: rgba(0, 128, 0, 0.5); /* green with 50% opacity */
     color: white;
 }
+.etat-encours {
+    background-color: rgba(238,130,238,0.5)
+}
 
 /* Ajouter un peu d'espace autour du tableau */
 table {

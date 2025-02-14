@@ -276,6 +276,12 @@ button.delete-btn {
 .etat-non-rendu {
     background-color: rgba(255, 193, 7, 0.5); /* Jaune pour "Non rendu" */
 }
+.etat-retour {
+    background-color: rgba(255, 0, 255, 0.5);
+}
+.etat-encours {
+    background-color: rgba(85, 85, 85, 0.5);
+}
 
 
 
@@ -342,3 +348,34 @@ button.delete-btn {
 }
 
 
+.drive-link {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    text-align: center;
+    text-decoration: none;
+    background-color: rgb(0,39,152);
+    padding: 10px 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.drive-link:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.drive-icon {
+    display: flex;
+    align-items: center;
+}
+
+.drive-title {
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+}

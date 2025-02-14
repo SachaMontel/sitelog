@@ -13,7 +13,9 @@
     gap: 12px;
     width: 100%;
   }
-  
+  .etat-encours {
+    background-color: rgba(238,130,238,0.5)
+}
   .select-wrapper {
     position: relative;
     flex: 1;
@@ -276,7 +278,9 @@ button.delete-btn {
 .etat-non-rendu {
     background-color: rgba(255, 193, 7, 0.5); /* Jaune pour "Non rendu" */
 }
-
+.etat-retour {
+    background-color: rgba(255, 0, 255, 0.5);
+}
 
 
 /* Style pour liens dans les cellules */

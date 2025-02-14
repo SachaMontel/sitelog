@@ -61,7 +61,112 @@ def home(request):
 def cdc(request):
     user = request.user
     camp = user.camp  # Récupération du camp associé à l'utilisateur
-    return render(request, 'cdc.html', {'camp': camp})
+    
+    if camp.branche == 'BC' or 'BM':
+        documents = [
+            {
+                'name': 'Demande de prospection',
+                'slug': 'demande_prospe',
+                'deadline': camp.demande_prospe_deadline,
+                'file': camp.demande_prospe,
+                'state': camp.demande_prospe_etat,
+                'comment': camp.demande_prospe_commentaire
+            },
+            {
+                'name': 'Compte-Rendu Prospection',
+                'slug': 'CR_prospe',
+                'deadline': camp.CR_prospe_deadline,
+                'file': camp.CR_prospe,
+                'state': camp.CR_prospe_etat,
+                'comment': camp.CR_prospe_commentaire
+            },
+            {
+                'name': 'Contrat de location',
+                'slug': 'contrat_location',
+                'deadline': camp.contrat_location_deadline,
+                'file': camp.contrat_location,
+                'state': camp.contrat_location_etat,
+                'comment': camp.contrat_location_commentaire
+            },
+            {
+                'name': 'Upload des prio',
+                'slug': 'PAF',
+                'deadline': camp.PAF_deadline,
+                'state': camp.PAF_etat,
+            },
+            {
+                'name': 'Fil Rouge',
+                'slug': 'fil_rouge',
+                'deadline': camp.fil_rouge_deadline,
+                'file': camp.fil_rouge,
+                'state': camp.fil_rouge_etat,
+                'comment': camp.fil_rouge_commentaire
+            },
+            {
+                'name': 'Fil Bleu',
+                'slug': 'fil_bleu',
+                'deadline': camp.fil_bleu_deadline,
+                'file': camp.fil_bleu,
+                'state': camp.fil_bleu_etat,
+                'comment': camp.fil_bleu_commentaire
+            },
+            {
+                'name': 'Fil Vert',
+                'slug': 'fil_vert',
+                'deadline': camp.fil_vert_deadline,
+                'file': camp.fil_vert,
+                'state': camp.fil_vert_etat,
+                'comment': camp.fil_vert_commentaire
+            },
+            {
+                'name': 'Grille Assurance',
+                'slug': 'grille_assurance',
+                'deadline': camp.grille_assurance_deadline,
+                'file': camp.grille_assurance,
+                'state': camp.grille_assurance_etat,
+                'comment': camp.grille_assurance_commentaire
+            },
+            {
+                'name': 'Budget',
+                'slug': 'Budget',
+                'deadline': camp.Budget_deadline,
+                'file': camp.Budget,
+                'state': camp.Budget_etat,
+                'comment': camp.Budget_commentaire
+            },
+            {
+                'name': 'Fiche SNCF',
+                'slug': 'fiche_sncf',
+                'deadline': camp.fiche_sncf_deadline,
+                'file': camp.fiche_sncf,
+                'state': camp.fiche_sncf_etat,
+                'comment': camp.fiche_sncf_commentaire
+            },
+            {
+                'name': 'Grille Intendance',
+                'slug': 'grille_intendance',
+                'deadline': camp.grille_intendance_deadline,
+                'file': camp.grille_intendance,
+                'state': camp.grille_intendance_etat,
+                'comment': camp.grille_intendance_commentaire
+            }]
+
+    if camp.branche== 'BP':
+        # Nouveaux documents ajoutés
+        documents=[{'name': 'Budget prévisionnel', 'slug': 'BP', 'deadline': '4 Février', 'file': camp.BP, 'state': camp.BP_etat, 'comment': camp.BP_commentaire},
+            {'name': 'V1 Grille de camp', 'slug': 'V1GC', 'deadline': '04 Février', 'file': camp.V1GC, 'state': camp.V1GC_etat, 'comment': camp.V1GC_commentaire},
+            {'name': 'PPT du point de validation', 'slug': 'PPTPV', 'deadline': '04 Février', 'file': camp.PPTPV, 'state': camp.PPTPV_etat, 'comment': camp.PPTPV_commentaire},
+            {'name': 'Proposition de casting accompagnateurs', 'slug': 'casting', 'deadline': '21 Février', 'file': camp.casting, 'state': camp.casting_etat, 'comment': camp.casting_commentaire},
+            {'name': 'Devis des Billet', 'slug': 'devisbillet', 'deadline': '9 Mars', 'file': camp.devisbillet, 'state': camp.devisbillet_etat, 'comment': camp.devisbillet_commentaire},
+            {'name': 'PPP', 'slug': 'PPP', 'deadline': '20 Mars', 'file': camp.PPP, 'state': camp.PPP_etat, 'comment': camp.PPP_commentaire},
+            {'name': 'Devis des logement', 'slug': 'devislogement', 'deadline': '20 Mars', 'file': camp.devislogement, 'state': camp.devislogement_etat, 'comment': camp.devislogement_commentaire},
+            {'name': 'PPP corrigé', 'slug': 'PPPc', 'deadline': 'Avant les JN', 'file': camp.PPPc, 'state': camp.PPPc_etat, 'comment': camp.PPPc_commentaire},
+            {'name': 'V2 Grille de Camp', 'slug': 'V2GC', 'deadline': '1er Mai', 'file': camp.V2GC, 'state': camp.V2GC_etat, 'comment': camp.V2GC_commentaire},
+            {'name': 'Grille intendance', 'slug': 'GI', 'deadline': '1er Mai', 'file': camp.GI, 'state': camp.GI_etat, 'comment': camp.GI_commentaire},
+            {'name': 'VF grille de camp', 'slug': 'VFGC', 'deadline': '1er Juin', 'file': camp.VFGC, 'state': camp.VFGC_etat, 'comment': camp.VFGC_commentaire}
+            ]
+    
+    return render(request, 'cdc.html', {'camp': camp, 'documents': documents})
 
 @group_required(['logistique','masai' ,'superuser'])
 def logistique(request):
@@ -87,9 +192,355 @@ def anbp(request):
     camps_bp = Camp.objects.filter(branche="BP")
     return render(request, 'anbp.html', {'camps_bp': camps_bp})
 
+@group_required(['logistique','masai' ,'superuser','anbb'])
+def statbb(request):
+    docs = ['demande_prospe','CR_prospe','contrat_location','PAF', 'fil_rouge', 'fil_bleu', 'Budget',  'fiche_sncf', 
+            'grille_assurance', 'grille_ddcs', 'grille_intendance', 'procuration_banque', 
+            'recepisse', 'chemins_explo', 'fil_vert', 'grille_camp' ]
+    camps_bb = Camp.objects.filter(branche="BB")
+    compteurs = {}
+
+    for doc in docs:
+        compteurs[doc] = {
+            "data": [0, 0, 0, 0, 0, 0],  # [Rendu, Non rendu, En cours, Validé]
+            "camps": {  # Associer les numéros des camps à chaque état
+                "Rendu": [],
+                "Non rendu": [],
+                "Validé": [],
+                "Refusé": [],
+                "Retour fait": [],
+                "En cours": [],
+            }
+        }
+
+    for camp in camps_bb:
+        for doc in docs:
+            doc_etat = getattr(camp, f"{doc}_etat", None)  # Récupérer l'état dynamiquement
+            if doc_etat == 'Rendu':
+                compteurs[doc]["data"][0] += 1
+                compteurs[doc]["camps"]["Rendu"].append(camp.numero)
+            elif doc_etat == 'Non rendu':
+                compteurs[doc]["data"][1] += 1
+                compteurs[doc]["camps"]["Non rendu"].append(camp.numero)
+            elif doc_etat == 'Validé':
+                compteurs[doc]["data"][2] += 1
+                compteurs[doc]["camps"]["Validé"].append(camp.numero)
+            elif doc_etat == 'Refusé':
+                compteurs[doc]["data"][3] += 1
+                compteurs[doc]["camps"]["Refusé"].append(camp.numero)
+            elif doc_etat == 'Retour fait':
+                compteurs[doc]["data"][4] += 1
+                compteurs[doc]["camps"]["Retour fait"].append(camp.numero)
+            elif doc_etat == 'En cours':
+                compteurs[doc]["data"][4] += 1
+                compteurs[doc]["camps"]["En cours"].append(camp.numero)
+
+    # Préparer des titres lisibles pour le template
+    compteurs_readable = {
+        doc.replace("_", " ").capitalize(): {"data": details["data"], "camps": details["camps"], "id": doc}
+        for doc, details in compteurs.items()
+    }
+
+    return render(request, 'statbb.html', {'camps_bb': camps_bb, 'compteurs': compteurs_readable})
+
+
+@group_required(['logistique','masai' ,'superuser','anbc'])
+def statbc(request):
+    docs = ['demande_prospe','CR_prospe','contrat_location','PAF', 'fil_rouge', 'fil_bleu', 'Budget',  'fiche_sncf', 
+            'grille_assurance', 'grille_ddcs', 'grille_intendance', 'procuration_banque', 
+            'recepisse', 'chemins_explo', 'fil_vert', 'grille_camp' ]
+    camps_bb = Camp.objects.filter(branche="BC")
+    compteurs = {}
+
+    for doc in docs:
+        compteurs[doc] = {
+            "data": [0, 0, 0, 0, 0, 0],  # [Rendu, Non rendu, En cours, Validé]
+            "camps": {  # Associer les numéros des camps à chaque état
+                "Rendu": [],
+                "Non rendu": [],
+                "Validé": [],
+                "Refusé": [],
+                "Retour fait": [],
+                "En cours": [],
+            }
+        }
+
+    for camp in camps_bb:
+        for doc in docs:
+            doc_etat = getattr(camp, f"{doc}_etat", None)  # Récupérer l'état dynamiquement
+            if doc_etat == 'Rendu':
+                compteurs[doc]["data"][0] += 1
+                compteurs[doc]["camps"]["Rendu"].append(camp.numero)
+            elif doc_etat == 'Non rendu':
+                compteurs[doc]["data"][1] += 1
+                compteurs[doc]["camps"]["Non rendu"].append(camp.numero)
+            elif doc_etat == 'Validé':
+                compteurs[doc]["data"][2] += 1
+                compteurs[doc]["camps"]["Validé"].append(camp.numero)
+            elif doc_etat == 'Refusé':
+                compteurs[doc]["data"][3] += 1
+                compteurs[doc]["camps"]["Refusé"].append(camp.numero)
+            elif doc_etat == 'Retour fait':
+                compteurs[doc]["data"][4] += 1
+                compteurs[doc]["camps"]["Retour fait"].append(camp.numero)
+            elif doc_etat == 'En cours':
+                compteurs[doc]["data"][4] += 1
+                compteurs[doc]["camps"]["En cours"].append(camp.numero)
+
+    # Préparer des titres lisibles pour le template
+    compteurs_readable = {
+        doc.replace("_", " ").capitalize(): {"data": details["data"], "camps": details["camps"], "id": doc}
+        for doc, details in compteurs.items()
+    }
+
+    return render(request, 'statbc.html', {'camps_bb': camps_bb, 'compteurs': compteurs_readable})
+
+@group_required(['logistique','masai' ,'superuser','anbm'])
+def statbm(request):
+    docs = ['demande_prospe','CR_prospe','contrat_location','PAF', 'fil_rouge', 'fil_bleu', 'Budget',  'fiche_sncf', 
+            'grille_assurance', 'grille_ddcs', 'grille_intendance', 'procuration_banque', 
+            'recepisse', 'chemins_explo', 'fil_vert', 'grille_camp' ]
+    camps_bb = Camp.objects.filter(branche="BM")
+    compteurs = {}
+
+    for doc in docs:
+        compteurs[doc] = {
+            "data": [0, 0, 0, 0, 0, 0],  # [Rendu, Non rendu, En cours, Validé]
+            "camps": {  # Associer les numéros des camps à chaque état
+                "Rendu": [],
+                "Non rendu": [],
+                "Validé": [],
+                "Refusé": [],
+                "Retour fait": [],
+                "En cours": [],
+            }
+        }
+
+    for camp in camps_bb:
+        for doc in docs:
+            doc_etat = getattr(camp, f"{doc}_etat", None)  # Récupérer l'état dynamiquement
+            if doc_etat == 'Rendu':
+                compteurs[doc]["data"][0] += 1
+                compteurs[doc]["camps"]["Rendu"].append(camp.numero)
+            elif doc_etat == 'Non rendu':
+                compteurs[doc]["data"][1] += 1
+                compteurs[doc]["camps"]["Non rendu"].append(camp.numero)
+            elif doc_etat == 'Validé':
+                compteurs[doc]["data"][2] += 1
+                compteurs[doc]["camps"]["Validé"].append(camp.numero)
+            elif doc_etat == 'Refusé':
+                compteurs[doc]["data"][3] += 1
+                compteurs[doc]["camps"]["Refusé"].append(camp.numero)
+            elif doc_etat == 'Retour fait':
+                compteurs[doc]["data"][4] += 1
+                compteurs[doc]["camps"]["Retour fait"].append(camp.numero)
+            elif doc_etat == 'En cours':
+                compteurs[doc]["data"][4] += 1
+                compteurs[doc]["camps"]["En cours"].append(camp.numero)
+
+    # Préparer des titres lisibles pour le template
+    compteurs_readable = {
+        doc.replace("_", " ").capitalize(): {"data": details["data"], "camps": details["camps"], "id": doc}
+        for doc, details in compteurs.items()
+    }
+
+    return render(request, 'statbm.html', {'camps_bb': camps_bb, 'compteurs': compteurs_readable})
+
+@group_required(['logistique','masai' ,'superuser','anbp'])
+def statbp(request):
+    docs = [
+    'BP', 'V1GC', 'PPTPV', 'casting', 'devisbillet', 'PPP', 
+    'devislogement', 'PPPc', 'V2GC', 'GI', 'VFGC'
+]
+    camps_bb = Camp.objects.filter(branche="BP")
+    compteurs = {}
+
+    for doc in docs:
+        compteurs[doc] = {
+            "data": [0, 0, 0, 0, 0],  # [Rendu, Non rendu, En cours, Validé]
+            "camps": {  # Associer les numéros des camps à chaque état
+                "Rendu": [],
+                "Non rendu": [],
+                "Validé": [],
+                "Refusé": [],
+                "Retour fait": [],
+            }
+        }
+
+    for camp in camps_bb:
+        for doc in docs:
+            doc_etat = getattr(camp, f"{doc}_etat", None)  # Récupérer l'état dynamiquement
+            if doc_etat == 'Rendu':
+                compteurs[doc]["data"][0] += 1
+                compteurs[doc]["camps"]["Rendu"].append(camp.numero)
+            elif doc_etat == 'Non rendu':
+                compteurs[doc]["data"][1] += 1
+                compteurs[doc]["camps"]["Non rendu"].append(camp.numero)
+            elif doc_etat == 'Validé':
+                compteurs[doc]["data"][2] += 1
+                compteurs[doc]["camps"]["Validé"].append(camp.numero)
+            elif doc_etat == 'Refusé':
+                compteurs[doc]["data"][3] += 1
+                compteurs[doc]["camps"]["Refusé"].append(camp.numero)
+            elif doc_etat == 'Retour fait':
+                compteurs[doc]["data"][4] += 1
+                compteurs[doc]["camps"]["Retour fait"].append(camp.numero)
+
+    # Préparer des titres lisibles pour le template
+    compteurs_readable = {
+        doc.replace("_", " ").capitalize(): {"data": details["data"], "camps": details["camps"], "id": doc}
+        for doc, details in compteurs.items()
+    }
+
+    return render(request, 'statbp.html', {'camps_bb': camps_bb, 'compteurs': compteurs_readable})
+
 def camp_detail(request, numero):
     camp = get_object_or_404(Camp, numero=numero)
-    return render(request, 'camp_detail.html', {'camp': camp})
+
+    if camp.branche == 'BC' or 'BM':
+    # Liste de tous les documents
+        documents = [
+            {
+                'name': 'Demande de prospe',
+                'slug': 'demande_prospe',
+                'deadline': camp.demande_prospe_deadline,
+                'file': camp.demande_prospe,
+                'state': camp.demande_prospe_etat,
+                'comment': camp.demande_prospe_commentaire
+            },
+            {
+                'name': 'Compte-Rendu Prospection',
+                'slug': 'CR_prospe',
+                'deadline': camp.CR_prospe_deadline,
+                'file': camp.CR_prospe,
+                'state': camp.CR_prospe_etat,
+                'comment': camp.CR_prospe_commentaire
+            },
+            {
+                'name': 'Contrat de Location',
+                'slug': 'contrat_location',
+                'deadline': camp.contrat_location_deadline,
+                'file': camp.contrat_location,
+                'state': camp.contrat_location_etat,
+                'comment': camp.contrat_location_commentaire
+            },
+            {
+                'name': 'Upload des prio',
+                'slug': 'PAF',
+                'deadline': camp.PAF_deadline,
+                'state': camp.PAF_etat,
+            },
+            {
+                'name': 'Fil Rouge',
+                'slug': 'fil_rouge',
+                'deadline': camp.fil_rouge_deadline,
+                'file': camp.fil_rouge,
+                'state': camp.fil_rouge_etat,
+                'comment': camp.fil_rouge_commentaire
+            },
+            {
+                'name': 'Fil Bleu',
+                'slug': 'fil_bleu',
+                'deadline': camp.fil_bleu_deadline,
+                'file': camp.fil_bleu,
+                'state': camp.fil_bleu_etat,
+                'comment': camp.fil_bleu_commentaire
+            },
+            {
+                'name': 'Fil Vert',
+                'slug': 'fil_vert',
+                'deadline': camp.fil_vert_deadline,
+                'file': camp.fil_vert,
+                'state': camp.fil_vert_etat,
+                'comment': camp.fil_vert_commentaire
+            },
+            {
+                'name': 'Grille Assurance',
+                'slug': 'grille_assurance',
+                'deadline': camp.grille_assurance_deadline,
+                'file': camp.grille_assurance,
+                'state': camp.grille_assurance_etat,
+                'comment': camp.grille_assurance_commentaire
+            },
+            {
+                'name': 'Grille DDCS',
+                'slug': 'grille_ddcs',
+                'deadline': camp.grille_ddcs_deadline,
+                'file': camp.grille_ddcs,
+                'state': camp.grille_ddcs_etat,
+                'comment': camp.grille_ddcs_commentaire
+            },
+            {
+                'name': 'Budget',
+                'slug': 'Budget',
+                'deadline': camp.Budget_deadline,
+                'file': camp.Budget,
+                'state': camp.Budget_etat,
+                'comment': camp.Budget_commentaire
+            },
+            {
+                'name': 'Grille Intendance',
+                'slug': 'grille_intendance',
+                'deadline': camp.grille_intendance_deadline,
+                'file': camp.grille_intendance,
+                'state': camp.grille_intendance_etat,
+                'comment': camp.grille_intendance_commentaire
+            },
+            {
+                'name': 'Fiche SNCF',
+                'slug': 'fiche_sncf',
+                'deadline': camp.fiche_sncf_deadline,
+                'file': camp.fiche_sncf,
+                'state': camp.fiche_sncf_etat,
+                'comment': camp.fiche_sncf_commentaire
+            },
+            {
+                'name': 'Récepissé',
+                'slug': 'recepisse',
+                'deadline': camp.recepisse_deadline,
+                'file': camp.recepisse,
+                'state': camp.recepisse_etat,
+                'comment': camp.recepisse_commentaire
+            },
+            {
+                'name': 'Chemins Explo',
+                'slug': 'chemins_explo',
+                'deadline': camp.chemins_explo_deadline,
+                'file': camp.chemins_explo,
+                'state': camp.chemins_explo_etat,
+                'comment': camp.chemins_explo_commentaire
+            },
+            {
+                'name': 'Procuration Banque',
+                'slug': 'procuration_banque',
+                'deadline': camp.procuration_banque_deadline,
+                'file': camp.procuration_banque,
+                'state': camp.procuration_banque_etat,
+                'comment': camp.procuration_banque_commentaire
+            },
+            {
+                'name': 'Grille de Camp',
+                'slug': 'grille_camp',
+                'deadline': camp.grille_camp_deadline,
+                'file': camp.grille_camp,
+                'state': camp.grille_camp_etat,
+                'comment': camp.grille_camp_commentaire
+            }
+        ]
+    if camp.branche == 'BP':
+        documents=[{'name': 'Budget prévisionnel', 'slug': 'BP', 'deadline': '4 Février', 'file': camp.BP, 'state': camp.BP_etat, 'comment': camp.BP_commentaire},
+            {'name': 'V1 Grille de camp', 'slug': 'V1GC', 'deadline': '04 Février', 'file': camp.V1GC, 'state': camp.V1GC_etat, 'comment': camp.V1GC_commentaire},
+            {'name': 'PPT du point de validation', 'slug': 'PPTPV', 'deadline': '04 Février', 'file': camp.PPTPV, 'state': camp.PPTPV_etat, 'comment': camp.PPTPV_commentaire},
+            {'name': 'Proposition de casting accompagnateurs', 'slug': 'casting', 'deadline': '21 Février', 'file': camp.casting, 'state': camp.casting_etat, 'comment': camp.casting_commentaire},
+            {'name': 'Devis des Billet', 'slug': 'devisbillet', 'deadline': '9 Mars', 'file': camp.devisbillet, 'state': camp.devisbillet_etat, 'comment': camp.devisbillet_commentaire},
+            {'name': 'PPP', 'slug': 'PPP', 'deadline': '20 Mars', 'file': camp.PPP, 'state': camp.PPP_etat, 'comment': camp.PPP_commentaire},
+            {'name': 'Devis des logement', 'slug': 'devislogement', 'deadline': '20 Mars', 'file': camp.devislogement, 'state': camp.devislogement_etat, 'comment': camp.devislogement_commentaire},
+            {'name': 'PPP corrigé', 'slug': 'PPPc', 'deadline': 'Avant les JN', 'file': camp.PPPc, 'state': camp.PPPc_etat, 'comment': camp.PPPc_commentaire},
+            {'name': 'V2 Grille de Camp', 'slug': 'V2GC', 'deadline': '1er Mai', 'file': camp.V2GC, 'state': camp.V2GC_etat, 'comment': camp.V2GC_commentaire},
+            {'name': 'Grille intendance', 'slug': 'GI', 'deadline': '1er Mai', 'file': camp.GI, 'state': camp.GI_etat, 'comment': camp.GI_commentaire},
+            {'name': 'VF grille de camp', 'slug': 'VFGC', 'deadline': '1er Juin', 'file': camp.VFGC, 'state': camp.VFGC_etat, 'comment': camp.VFGC_commentaire}
+            ]
+    return render(request, 'camp_detail.html', {'camp': camp, 'documents': documents})
 
 @login_required
 def upload_file(request, file_type, camp_id):
@@ -177,6 +628,66 @@ def upload_file(request, file_type, camp_id):
             camp.grille_camp = uploaded_file
             file_label = "Grille camp"
             camp.grille_camp_etat = 'Rendu'
+        elif file_type == 'demande_prospe':
+            camp.delete_old_file('demande_prospe')
+            camp.demande_prospe = uploaded_file
+            file_label = "Demande de prospe"
+            camp.demande_prospe_etat = 'Rendu'
+        elif file_type == 'BP':
+            camp.delete_old_file('BP')
+            camp.BP = uploaded_file
+            file_label = "BP"
+            camp.BP_etat = 'Rendu'
+        elif file_type == 'V1GC':
+            camp.delete_old_file('V1GC')
+            camp.V1GC = uploaded_file
+            file_label = "V1GC"
+            camp.V1GC_etat = 'Rendu'
+        elif file_type == 'PPTPV':
+            camp.delete_old_file('PPTPV')
+            camp.PPTPV = uploaded_file
+            file_label = "PPTPV"
+            camp.PPTPV_etat = 'Rendu'
+        elif file_type == 'casting':
+            camp.delete_old_file('casting')
+            camp.casting = uploaded_file
+            file_label = "Casting"
+            camp.casting_etat = 'Rendu'
+        elif file_type == 'devisbillet':
+            camp.delete_old_file('devisbillet')
+            camp.devisbillet = uploaded_file
+            file_label = "Devis Billet"
+            camp.devisbillet_etat = 'Rendu'
+        elif file_type == 'PPP':
+            camp.delete_old_file('PPP')
+            camp.PPP = uploaded_file
+            file_label = "PPP"
+            camp.PPP_etat = 'Rendu'
+        elif file_type == 'devislogement':
+            camp.delete_old_file('devislogement')
+            camp.devislogement = uploaded_file
+            file_label = "Devis Logement"
+            camp.devislogement_etat = 'Rendu'
+        elif file_type == 'PPPc':
+            camp.delete_old_file('PPPc')
+            camp.PPPc = uploaded_file
+            file_label = "PPPc"
+            camp.PPPc_etat = 'Rendu'
+        elif file_type == 'V2GC':
+            camp.delete_old_file('V2GC')
+            camp.V2GC = uploaded_file
+            file_label = "V2GC"
+            camp.V2GC_etat = 'Rendu'
+        elif file_type == 'GI':
+            camp.delete_old_file('GI')
+            camp.GI = uploaded_file
+            file_label = "GI"
+            camp.GI_etat = 'Rendu'
+        elif file_type == 'VFGC':
+            camp.delete_old_file('VFGC')
+            camp.VFGC = uploaded_file
+            file_label = "VFGC"
+            camp.VFGC_etat = 'Rendu'
         else:
             return HttpResponse("Type de fichier invalide.", status=400)
         camp.save()
@@ -259,14 +770,60 @@ def delete_file(request, file_type, camp_id):
         camp.delete_old_file('grille_camp')
         camp.grille_camp = None
         camp.grille_camp_etat = 'Non rendu'
+    elif file_type == 'demande_prospe':
+        camp.delete_old_file('demande_prospe')
+        camp.demande_prospe = None
+        camp.demande_prospe_etat = 'Non rendu'
+    elif file_type == 'BP':
+        camp.delete_old_file('BP')
+        camp.BP = None
+        camp.BP_etat = 'Non rendu'
+    elif file_type == 'V1GC':
+        camp.delete_old_file('V1GC')
+        camp.V1GC = None
+        camp.V1GC_etat = 'Non rendu'
+    elif file_type == 'PPTPV':
+        camp.delete_old_file('PPTPV')
+        camp.PPTPV = None
+        camp.PPTPV_etat = 'Non rendu'
+    elif file_type == 'casting':
+        camp.delete_old_file('casting')
+        camp.casting = None
+        camp.casting_etat = 'Non rendu'
+    elif file_type == 'devisbillet':
+        camp.delete_old_file('devisbillet')
+        camp.devisbillet = None
+        camp.devisbillet_etat = 'Non rendu'
+    elif file_type == 'PPP':
+        camp.delete_old_file('PPP')
+        camp.PPP = None
+        camp.PPP_etat = 'Non rendu'
+    elif file_type == 'devislogement':
+        camp.delete_old_file('devislogement')
+        camp.devislogement = None
+        camp.devislogement_etat = 'Non rendu'
+    elif file_type == 'PPPc':
+        camp.delete_old_file('PPPc')
+        camp.PPPc = None
+        camp.PPPc_etat = 'Non rendu'
+    elif file_type == 'V2GC':
+        camp.delete_old_file('V2GC')
+        camp.V2GC = None
+        camp.V2GC_etat = 'Non rendu'
+    elif file_type == 'GI':
+        camp.delete_old_file('GI')
+        camp.GI = None
+        camp.GI_etat = 'Non rendu'
+    elif file_type == 'VFGC':
+        camp.delete_old_file('VFGC')
+        camp.VFGC = None
+        camp.VFGC_etat = 'Non rendu'
     else:
         return HttpResponse("Type de fichier invalide.", status=400)
     camp.save()
     return redirect('cdc')
 
-
-@login_required
-def update_file_state(request, file_type, camp_id):
+def update_file_state_cdc(request, file_type, camp_id):
     if request.method == "POST":
         new_state = request.POST.get("new_state")
         camp = get_object_or_404(Camp, numero=camp_id)
@@ -278,6 +835,8 @@ def update_file_state(request, file_type, camp_id):
             camp.fil_bleu_etat = new_state
         elif file_type == "fil_vert":
             camp.fil_vert_etat = new_state
+        elif file_type == "PAF":
+            camp.PAF_etat = new_state
         elif file_type == "CR_prospe":
             camp.CR_prospe_etat = new_state
         elif file_type == "grille_assurance":
@@ -300,6 +859,108 @@ def update_file_state(request, file_type, camp_id):
             camp.Budget_etat = new_state
         elif file_type == "grille_camp":
             camp.grille_camp_etat = new_state
+        elif file_type == "demande_prospe":
+            camp.demande_prospe_etat = new_state
+        elif file_type == "BP":
+            camp.BP_etat = new_state
+        elif file_type == "V1GC":
+            camp.V1GC_etat = new_state
+        elif file_type == "PPTPV":
+            camp.PPTPV_etat = new_state
+        elif file_type == "casting":
+            camp.casting_etat = new_state
+        elif file_type == "devisbillet":
+            camp.devisbillet_etat = new_state
+        elif file_type == "PPP":
+            camp.PPP_etat = new_state
+        elif file_type == "devislogement":
+            camp.devislogement_etat = new_state
+        elif file_type == "PPPc":
+            camp.PPPc_etat = new_state
+        elif file_type == "V2GC":
+            camp.V2GC_etat = new_state
+        elif file_type == "GI":
+            camp.GI_etat = new_state
+        elif file_type == "VFGC":
+            camp.VFGC_etat = new_state
+
+        else:
+            return HttpResponse("Type de fichier invalide.", status=400)
+        # Sauvegarder les changements
+        camp.save()
+        send_mail(
+            subject='Retour du QG',
+            message=f'L état du fichier {file_type} a été modifié pour le camp {camp.numero}. Connectez-vous sur https://eeif.rezel.net/home',
+            from_email='eeif@rezel.net',  # Remplacez par votre adresse e-mail
+            recipient_list=[camp.mail],
+        )
+
+        # Rediriger vers la page de détails du camp
+        return redirect('cdc')
+    return redirect('cdc')
+
+@login_required
+def update_file_state(request, file_type, camp_id):
+    if request.method == "POST":
+        new_state = request.POST.get("new_state")
+        camp = get_object_or_404(Camp, numero=camp_id)
+
+        # Mettre à jour l'état du fichier correspondant
+        if file_type == "fil_rouge":
+            camp.fil_rouge_etat = new_state
+        elif file_type == "fil_bleu":
+            camp.fil_bleu_etat = new_state
+        elif file_type == "fil_vert":
+            camp.fil_vert_etat = new_state
+        elif file_type == "PAF":
+            camp.PAF_etat = new_state
+        elif file_type == "CR_prospe":
+            camp.CR_prospe_etat = new_state
+        elif file_type == "grille_assurance":
+            camp.grille_assurance_etat = new_state
+        elif file_type == "grille_ddcs":
+            camp.grille_ddcs_etat = new_state
+        elif file_type == "grille_intendance":
+            camp.grille_intendance_etat = new_state
+        elif file_type == "fiche_sncf":
+            camp.fiche_sncf_etat = new_state
+        elif file_type == "procuration_banque":
+            camp.procuration_banque_etat = new_state
+        elif file_type == "recepisse":
+            camp.recepisse_etat = new_state
+        elif file_type == "chemins_explo":
+            camp.chemins_explo_etat = new_state
+        elif file_type == "contrat_location":
+            camp.contrat_location_etat = new_state
+        elif file_type == "Budget":
+            camp.Budget_etat = new_state
+        elif file_type == "grille_camp":
+            camp.grille_camp_etat = new_state
+        elif file_type == "demande_prospe":
+            camp.demande_prospe_etat = new_state
+        elif file_type == "BP":
+            camp.BP_etat = new_state
+        elif file_type == "V1GC":
+            camp.V1GC_etat = new_state
+        elif file_type == "PPTPV":
+            camp.PPTPV_etat = new_state
+        elif file_type == "casting":
+            camp.casting_etat = new_state
+        elif file_type == "devisbillet":
+            camp.devisbillet_etat = new_state
+        elif file_type == "PPP":
+            camp.PPP_etat = new_state
+        elif file_type == "devislogement":
+            camp.devislogement_etat = new_state
+        elif file_type == "PPPc":
+            camp.PPPc_etat = new_state
+        elif file_type == "V2GC":
+            camp.V2GC_etat = new_state
+        elif file_type == "GI":
+            camp.GI_etat = new_state
+        elif file_type == "VFGC":
+            camp.VFGC_etat = new_state
+
         else:
             return HttpResponse("Type de fichier invalide.", status=400)
         # Sauvegarder les changements
@@ -351,6 +1012,31 @@ def modifier_commentaire(request, file_type, camp_id):
             camp.Budget_commentaire = nouveau_commentaire
         elif file_type == 'grille_camp':
             camp.grille_camp_commentaire = nouveau_commentaire
+        elif file_type == 'demande_prospe':
+            camp.demande_prospe_commentaire = nouveau_commentaire
+        elif file_type == 'BP':
+            camp.BP_commentaire = nouveau_commentaire
+        elif file_type == 'V1GC':
+            camp.V1GC_commentaire = nouveau_commentaire
+        elif file_type == 'PPTPV':
+            camp.PPTPV_commentaire = nouveau_commentaire
+        elif file_type == 'casting':
+            camp.casting_commentaire = nouveau_commentaire
+        elif file_type == 'devisbillet':
+            camp.devisbillet_commentaire = nouveau_commentaire
+        elif file_type == 'PPP':
+            camp.PPP_commentaire = nouveau_commentaire
+        elif file_type == 'devislogement':
+            camp.devislogement_commentaire = nouveau_commentaire
+        elif file_type == 'PPPc':
+            camp.PPPc_commentaire = nouveau_commentaire
+        elif file_type == 'V2GC':
+            camp.V2GC_commentaire = nouveau_commentaire
+        elif file_type == 'GI':
+            camp.GI_commentaire = nouveau_commentaire
+        elif file_type == 'VFGC':
+            camp.VFGC_commentaire = nouveau_commentaire
+
         else:
             return HttpResponse("Type de fichier invalide.", status=400)
         # Sauvegarder les changements

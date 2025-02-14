@@ -11,7 +11,9 @@ h1 {
     text-align: center;
     color: rgb(255,127,0);
 }
-
+.etat-encours {
+    background-color: rgba(238,130,238,0.5)
+}
 /* Style pour le tableau */
 table {
     width: 100%;

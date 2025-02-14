@@ -7,7 +7,7 @@ django.setup()
 
 from camps.models import Camp  # Remplacez 'camps' par le nom de votre app
 
-Camp.objects.all().delete()
+#Camp.objects.all().delete()
 
 def create_camps():
     branches = ['BB', 'BC', 'BM', 'BP']
@@ -31,5 +31,5 @@ def create_mail():
         camp.save()
         print(f"Mail créé pour {camp}")
 
-create_camps()
-create_mail()
+#create_camps()
+#create_mail()

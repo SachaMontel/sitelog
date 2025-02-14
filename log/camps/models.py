@@ -116,6 +116,8 @@ ETAT_CHOICES = (
     ('Validé', 'Validé'),
     ('Refusé', 'Refusé'),
     ('Non rendu', 'Non rendu'),
+    ('Retour fait', 'Retour fait'),
+    ('En cours', 'En cours'),
 )
 
 # Create your models here.
@@ -227,7 +229,68 @@ class Camp(models.Model):
     demande_prospe_commentaire = models.TextField("Commentaire de demande de prospe", blank=True, null=True, default='')
     demande_prospe_deadline = models.CharField("Date limite demande de prospe", max_length=50, blank=True, null=True, default='30 Janvier')
 
+    PAF_etat = models.CharField("État de la PAF", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    PAF_deadline = models.CharField("Date limite de la PAF", max_length=50, blank=True, null=True, default='14 Fevrier')
+
+    BP = models.FileField(upload_to='media/fichiers_camps/bp/', blank=True, null=True)
+    BP_etat = models.CharField("État du BP", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    BP_commentaire = models.TextField("Commentaire de demande de prospe", blank=True, null=True, default='')
+    BP_deadline = models.CharField("Date limite du BP", max_length=50, blank=True, null=True, default='30 Janvier')
+
+    V1GC = models.FileField(upload_to='media/fichiers_camps/v1gc/', blank=True, null=True)
+    V1GC_etat = models.CharField("État du V1GC", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    V1GC_commentaire = models.TextField("Commentaire de demande de prospe", blank=True, null=True, default='')
+    V1GC_deadline = models.CharField("Date limite du V1GC", max_length=50, blank=True, null=True, default='30 Janvier')
+
+    PPTPV = models.FileField(upload_to='media/fichiers_camps/pptpv/', blank=True, null=True)
+    PPTPV_etat = models.CharField("État du PPTPV", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    PPTPV_commentaire = models.TextField("Commentaire de demande de prospe", blank=True, null=True, default='')
+    PPTPV_deadline = models.CharField("Date limite du PPTPV", max_length=50, blank=True, null=True, default='30 Janvier')
+
+    casting = models.FileField(upload_to='media/fichiers_camps/casting/', blank=True, null=True)
+    casting_etat = models.CharField("État du Casting", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    casting_commentaire = models.TextField("Commentaire de demande de prospe", blank=True, null=True, default='')
+    casting_deadline = models.CharField("Date limite du Casting", max_length=50, blank=True, null=True, default='30 Janvier')
+
+    devisbillet = models.FileField(upload_to='media/fichiers_camps/devisbillet/', blank=True, null=True)
+    devisbillet_etat = models.CharField("État du devisbillet", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    devisbillet_commentaire = models.TextField("Commentaire de demande de prospe", blank=True, null=True, default='')
+    devisbillet_deadline = models.CharField("Date limite du devisbillet", max_length=50, blank=True, null=True, default='30 Janvier')
+
+    PPP = models.FileField(upload_to='media/fichiers_camps/ppp/', blank=True, null=True)
+    PPP_etat = models.CharField("État du PPP", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    PPP_commentaire = models.TextField("Commentaire de demande de prospe", blank=True, null=True, default='')
+    PPP_deadline = models.CharField("Date limite du PPP", max_length=50, blank=True, null=True, default='30 Janvier')
+
+    devislogement = models.FileField(upload_to='media/fichiers_camps/devislogement/', blank=True, null=True)
+    devislogement_etat = models.CharField("État du devislogement", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    devislogement_commentaire = models.TextField("Commentaire de demande de prospe", blank=True, null=True, default='')
+    devislogement_deadline = models.CharField("Date limite du devislogement", max_length=50, blank=True, null=True, default='30 Janvier')
+
+    PPPc = models.FileField(upload_to='media/fichiers_camps/pppc/', blank=True, null=True)
+    PPPc_etat = models.CharField("État du PPPc", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    PPPc_commentaire = models.TextField("Commentaire de demande de prospe", blank=True, null=True, default='')
+    PPPc_deadline = models.CharField("Date limite du PPPc", max_length=50, blank=True, null=True, default='30 Janvier')
+
+    V2GC = models.FileField(upload_to='media/fichiers_camps/v2gc/', blank=True, null=True)
+    V2GC_etat = models.CharField("État du V2GC", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    V2GC_commentaire = models.TextField("Commentaire de demande de prospe", blank=True, null=True, default='')
+    V2GC_deadline = models.CharField("Date limite du V2GC", max_length=50, blank=True, null=True, default='30 Janvier')
+
+    GI = models.FileField(upload_to='media/fichiers_camps/gi/', blank=True, null=True)
+    GI_etat = models.CharField("État du GI", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    GI_commentaire = models.TextField("Commentaire de demande de prospe", blank=True, null=True, default='')
+    GI_deadline = models.CharField("Date limite du GI", max_length=50, blank=True, null=True, default='30 Janvier')
+
+    VFGC = models.FileField(upload_to='media/fichiers_camps/vfgc/', blank=True, null=True)
+    VFGC_etat = models.CharField("État du VFGC", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    VFGC_commentaire = models.TextField("Commentaire de demande de prospe", blank=True, null=True, default='')
+    VFGC_deadline = models.CharField("Date limite du VFGC", max_length=50, blank=True, null=True, default='30 Janvier')
+
     
+
+
+
     def count_validated_files(self):
         """Compter le nombre de fichiers validés."""
         valid_states = ['Validé']
@@ -246,6 +309,18 @@ class Camp(models.Model):
             self.contrat_location_etat,
             self.Budget_etat,
             self.grille_camp_etat,
+            self.demande_prospe_etat,
+            self.BP_etat,  # Ajout des nouveaux fichiers
+            self.V1GC_etat,
+            self.PPTPV_etat,
+            self.casting_etat,
+            self.devisbillet_etat,
+            self.PPP_etat,
+            self.devislogement_etat,
+            self.PPPc_etat,
+            self.V2GC_etat,
+            self.GI_etat,
+            self.VFGC_etat,
         ]
         return sum(1 for field in fields if field in valid_states)
 
@@ -267,8 +342,21 @@ class Camp(models.Model):
             self.contrat_location_etat,
             self.Budget_etat,
             self.grille_camp_etat,
+            self.demande_prospe_etat,
+            self.BP_etat,  # Ajout des nouveaux fichiers
+            self.V1GC_etat,
+            self.PPTPV_etat,
+            self.casting_etat,
+            self.devisbillet_etat,
+            self.PPP_etat,
+            self.devislogement_etat,
+            self.PPPc_etat,
+            self.V2GC_etat,
+            self.GI_etat,
+            self.VFGC_etat,
         ]
         return sum(1 for field in fields if field in rendered_states)
+
 
     fichiers_valides = property(count_validated_files)
     fichiers_rendus = property(count_rendered_files)

@@ -35,6 +35,14 @@
 </style>
 <body>
     <a href="{% url 'home' %}" class="home-button">Home</a>
+    <a href="https://drive.google.com/drive/folders/1d-A9KQboshjex7MwaMOCfKkg-zZTw-br?usp=share_link" target="_blank" class="drive-link">
+        <span class="drive-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+            </svg>
+        </span>
+        <span class="drive-title">Drive CDC</span>
+    </a>
     <header>
         <h1>Détails du Camp {{ camp.numero }}</h1>
     </header>
@@ -69,560 +77,85 @@
             </tbody>
         </table>   
         <table border="1">
-                    <theader>
-                        <tr>
-                            <th>Fichier</th>
-                            <th>Deadline</th>
-                            <th>Télécharger</th>
-                            <th>Téléverser</th>
-                            <th>État</th>
-                            <th>Commentaires</th>
-                        </tr>
-                    </theader>
-                    <tbody>
-                        <tr>
-                            <td>Demande de prospection</td>
-                            <td>{{ camp.demande_prospe_deadline }}</td>
-                            <td>
-                                {% if camp.demande_prospe %}
-                                    <a href="{{ camp.demande_prospe.url }}" target="_blank">Télécharger</a>
-                                {% else %}
-                                    Aucun fichier disponible
-                                {% endif %}
-                            </td>
-                            <td>
-                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'demande_prospe' camp.numero %}" class="inline-form">
-                                    {% csrf_token %}
-                                    <input type="file" name="file" required>
-                                    <button type="submit" class="upload-btn">Téléverser</button>
-                                </form>
-                                {% if camp.demande_prospe %}
-                                    <form method="post" action="{% url 'delete_file' 'demande_prospe' camp.numero %}" class="inline-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="delete-btn">Supprimer</button>
-                                    </form>
-                                {% endif %}
-                            </td>
-                            <td class="
-                            {% if camp.demande_prospe_etat == 'Non rendu' %}
-                                etat-non-rendu
-                            {% elif camp.demande_prospe_etat == 'Rendu' %}
-                                etat-rendu
-                            {% elif camp.demande_prospe_etat == 'Validé' %}
-                                etat-valide
-                            {% elif camp.demande_prospe_etat == 'Refusé' %}
-                                etat-refuse
-                            {% endif %}
-                        ">{{ camp.demande_prospe_etat }}</td>
-                        <td>{{ camp.demande_prospe_commentaire|default_if_none:"" }}</td>
-                        </tr>
-                        <tr>
-                            <td>Compte-Rendu Prospection</td>
-                            <td>{{ camp.CR_prospe_deadline }}</td>
-                            <td>
-                                {% if camp.CR_prospe %}
-                                    <a href="{{ camp.CR_prospe.url }}" target="_blank">Télécharger</a>
-                                {% else %}
-                                    Aucun fichier disponible
-                                {% endif %}
-                            </td>
-                            <td>
-                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'CR_prospe' camp.numero %}" class="inline-form">
-                                    {% csrf_token %}
-                                    <input type="file" name="file" required>
-                                    <button type="submit" class="upload-btn">Téléverser</button>
-                                </form>
-                                {% if camp.CR_prospe %}
-                                    <form method="post" action="{% url 'delete_file' 'CR_prospe' camp.numero %}" class="inline-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="delete-btn">Supprimer</button>
-                                    </form>
-                                {% endif %}
-                            </td>
-                            <td class="
-                            {% if camp.CR_prospe_etat == 'Non rendu' %}
-                                etat-non-rendu
-                            {% elif camp.CR_prospe_etat == 'Rendu' %}
-                                etat-rendu
-                            {% elif camp.CR_prospe_etat == 'Validé' %}
-                                etat-valide
-                            {% elif camp.CR_prospe_etat == 'Refusé' %}
-                                etat-refuse
-                            {% endif %}
-                        ">{{ camp.CR_prospe_etat }}</td>
-                        <td>{{ camp.CR_prospe_commentaire|default_if_none:"" }}</td>
-                        </tr>
-                        <tr>
-                            <td>Contrat de location</td>
-                            <td>28 Février</td>
-                            <td>
-                                {% if camp.contrat_location %}
-                                    <a href="{{ camp.contrat_location.url }}" target="_blank">Télécharger</a>
-                                {% else %}
-                                    Aucun fichier disponible
-                                {% endif %}
-                            </td>
-                            <td>
-                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'contrat_location' camp.numero %}" class="inline-form">
-                                    {% csrf_token %}
-                                    <input type="file" name="file" required>
-                                    <button type="submit" class="upload-btn">Téléverser</button>
-                                </form>
-                                {% if camp.contrat_location %}
-                                    <form method="post" action="{% url 'delete_file' 'contrat_location' camp.numero %}" class="inline-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="delete-btn">Supprimer</button>
-                                    </form>
-                                {% endif %}
-                            </td>
-                            <td class="
-                            {% if camp.contrat_location_etat == 'Non rendu' %}
-                                etat-non-rendu
-                            {% elif camp.contrat_location_etat == 'Rendu' %}
-                                etat-rendu
-                            {% elif camp.contrat_location_etat == 'Validé' %}
-                                etat-valide
-                            {% elif camp.contrat_location_etat == 'Refusé' %}
-                                etat-refuse
-                            {% endif %}
-                        ">{{ camp.contrat_location_etat }}</td>
-                        <td>{{ camp.contrat_location_commentaire|default_if_none:"" }}</td>
-                        </tr>
-                        <tr>
-                            <td>Fil Rouge</td>
-                            <td>{{ camp.fil_rouge_deadline }}</td>
-                            <td>
-                                {% if camp.fil_rouge %}
-                                    <a href="{{ camp.fil_rouge.url }}" target="_blank">Télécharger</a>
-                                {% else %}
-                                    Aucun fichier disponible
-                                {% endif %}
-                            </td>
-                            <td>
-                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'fil_rouge' camp.numero %}" class="inline-form">
-                                    {% csrf_token %}
-                                    <input type="file" name="file" required>
-                                    <button type="submit" class="upload-btn">Téléverser</button>
-                                </form>
-                                {% if camp.fil_rouge %}
-                                    <form method="post" action="{% url 'delete_file' 'fil_rouge' camp.numero %}" class="inline-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="delete-btn">Supprimer</button>
-                                    </form>
-                                {% endif %}
-                            </td>
-                            <td class="
-                            {% if camp.fil_rouge_etat == 'Non rendu' %}
-                                etat-non-rendu
-                            {% elif camp.fil_rouge_etat == 'Rendu' %}
-                                etat-rendu
-                            {% elif camp.fil_rouge_etat == 'Validé' %}
-                                etat-valide
-                            {% elif camp.fil_rouge_etat == 'Refusé' %}
-                                etat-refuse
-                            {% endif %}
-                        ">{{ camp.fil_rouge_etat }}</td>
-                        <td>{{ camp.fil_rouge_commentaire|default_if_none:"" }}</td>
-                        </tr>
-                        <tr>
-                            <td>Fil Bleu</td>
-                            <td>{{ camp.fil_bleu_deadline }}</td>
-                            <td>
-                                {% if camp.fil_bleu %}
-                                    <a href="{{ camp.fil_bleu.url }}" target="_blank">Télécharger</a>
-                                {% else %}
-                                    Aucun fichier disponible
-                                {% endif %}
-                            </td>
-                            <td>
-                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'fil_bleu' camp.numero %}" class="inline-form">
-                                    {% csrf_token %}
-                                    <input type="file" name="file" required>
-                                    <button type="submit" class="upload-btn">Téléverser</button>
-                                </form>
-                                {% if camp.fil_bleu %}
-                                    <form method="post" action="{% url 'delete_file' 'fil_bleu' camp.numero %}" class="inline-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="delete-btn">Supprimer</button>
-                                    </form>
-                                {% endif %}
-                            </td>
-                            <td class="
-                            {% if camp.fil_bleu_etat == 'Non rendu' %}
-                                etat-non-rendu
-                            {% elif camp.fil_bleu_etat == 'Rendu' %}
-                                etat-rendu
-                            {% elif camp.fil_bleu_etat == 'Validé' %}
-                                etat-valide
-                            {% elif camp.fil_bleu_etat == 'Refusé' %}
-                                etat-refuse
-                            {% endif %}
-                        ">{{ camp.fil_bleu_etat }}</td>
-                        <td>{{ camp.fil_bleu_commentaire|default_if_none:"" }}</td>
-                        </tr>
-                        <tr>
-                            <td>Fil Vert</td>
-                            <td>{{ camp.fil_vert_deadline }}</td>
-                            <td>
-                                {% if camp.fil_vert %}
-                                    <a href="{{ camp.fil_vert.url }}" target="_blank">Télécharger</a>
-                                {% else %}
-                                    Aucun fichier disponible
-                                {% endif %}
-                            </td>
-                            <td>
-                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'fil_vert' camp.numero %}" class="inline-form">
-                                    {% csrf_token %}
-                                    <input type="file" name="file" required>
-                                    <button type="submit" class="upload-btn">Téléverser</button>
-                                </form>
-                                {% if camp.fil_vert %}
-                                    <form method="post" action="{% url 'delete_file' 'fil_vert' camp.numero %}" class="inline-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="delete-btn">Supprimer</button>
-                                    </form>
-                                {% endif %}
-                            </td>
-                            <td class="
-                            {% if camp.fil_vert_etat == 'Non rendu' %}
-                                etat-non-rendu
-                            {% elif camp.fil_vert_etat == 'Rendu' %}
-                                etat-rendu
-                            {% elif camp.fil_vert_etat == 'Validé' %}
-                                etat-valide
-                            {% elif camp.fil_vert_etat == 'Refusé' %}
-                                etat-refuse
-                            {% endif %}
-                        ">{{ camp.fil_vert_etat }}</td>
-                        <td>{{ camp.fil_vert_commentaire|default_if_none:"" }}</td>
-                        </tr>
-                        <tr>
-                            <td>Grille Assurance</td>
-                            <td>{{ camp.grille_assurance_deadline }}</td>
-                            <td>
-                                {% if camp.grille_assurance %}
-                                    <a href="{{ camp.grille_assurance.url }}" target="_blank">Télécharger</a>
-                                {% else %}
-                                    Aucun fichier disponible
-                                {% endif %}
-                            </td>
-                            <td>
-                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'grille_assurance' camp.numero %}" class="inline-form">
-                                    {% csrf_token %}
-                                    <input type="file" name="file" required>
-                                    <button type="submit" class="upload-btn">Téléverser</button>
-                                </form>
-                                {% if camp.grille_assurance %}
-                                    <form method="post" action="{% url 'delete_file' 'grille_assurance' camp.numero %}" class="inline-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="delete-btn">Supprimer</button>
-                                    </form>
-                                {% endif %}
-                            </td>
-                            <td class="
-                            {% if camp.grille_assurance_etat == 'Non rendu' %}
-                                etat-non-rendu
-                            {% elif camp.grille_assurance_etat == 'Rendu' %}
-                                etat-rendu
-                            {% elif camp.grille_assurance_etat == 'Validé' %}
-                                etat-valide
-                            {% elif camp.grille_assurance_etat == 'Refusé' %}
-                                etat-refuse
-                            {% endif %}
-                        ">{{ camp.grille_assurance_etat }}</td>
-                        <td>{{ camp.grille_assurance_commentaire|default_if_none:"" }}</td>
-                        </tr>
-                        <tr>
-                            <td>Grille DDCS</td>
-                            <td>{{ camp.grille_ddcs_deadline }}</td>
-                            <td>
-                                {% if camp.grille_ddcs %}
-                                    <a href="{{ camp.grille_ddcs.url }}" target="_blank">Télécharger</a>
-                                {% else %}
-                                    Aucun fichier disponible
-                                {% endif %}
-                            </td>
-                            <td>
-                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'grille_ddcs' camp.numero %}" class="inline-form">
-                                    {% csrf_token %}
-                                    <input type="file" name="file" required>
-                                    <button type="submit" class="upload-btn">Téléverser</button>
-                                </form>
-                                {% if camp.grille_ddcs %}
-                                    <form method="post" action="{% url 'delete_file' 'grille_ddcs' camp.numero %}" class="inline-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="delete-btn">Supprimer</button>
-                                    </form>
-                                {% endif %}
-                            </td>
-                            <td class="
-                            {% if camp.grille_ddcs_etat == 'Non rendu' %}
-                                etat-non-rendu
-                            {% elif camp.grille_ddcs_etat == 'Rendu' %}
-                                etat-rendu
-                            {% elif camp.grille_ddcs_etat == 'Validé' %}
-                                etat-valide
-                            {% elif camp.grille_ddcs_etat == 'Refusé' %}
-                                etat-refuse
-                            {% endif %}
-                        ">{{ camp.grille_ddcs_etat }}</td>
-                        <td>{{ camp.grille_ddcs_commentaire|default_if_none:"" }}</td>
-                        </tr>
-                        <tr>
-                            <td>Budget</td>
-                            <td>{{ camp.Budget_deadline }}</td>
-                            <td>
-                                {% if camp.Budget %}
-                                    <a href="{{ camp.Budget.url }}" target="_blank">Télécharger</a>
-                                {% else %}
-                                    Aucun fichier disponible
-                                {% endif %}
-                            </td>
-                            <td>
-                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'Budget' camp.numero %}" class="inline-form">
-                                    {% csrf_token %}
-                                    <input type="file" name="file" required>
-                                    <button type="submit" class="upload-btn">Téléverser</button>
-                                </form>
-                                {% if camp.Budget %}
-                                    <form method="post" action="{% url 'delete_file' 'Budget' camp.numero %}" class="inline-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="delete-btn">Supprimer</button>
-                                    </form>
-                                {% endif %}
-                            </td>
-                            <td class="
-                            {% if camp.Budget_etat == 'Non rendu' %}
-                                etat-non-rendu
-                            {% elif camp.Budget_etat == 'Rendu' %}
-                                etat-rendu
-                            {% elif camp.Budget_etat == 'Validé' %}
-                                etat-valide
-                            {% elif camp.Budget_etat == 'Refusé' %}
-                                etat-refuse
-                            {% endif %}
-                        ">{{ camp.Budget_etat }}</td>
-                        <td>{{ camp.Budget_commentaire|default_if_none:"" }}</td>
-                        </tr>
-                        <tr>
-                            <td>Grille Intendance</td>
-                            <td>{{ camp.grille_intendance_deadline }}</td>
-                            <td>
-                                {% if camp.grille_intendance %}
-                                    <a href="{{ camp.grille_intendance.url }}" target="_blank">Télécharger</a>
-                                {% else %}
-                                    Aucun fichier disponible
-                                {% endif %}
-                            </td>
-                            <td>
-                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'grille_intendance' camp.numero %}" class="inline-form">
-                                    {% csrf_token %}
-                                    <input type="file" name="file" required>
-                                    <button type="submit" class="upload-btn">Téléverser</button>
-                                </form>
-                                {% if camp.grille_intendance %}
-                                    <form method="post" action="{% url 'delete_file' 'grille_intendance' camp.numero %}" class="inline-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="delete-btn">Supprimer</button>
-                                    </form>
-                                {% endif %}
-                            </td>
-                            <td class="
-                            {% if camp.grille_intendance_etat == 'Non rendu' %}
-                                etat-non-rendu
-                            {% elif camp.grille_intendance_etat == 'Rendu' %}
-                                etat-rendu
-                            {% elif camp.grille_intendance_etat == 'Validé' %}
-                                etat-valide
-                            {% elif camp.grille_intendance_etat == 'Refusé' %}
-                                etat-refuse
-                            {% endif %}
-                        ">{{ camp.grille_intendance_etat }}</td>
-                        <td>{{ camp.grille_intendance_commentaire|default_if_none:"" }}</td>
-                        </tr>
-                        <tr>
-                            <td>Fiche SNCF</td>
-                            <td>{{ camp.fiche_sncf_deadline }}</td>
-                            <td>
-                                {% if camp.fiche_sncf %}
-                                    <a href="{{ camp.fiche_sncf.url }}" target="_blank">Télécharger</a>
-                                {% else %}
-                                    Aucun fichier disponible
-                                {% endif %}
-                            </td>
-                            <td>
-                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'fiche_sncf' camp.numero %}" class="inline-form">
-                                    {% csrf_token %}
-                                    <input type="file" name="file" required>
-                                    <button type="submit" class="upload-btn">Téléverser</button>
-                                </form>
-                                {% if camp.fiche_sncf %}
-                                    <form method="post" action="{% url 'delete_file' 'fiche_sncf' camp.numero %}" class="inline-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="delete-btn">Supprimer</button>
-                                    </form>
-                                {% endif %}
-                            </td>
-                            <td class="
-                            {% if camp.fiche_sncf_etat == 'Non rendu' %}
-                                etat-non-rendu
-                            {% elif camp.fiche_sncf_etat == 'Rendu' %}
-                                etat-rendu
-                            {% elif camp.fiche_sncf_etat == 'Validé' %}
-                                etat-valide
-                            {% elif camp.fiche_sncf_etat == 'Refusé' %}
-                                etat-refuse
-                            {% endif %}
-                        ">{{ camp.fiche_sncf_etat }}</td>
-                        <td>{{ camp.fiche_sncf_commentaire|default_if_none:"" }}</td>
-                        </tr>
-                        <tr>
-                            <td>Procuration Banque</td>
-                            <td>{{ camp.procuration_banque_deadline }}</td>
-                            <td>
-                                {% if camp.procuration_banque %}
-                                    <a href="{{ camp.procuration_banque.url }}" target="_blank">Télécharger</a>
-                                {% else %}
-                                    Aucun fichier disponible
-                                {% endif %}
-                            </td>
-                            <td>
-                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'procuration_banque' camp.numero %}" class="inline-form">
-                                    {% csrf_token %}
-                                    <input type="file" name="file" required>
-                                    <button type="submit" class="upload-btn">Téléverser</button>
-                                </form>
-                                {% if camp.procuration_banque %}
-                                    <form method="post" action="{% url 'delete_file' 'procuration_banque' camp.numero %}" class="inline-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="delete-btn">Supprimer</button>
-                                    </form>
-                                {% endif %}
-                            </td>
-                            <td class="
-                            {% if camp.procuration_banque_etat == 'Non rendu' %}
-                                etat-non-rendu
-                            {% elif camp.procuration_banque_etat == 'Rendu' %}
-                                etat-rendu
-                            {% elif camp.procuration_banque_etat == 'Validé' %}
-                                etat-valide
-                            {% elif camp.procuration_banque_etat == 'Refusé' %}
-                                etat-refuse
-                            {% endif %}
-                        ">{{ camp.procuration_banque_etat }}</td>
-                        <td>{{ camp.procuration_banque_commentaire|default_if_none:"" }}</td>
-                        </tr>
-                        <tr>
-                            <td>Récepissé</td>
-                            <td>{{ camp.recepisse_deadline }}</td>
-                            <td>
-                                {% if camp.recepisse %}
-                                    <a href="{{ camp.recepisse.url }}" target="_blank">Télécharger</a>
-                                {% else %}
-                                    Aucun fichier disponible
-                                {% endif %}
-                            </td>
-                            <td>
-                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'recepisse' camp.numero %}" class="inline-form">
-                                    {% csrf_token %}
-                                    <input type="file" name="file" required>
-                                    <button type="submit" class="upload-btn">Téléverser</button>
-                                </form>
-                                {% if camp.recepisse %}
-                                    <form method="post" action="{% url 'delete_file' 'recepisse' camp.numero %}" class="inline-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="delete-btn">Supprimer</button>
-                                    </form>
-                                {% endif %}
-                            </td>
-                            <td class="
-                            {% if camp.recepisse_etat == 'Non rendu' %}
-                                etat-non-rendu
-                            {% elif camp.recepisse_etat == 'Rendu' %}
-                                etat-rendu
-                            {% elif camp.recepisse_etat == 'Validé' %}
-                                etat-valide
-                            {% elif camp.recepisse_etat == 'Refusé' %}
-                                etat-refuse
-                            {% endif %}
-                        ">{{ camp.recepisse_etat }}</td>
-                        <td>{{ camp.recepisse_commentaire|default_if_none:"" }}</td>
-                        </tr>
-                        <tr>
-                            <td>Chemins Explo</td>
-                            <td>{{ camp.chemins_explo_deadline }}</td>
-                            <td>
-                                {% if camp.chemins_explo %}
-                                    <a href="{{ camp.chemins_explo.url }}" target="_blank">Télécharger</a>
-                                {% else %}
-                                    Aucun fichier disponible
-                                {% endif %}
-                            </td>
-                            <td>
-                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'chemins_explo' camp.numero %}" class="inline-form">
-                                    {% csrf_token %}
-                                    <input type="file" name="file" required>
-                                    <button type="submit" class="upload-btn">Téléverser</button>
-                                </form>
-                                {% if camp.chemins_explo %}
-                                    <form method="post" action="{% url 'delete_file' 'chemins_explo' camp.numero %}" class="inline-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="delete-btn">Supprimer</button>
-                                    </form>
-                                {% endif %}
-                            </td>
-                            <td class="
-                            {% if camp.chemins_explo_etat == 'Non rendu' %}
-                                etat-non-rendu
-                            {% elif camp.chemins_explo_etat == 'Rendu' %}
-                                etat-rendu
-                            {% elif camp.chemins_explo_etat == 'Validé' %}
-                                etat-valide
-                            {% elif camp.chemins_explo_etat == 'Refusé' %}
-                                etat-refuse
-                            {% endif %}
-                        ">{{ camp.chemins_explo_etat }}</td>
-                        <td>{{ camp.chemins_explo_commentaire|default_if_none:"" }}</td>
-                        </tr>
-                        <tr>
-                            <td>Grille de camp</td>
-                            <td>{{ camp.grille_camp_deadline }}</td>
-                            <td>
-                                {% if camp.grille_camp %}
-                                    <a href="{{ camp.grille_camp.url }}" target="_blank">Télécharger</a>
-                                {% else %}
-                                    Aucun fichier disponible
-                                {% endif %}
-                            </td>
-                            <td>
-                                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' 'grille_camp' camp.numero %}" class="inline-form">
-                                    {% csrf_token %}
-                                    <input type="file" name="file" required>
-                                    <button type="submit" class="upload-btn">Téléverser</button>
-                                </form>
-                                {% if camp.grille_camp %}
-                                    <form method="post" action="{% url 'delete_file' 'grille_camp' camp.numero %}" class="inline-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="delete-btn">Supprimer</button>
-                                    </form>
-                                {% endif %}
-                            </td>
-                            <td class="
-                            {% if camp.grille_camp_etat == 'Non rendu' %}
-                                etat-non-rendu
-                            {% elif camp.grille_camp_etat == 'Rendu' %}
-                                etat-rendu
-                            {% elif camp.grille_camp_etat == 'Validé' %}
-                                etat-valide
-                            {% elif camp.grille_camp_etat == 'Refusé' %}
-                                etat-refuse
-                            {% endif %}
-                        ">{{ camp.grille_camp_etat }}</td>
-                        <td>{{ camp.grille_camp_commentaire|default_if_none:"" }}</td>
-                        </tr>
-                    </tbody>
-                                        
-                </table>
+            <thead>
+                <tr>
+                    <th>Fichier</th>
+                    <th>Deadline</th>
+                    <th>Télécharger</th>
+                    <th>Téléverser</th>
+                    <th>État</th>
+                    <th>Commentaires</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for document in documents %}
+                <tr>
+                    <td>{{ document.name }}</td>
+                    <td>{{ document.deadline|default:"Aucune date" }}</td>
+                    <td>
+                        {% if document.slug != 'PAF' %}
+                        {% if document.file %}
+                            <a href="{{ document.file.url }}" target="_blank">Télécharger</a>
+                        {% else %}
+                            Aucun fichier disponible
+                        {% endif %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if document.slug != 'PAF' %}
+                        <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' document.slug camp.numero %}" class="inline-form">
+                            {% csrf_token %}
+                            <input type="file" name="file" required>
+                            <button type="submit" class="upload-btn">Téléverser</button>
+                        </form>
+                        {% if document.file %}
+                        <form method="post" action="{% url 'delete_file' document.slug camp.numero %}" class="inline-form">
+                            {% csrf_token %}
+                            <button type="submit" class="delete-btn">Supprimer</button>
+                        </form>
+                        {% endif %}
+                        {% endif %}
+                    </td>
+                    <td class="
+                    {% if document.state == 'Non rendu' %}
+                    etat-non-rendu
+                {% elif document.state == 'Rendu' %}
+                    etat-rendu
+                {% elif document.state == 'Validé' %}
+                    etat-valide
+                {% elif document.state == 'Refusé' %}
+                    etat-refuse
+                {% elif document.state == 'Retour fait' %}
+                    etat-retour
+                {% elif document.state == 'En cours' %}
+                    etat-encours
+                {% endif %}
+                    ">
+                    
+                        {{ document.state }}
+                    </td>
+                    <td>
+                        {% if document.slug == 'PAF' %}
+                    <form method="post" action="{% url 'update_file_state_cdc' document.slug camp.numero %}" class="state-form">
+                        {% csrf_token %}
+                        <div class="file-state-actions">
+                            <div class="select-wrapper">
+                                <select name="new_state" class="file-state-select">
+                                    <option value="Non rendu" {% if document.state == "Non rendu" %}selected{% endif %}>Non uploadé</option>
+                                    <option value="Rendu" {% if document.state == "Rendu" %}selected{% endif %}>Uploadé</option>
+                                    <option value="En cours" {% if document.state == "En cours" %}selected{% endif %}>En cours</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="file-state-button">Mettre à jour</button>
+                        </div>
+                    </form>
+                    {% else %}
+                        {{ document.comment|default:"" }}</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
             </ul>
         {% else %}
             <p>Aucun camp n'est associé à votre compte.</p>
