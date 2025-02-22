@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/upload.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Upload Fichier Excel</title>
+</head>
+<body>
+    <a href="{% url 'home' %}" class="home-button">Home</a>
+    <div class="container">
+        <div class="upload-card">
+            <div class="icon-container">
+                <i class="fas fa-file-excel"></i>
+            </div>
+            <h2>Uploader un fichier Excel</h2>
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="file-upload-wrapper">
+                    <label for="file-upload" class="custom-file-upload">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Choisir un fichier</span>
+                    </label>
+                    {{ form.as_p }}
+                </div>
+                <button type="submit">
+                    <i class="fas fa-download"></i>
+                    Télécharger les fichiers
+                </button>
+            </form>
+            <div class="upload-info">
+                <p>Formats acceptés: .xlsx, .xls</p>
+                <p>Taille maximale: 10 MB</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

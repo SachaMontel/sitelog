@@ -1,0 +1,196 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Body */
+body {
+    background: linear-gradient(135deg, #6c5ce7, #a363d9);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-image: url("../images/photo2.jpeg");
+}
+
+/* Container */
+.container {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+/* Upload Card */
+.upload-card {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    animation: slideUp 0.5s ease-out;
+}
+
+/* Icon Container */
+.icon-container {
+    font-size: 48px;
+    color: #6c5ce7;
+    margin-bottom: 20px;
+    animation: bounce 2s infinite;
+}
+
+/* Title */
+h2 {
+    color: #2d3436;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* Form */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* File Upload */
+.file-upload-wrapper {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.custom-file-upload {
+    display: block;
+    padding: 15px;
+    background: #f8f9fa;
+    border: 2px dashed #6c5ce7;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-file-upload:hover {
+    background: #f0f1f7;
+    border-color: #a363d9;
+}
+
+.custom-file-upload i {
+    font-size: 24px;
+    margin-right: 10px;
+    color: #6c5ce7;
+}
+
+/* Hide default file input */
+input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+/* Button */
+button {
+    background: linear-gradient(135deg, #6c5ce7, #a363d9);
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(108, 92, 231, 0.2);
+}
+
+button i {
+    font-size: 18px;
+}
+
+/* Upload Info */
+.upload-info {
+    margin-top: 20px;
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+}
+
+.upload-info p {
+    margin: 5px 0;
+}
+
+/* Animations */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .upload-card {
+        padding: 30px 20px;
+    }
+    
+    h2 {
+        font-size: 20px;
+    }
+    
+    .icon-container {
+        font-size: 36px;
+    }
+}
+
+.home-button {
+    position: fixed; /* Fixé à l'écran, toujours visible */
+    top: 10px; /* Marges depuis le haut */
+    left: 10px; /* Marges depuis la gauche */
+    background-color: rgb(0,39,152); /* Couleur de fond */
+    color: white; /* Couleur du texte */
+    text-decoration: none; /* Supprimer le soulignement */
+    font-size: 16px; /* Taille du texte */
+    padding: 10px 20px; /* Espacement interne */
+    border-radius: 5px; /* Coins arrondis */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre */
+    transition: background-color 0.3s ease; /* Animation de survol */
+}
+
+.home-button:hover {
+    background-color: #0056b3; /* Couleur au survol */
+    text-decoration: none; /* Assure qu'il n'y a pas de soulignement */
+}

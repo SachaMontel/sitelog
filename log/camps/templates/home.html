@@ -61,6 +61,7 @@
             <div class="hero-container">
                 <div class="card">
                     <h2>Actualités</h2>
+                    <img src="{% static 'images/toubich.jpeg' %}" alt="Image 1">
                     <img src="{% static 'images/inscription.jpeg' %}" alt="Image 1">
                     <img src="{% static 'images/auschwitz.jpg' %}" alt="Image 1">
                     <img src="{% static 'images/nml.jpeg' %}" alt="Image 1">
@@ -70,9 +71,7 @@
                 </div>
                 <div class="card">
                     <h2>Prochainement</h2>
-                    <img src="{% static 'images/oulpan.jpeg' %}" alt="Image 2">
-                    <img src="{% static 'images/lecture.jpeg' %}" alt="Image 1">
-                    <img src="{% static 'images/halla.jpeg' %}" alt="Image 1">
+                    <img src="{% static 'images/neoum.jpeg' %}" alt="Image 2">
                 </div>
                 <div class="card resources">
                     <h2>Ressources</h2>
@@ -102,6 +101,14 @@
                             </a>
                         </div>
                         <!-- Ajoutez plus de fichiers si nécessaire -->
+                        {% if user.is_authenticated %}
+                        <div class="file-item">
+                            <a href="{% url 'fichiers:upload_excel' %}" aria-label="Référentiel">
+                                <img src="{% static 'images/excel.png' %}" alt="Link">
+                                <p>Export fiches sanitaires</p>
+                            </a>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

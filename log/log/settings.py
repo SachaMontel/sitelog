@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'camps',
     'log',
+    'fichiers',
 ]
 
 MIDDLEWARE = [
