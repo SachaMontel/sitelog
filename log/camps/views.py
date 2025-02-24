@@ -12,6 +12,10 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import user_passes_test
 
+
+def get_document_slugs(documents):
+    return [doc['slug'] for doc in documents]
+
 def logout(request):
     return render(request, 'home.html')
 
@@ -133,51 +137,64 @@ def anbp(request):
 
 @group_required(['logistique','masai' ,'superuser','anbb'])
 def statbb(request):
-    docs = ['demande_prospe','CR_prospe','contrat_location','PAF', 'fil_rouge', 'fil_bleu', 'Budget',  'fiche_sncf', 
-            'grille_assurance', 'grille_ddcs', 'grille_intendance', 'procuration_banque', 
-            'recepisse', 'chemins_explo', 'fil_vert', 'grille_camp' ]
+    documents = [
+        {'name': 'Demande de prospection', 'slug': 'demande_prospe'},
+        {'name': 'Compte-Rendu Prospection', 'slug': 'CR_prospe'},
+        {'name': 'Contrat de location', 'slug': 'contrat_location'},
+        {'name': 'Upload des prio', 'slug': 'PAF'},
+        {'name': 'Maitrise', 'slug': 'grille_ddcs'},
+        {'name': 'Grille de Camp', 'slug': 'grille_camp'},
+        {'name': 'Projet pédagogique V1', 'slug': 'projetv1'},
+        {'name': 'Grille Intendance', 'slug': 'grille_intendance'},
+        {'name': 'Fiche SNCF / Cars', 'slug': 'fiche_sncf'},
+        {'name': 'Commandes Intendance', 'slug': 'intendance2'},
+        {'name': 'Grille Assurance', 'slug': 'grille_assurance'},
+        {'name': 'Infos JN', 'slug': 'JN'},
+        {'name': 'Projet d activité', 'slug': 'fil_rouge'},
+        {'name': 'Projet vie juive', 'slug': 'fil_bleu'},
+        {'name': 'Projet vie de camp', 'slug': 'fil_vert'},
+        {'name': 'Budget prévisionnel', 'slug': 'Budget'},
+        {'name': 'Voiture', 'slug': 'voiture'},
+        {'name': 'Projet pédagogique VF', 'slug': 'projetvf'},
+        {'name': 'Budget réel', 'slug': 'Budgetreal'},
+        {'name': 'Documents obligatoires en ACM', 'slug': 'docACM'},
+        {'name': 'Récepissé', 'slug': 'recepisse'},
+        {'name': 'Chemins Explo', 'slug': 'chemins_explo'},
+        {'name': 'Procuration Banque', 'slug': 'procuration_banque'}
+    ]
+
+    # Liste des slugs pour accès rapide
+    docs = [doc['slug'] for doc in documents]
+
+    # Récupération des camps filtrés
     camps_bb = Camp.objects.filter(branche="BB")
-    compteurs = {}
 
-    for doc in docs:
-        compteurs[doc] = {
-            "data": [0, 0, 0, 0, 0, 0],  # [Rendu, Non rendu, En cours, Validé]
-            "camps": {  # Associer les numéros des camps à chaque état
-                "Rendu": [],
-                "Non rendu": [],
-                "Validé": [],
-                "Refusé": [],
-                "Retour fait": [],
-                "En cours": [],
-            }
-        }
+    # Définition des états possibles
+    etats = ["Rendu", "Non rendu", "Validé", "Refusé", "Retour fait", "En cours"]
 
+    # Initialisation des compteurs
+    compteurs = {
+        doc: {"data": [0] * len(etats), "camps": {etat: [] for etat in etats}}
+        for doc in docs
+    }
+
+    # Remplissage des compteurs
     for camp in camps_bb:
         for doc in docs:
-            doc_etat = getattr(camp, f"{doc}_etat", None)  # Récupérer l'état dynamiquement
-            if doc_etat == 'Rendu':
-                compteurs[doc]["data"][0] += 1
-                compteurs[doc]["camps"]["Rendu"].append(camp.numero)
-            elif doc_etat == 'Non rendu':
-                compteurs[doc]["data"][1] += 1
-                compteurs[doc]["camps"]["Non rendu"].append(camp.numero)
-            elif doc_etat == 'Validé':
-                compteurs[doc]["data"][2] += 1
-                compteurs[doc]["camps"]["Validé"].append(camp.numero)
-            elif doc_etat == 'Refusé':
-                compteurs[doc]["data"][3] += 1
-                compteurs[doc]["camps"]["Refusé"].append(camp.numero)
-            elif doc_etat == 'Retour fait':
-                compteurs[doc]["data"][4] += 1
-                compteurs[doc]["camps"]["Retour fait"].append(camp.numero)
-            elif doc_etat == 'En cours':
-                compteurs[doc]["data"][4] += 1
-                compteurs[doc]["camps"]["En cours"].append(camp.numero)
+            doc_etat = getattr(camp, f"{doc}_etat", None)  # Récupération dynamique
+            if doc_etat in etats:  # Vérification pour éviter une KeyError
+                index = etats.index(doc_etat)
+                compteurs[doc]["data"][index] += 1
+                compteurs[doc]["camps"][doc_etat].append(camp.numero)
 
-    # Préparer des titres lisibles pour le template
+    # Création du dictionnaire lisible pour le template
     compteurs_readable = {
-        doc.replace("_", " ").capitalize(): {"data": details["data"], "camps": details["camps"], "id": doc}
-        for doc, details in compteurs.items()
+        doc["name"]: {
+            "data": compteurs[doc["slug"]]["data"],
+            "camps": compteurs[doc["slug"]]["camps"],
+            "id": doc["slug"]
+        }
+        for doc in documents
     }
 
     return render(request, 'statbb.html', {'camps_bb': camps_bb, 'compteurs': compteurs_readable})
@@ -185,102 +202,128 @@ def statbb(request):
 
 @group_required(['logistique','masai' ,'superuser','anbc'])
 def statbc(request):
-    docs = ['demande_prospe','CR_prospe','contrat_location','PAF', 'fil_rouge', 'fil_bleu', 'Budget',  'fiche_sncf', 
-            'grille_assurance', 'grille_ddcs', 'grille_intendance', 'procuration_banque', 
-            'recepisse', 'chemins_explo', 'fil_vert', 'grille_camp' ]
+    documents = [
+        {'name': 'Demande de prospection', 'slug': 'demande_prospe'},
+        {'name': 'Compte-Rendu Prospection', 'slug': 'CR_prospe'},
+        {'name': 'Contrat de location', 'slug': 'contrat_location'},
+        {'name': 'Upload des prio', 'slug': 'PAF'},
+        {'name': 'Maitrise', 'slug': 'grille_ddcs'},
+        {'name': 'Grille de Camp', 'slug': 'grille_camp'},
+        {'name': 'Projet pédagogique V1', 'slug': 'projetv1'},
+        {'name': 'Grille Intendance', 'slug': 'grille_intendance'},
+        {'name': 'Fiche SNCF / Cars', 'slug': 'fiche_sncf'},
+        {'name': 'Commandes Intendance', 'slug': 'intendance2'},
+        {'name': 'Grille Assurance', 'slug': 'grille_assurance'},
+        {'name': 'Infos JN', 'slug': 'JN'},
+        {'name': 'Projet d activité', 'slug': 'fil_rouge'},
+        {'name': 'Projet vie juive', 'slug': 'fil_bleu'},
+        {'name': 'Projet vie de camp', 'slug': 'fil_vert'},
+        {'name': 'Budget prévisionnel', 'slug': 'Budget'},
+        {'name': 'Voiture', 'slug': 'voiture'},
+        {'name': 'Projet pédagogique VF', 'slug': 'projetvf'},
+        {'name': 'Budget réel', 'slug': 'Budgetreal'},
+        {'name': 'Documents obligatoires en ACM', 'slug': 'docACM'},
+        {'name': 'Récepissé', 'slug': 'recepisse'},
+        {'name': 'Chemins Explo', 'slug': 'chemins_explo'},
+        {'name': 'Procuration Banque', 'slug': 'procuration_banque'}
+    ]
+
+    # Liste des slugs pour accès rapide
+    docs = [doc['slug'] for doc in documents]
+
+    # Récupération des camps filtrés
     camps_bb = Camp.objects.filter(branche="BC")
-    compteurs = {}
 
-    for doc in docs:
-        compteurs[doc] = {
-            "data": [0, 0, 0, 0, 0, 0],  # [Rendu, Non rendu, En cours, Validé]
-            "camps": {  # Associer les numéros des camps à chaque état
-                "Rendu": [],
-                "Non rendu": [],
-                "Validé": [],
-                "Refusé": [],
-                "Retour fait": [],
-                "En cours": [],
-            }
-        }
+    # Définition des états possibles
+    etats = ["Rendu", "Non rendu", "Validé", "Refusé", "Retour fait", "En cours"]
 
+    # Initialisation des compteurs
+    compteurs = {
+        doc: {"data": [0] * len(etats), "camps": {etat: [] for etat in etats}}
+        for doc in docs
+    }
+
+    # Remplissage des compteurs
     for camp in camps_bb:
         for doc in docs:
-            doc_etat = getattr(camp, f"{doc}_etat", None)  # Récupérer l'état dynamiquement
-            if doc_etat == 'Rendu':
-                compteurs[doc]["data"][0] += 1
-                compteurs[doc]["camps"]["Rendu"].append(camp.numero)
-            elif doc_etat == 'Non rendu':
-                compteurs[doc]["data"][1] += 1
-                compteurs[doc]["camps"]["Non rendu"].append(camp.numero)
-            elif doc_etat == 'Validé':
-                compteurs[doc]["data"][2] += 1
-                compteurs[doc]["camps"]["Validé"].append(camp.numero)
-            elif doc_etat == 'Refusé':
-                compteurs[doc]["data"][3] += 1
-                compteurs[doc]["camps"]["Refusé"].append(camp.numero)
-            elif doc_etat == 'Retour fait':
-                compteurs[doc]["data"][4] += 1
-                compteurs[doc]["camps"]["Retour fait"].append(camp.numero)
-            elif doc_etat == 'En cours':
-                compteurs[doc]["data"][4] += 1
-                compteurs[doc]["camps"]["En cours"].append(camp.numero)
+            doc_etat = getattr(camp, f"{doc}_etat", None)  # Récupération dynamique
+            if doc_etat in etats:  # Vérification pour éviter une KeyError
+                index = etats.index(doc_etat)
+                compteurs[doc]["data"][index] += 1
+                compteurs[doc]["camps"][doc_etat].append(camp.numero)
 
-    # Préparer des titres lisibles pour le template
+    # Création du dictionnaire lisible pour le template
     compteurs_readable = {
-        doc.replace("_", " ").capitalize(): {"data": details["data"], "camps": details["camps"], "id": doc}
-        for doc, details in compteurs.items()
+        doc["name"]: {
+            "data": compteurs[doc["slug"]]["data"],
+            "camps": compteurs[doc["slug"]]["camps"],
+            "id": doc["slug"]
+        }
+        for doc in documents
     }
 
     return render(request, 'statbc.html', {'camps_bb': camps_bb, 'compteurs': compteurs_readable})
 
 @group_required(['logistique','masai' ,'superuser','anbm'])
 def statbm(request):
-    docs = ['demande_prospe','CR_prospe','contrat_location','PAF', 'fil_rouge', 'fil_bleu', 'Budget',  'fiche_sncf', 
-            'grille_assurance', 'grille_ddcs', 'grille_intendance', 'procuration_banque', 
-            'recepisse', 'chemins_explo', 'fil_vert', 'grille_camp' ]
+    documents = [
+        {'name': 'Demande de prospection', 'slug': 'demande_prospe'},
+        {'name': 'Compte-Rendu Prospection', 'slug': 'CR_prospe'},
+        {'name': 'Contrat de location', 'slug': 'contrat_location'},
+        {'name': 'Upload des prio', 'slug': 'PAF'},
+        {'name': 'Maitrise', 'slug': 'grille_ddcs'},
+        {'name': 'Grille de Camp', 'slug': 'grille_camp'},
+        {'name': 'Projet pédagogique V1', 'slug': 'projetv1'},
+        {'name': 'Grille Intendance', 'slug': 'grille_intendance'},
+        {'name': 'Fiche SNCF / Cars', 'slug': 'fiche_sncf'},
+        {'name': 'Commandes Intendance', 'slug': 'intendance2'},
+        {'name': 'Grille Assurance', 'slug': 'grille_assurance'},
+        {'name': 'Infos JN', 'slug': 'JN'},
+        {'name': 'Projet d activité', 'slug': 'fil_rouge'},
+        {'name': 'Projet vie juive', 'slug': 'fil_bleu'},
+        {'name': 'Projet vie de camp', 'slug': 'fil_vert'},
+        {'name': 'Budget prévisionnel', 'slug': 'Budget'},
+        {'name': 'Voiture', 'slug': 'voiture'},
+        {'name': 'Projet pédagogique VF', 'slug': 'projetvf'},
+        {'name': 'Budget réel', 'slug': 'Budgetreal'},
+        {'name': 'Documents obligatoires en ACM', 'slug': 'docACM'},
+        {'name': 'Récepissé', 'slug': 'recepisse'},
+        {'name': 'Chemins Explo', 'slug': 'chemins_explo'},
+        {'name': 'Procuration Banque', 'slug': 'procuration_banque'}
+    ]
+
+    # Liste des slugs pour accès rapide
+    docs = [doc['slug'] for doc in documents]
+
+    # Récupération des camps filtrés
     camps_bb = Camp.objects.filter(branche="BM")
-    compteurs = {}
 
-    for doc in docs:
-        compteurs[doc] = {
-            "data": [0, 0, 0, 0, 0, 0],  # [Rendu, Non rendu, En cours, Validé]
-            "camps": {  # Associer les numéros des camps à chaque état
-                "Rendu": [],
-                "Non rendu": [],
-                "Validé": [],
-                "Refusé": [],
-                "Retour fait": [],
-                "En cours": [],
-            }
-        }
+    # Définition des états possibles
+    etats = ["Rendu", "Non rendu", "Validé", "Refusé", "Retour fait", "En cours"]
 
+    # Initialisation des compteurs
+    compteurs = {
+        doc: {"data": [0] * len(etats), "camps": {etat: [] for etat in etats}}
+        for doc in docs
+    }
+
+    # Remplissage des compteurs
     for camp in camps_bb:
         for doc in docs:
-            doc_etat = getattr(camp, f"{doc}_etat", None)  # Récupérer l'état dynamiquement
-            if doc_etat == 'Rendu':
-                compteurs[doc]["data"][0] += 1
-                compteurs[doc]["camps"]["Rendu"].append(camp.numero)
-            elif doc_etat == 'Non rendu':
-                compteurs[doc]["data"][1] += 1
-                compteurs[doc]["camps"]["Non rendu"].append(camp.numero)
-            elif doc_etat == 'Validé':
-                compteurs[doc]["data"][2] += 1
-                compteurs[doc]["camps"]["Validé"].append(camp.numero)
-            elif doc_etat == 'Refusé':
-                compteurs[doc]["data"][3] += 1
-                compteurs[doc]["camps"]["Refusé"].append(camp.numero)
-            elif doc_etat == 'Retour fait':
-                compteurs[doc]["data"][4] += 1
-                compteurs[doc]["camps"]["Retour fait"].append(camp.numero)
-            elif doc_etat == 'En cours':
-                compteurs[doc]["data"][4] += 1
-                compteurs[doc]["camps"]["En cours"].append(camp.numero)
+            doc_etat = getattr(camp, f"{doc}_etat", None)  # Récupération dynamique
+            if doc_etat in etats:  # Vérification pour éviter une KeyError
+                index = etats.index(doc_etat)
+                compteurs[doc]["data"][index] += 1
+                compteurs[doc]["camps"][doc_etat].append(camp.numero)
 
-    # Préparer des titres lisibles pour le template
+    # Création du dictionnaire lisible pour le template
     compteurs_readable = {
-        doc.replace("_", " ").capitalize(): {"data": details["data"], "camps": details["camps"], "id": doc}
-        for doc, details in compteurs.items()
+        doc["name"]: {
+            "data": compteurs[doc["slug"]]["data"],
+            "camps": compteurs[doc["slug"]]["camps"],
+            "id": doc["slug"]
+        }
+        for doc in documents
     }
 
     return render(request, 'statbm.html', {'camps_bb': camps_bb, 'compteurs': compteurs_readable})
