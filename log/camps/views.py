@@ -64,92 +64,31 @@ def cdc(request):
     
     if camp.branche == 'BC' or 'BM':
         documents = [
-            {
-                'name': 'Demande de prospection',
-                'slug': 'demande_prospe',
-                'deadline': camp.demande_prospe_deadline,
-                'file': camp.demande_prospe,
-                'state': camp.demande_prospe_etat,
-                'comment': camp.demande_prospe_commentaire
-            },
-            {
-                'name': 'Compte-Rendu Prospection',
-                'slug': 'CR_prospe',
-                'deadline': camp.CR_prospe_deadline,
-                'file': camp.CR_prospe,
-                'state': camp.CR_prospe_etat,
-                'comment': camp.CR_prospe_commentaire
-            },
-            {
-                'name': 'Contrat de location',
-                'slug': 'contrat_location',
-                'deadline': camp.contrat_location_deadline,
-                'file': camp.contrat_location,
-                'state': camp.contrat_location_etat,
-                'comment': camp.contrat_location_commentaire
-            },
-            {
-                'name': 'Upload des prio',
-                'slug': 'PAF',
-                'deadline': camp.PAF_deadline,
-                'state': camp.PAF_etat,
-            },
-            {
-                'name': 'Fil Rouge',
-                'slug': 'fil_rouge',
-                'deadline': camp.fil_rouge_deadline,
-                'file': camp.fil_rouge,
-                'state': camp.fil_rouge_etat,
-                'comment': camp.fil_rouge_commentaire
-            },
-            {
-                'name': 'Fil Bleu',
-                'slug': 'fil_bleu',
-                'deadline': camp.fil_bleu_deadline,
-                'file': camp.fil_bleu,
-                'state': camp.fil_bleu_etat,
-                'comment': camp.fil_bleu_commentaire
-            },
-            {
-                'name': 'Fil Vert',
-                'slug': 'fil_vert',
-                'deadline': camp.fil_vert_deadline,
-                'file': camp.fil_vert,
-                'state': camp.fil_vert_etat,
-                'comment': camp.fil_vert_commentaire
-            },
-            {
-                'name': 'Grille Assurance',
-                'slug': 'grille_assurance',
-                'deadline': camp.grille_assurance_deadline,
-                'file': camp.grille_assurance,
-                'state': camp.grille_assurance_etat,
-                'comment': camp.grille_assurance_commentaire
-            },
-            {
-                'name': 'Budget',
-                'slug': 'Budget',
-                'deadline': camp.Budget_deadline,
-                'file': camp.Budget,
-                'state': camp.Budget_etat,
-                'comment': camp.Budget_commentaire
-            },
-            {
-                'name': 'Fiche SNCF',
-                'slug': 'fiche_sncf',
-                'deadline': camp.fiche_sncf_deadline,
-                'file': camp.fiche_sncf,
-                'state': camp.fiche_sncf_etat,
-                'comment': camp.fiche_sncf_commentaire
-            },
-            {
-                'name': 'Grille Intendance',
-                'slug': 'grille_intendance',
-                'deadline': camp.grille_intendance_deadline,
-                'file': camp.grille_intendance,
-                'state': camp.grille_intendance_etat,
-                'comment': camp.grille_intendance_commentaire
-            }]
+    {'name': 'Demande de prospection', 'slug': 'demande_prospe', 'deadline': camp.demande_prospe_deadline, 'file': camp.demande_prospe, 'state': camp.demande_prospe_etat, 'comment': camp.demande_prospe_commentaire},
+    {'name': 'Compte-Rendu Prospection', 'slug': 'CR_prospe', 'deadline': camp.CR_prospe_deadline, 'file': camp.CR_prospe, 'state': camp.CR_prospe_etat, 'comment': camp.CR_prospe_commentaire},
+    {'name': 'Contrat de location', 'slug': 'contrat_location', 'deadline': camp.contrat_location_deadline, 'file': camp.contrat_location, 'state': camp.contrat_location_etat, 'comment': camp.contrat_location_commentaire},
+    {'name': 'Upload des prio', 'slug': 'PAF', 'deadline': camp.PAF_deadline, 'state': camp.PAF_etat},
+    {'name': 'Maitrise', 'slug': 'grille_ddcs', 'deadline': camp.grille_ddcs_deadline, 'file': camp.grille_ddcs, 'state': camp.grille_ddcs_etat, 'comment': camp.grille_ddcs_commentaire},
+    {'name': 'Grille de Camp', 'slug': 'grille_camp', 'deadline': camp.grille_camp_deadline, 'file': camp.grille_camp, 'state': camp.grille_camp_etat, 'comment': camp.grille_camp_commentaire},
+    {'name': 'Projet pédagogique V1', 'slug': 'projetv1', 'deadline': camp.projetv1_deadline, 'file': camp.projetv1, 'file_retour': camp.projetv1_retour, 'state': camp.projetv1_etat, 'comment': camp.projetv1_commentaire},
+    {'name': 'Grille Intendance', 'slug': 'grille_intendance', 'deadline': camp.grille_intendance_deadline, 'file': camp.grille_intendance, 'state': camp.grille_intendance_etat, 'comment': camp.grille_intendance_commentaire},
+    {'name': 'Fiche SNCF / Cars', 'slug': 'fiche_sncf', 'deadline': camp.fiche_sncf_deadline, 'file': camp.fiche_sncf, 'state': camp.fiche_sncf_etat, 'comment': camp.fiche_sncf_commentaire},
+    {'name': 'Commandes Intendance', 'slug': 'intendance2', 'deadline': camp.intendance2_deadline, 'file': camp.intendance2, 'state': camp.intendance2_etat, 'comment': camp.intendance2_commentaire},
+    {'name': 'Grille Assurance', 'slug': 'grille_assurance', 'deadline': camp.grille_assurance_deadline, 'file': camp.grille_assurance, 'state': camp.grille_assurance_etat, 'comment': camp.grille_assurance_commentaire},
+    {'name': 'Infos JN', 'slug': 'JN', 'deadline': camp.JN_deadline, 'file': camp.JN, 'state': camp.JN_etat, 'comment': camp.JN_commentaire},
+    {'name': 'Projet d activité', 'slug': 'fil_rouge', 'deadline': camp.fil_rouge_deadline, 'file': camp.fil_rouge, 'file_retour': camp.fil_rouge_retour, 'state': camp.fil_rouge_etat, 'comment': camp.fil_rouge_commentaire},
+    {'name': 'Projet vie juive', 'slug': 'fil_bleu', 'deadline': camp.fil_bleu_deadline, 'file': camp.fil_bleu, 'file_retour': camp.fil_bleu_retour, 'state': camp.fil_bleu_etat, 'comment': camp.fil_bleu_commentaire},
+    {'name': 'Projet vie de camp', 'slug': 'fil_vert', 'deadline': camp.fil_vert_deadline, 'file': camp.fil_vert, 'file_retour': camp.fil_vert_retour, 'state': camp.fil_vert_etat, 'comment': camp.fil_vert_commentaire},
+    {'name': 'Budget prévisionnel', 'slug': 'Budget', 'deadline': camp.Budget_deadline, 'file': camp.Budget, 'state': camp.Budget_etat, 'comment': camp.Budget_commentaire},
+    {'name': 'Voiture', 'slug': 'voiture', 'deadline': camp.voiture_deadline, 'file': camp.voiture, 'state': camp.voiture_etat, 'comment': camp.voiture_commentaire},
+    {'name': 'Projet pédagogique VF', 'slug': 'projetvf', 'deadline': camp.projetvf_deadline, 'file': camp.projetvf, 'file_retour': camp.projetvf_retour, 'state': camp.projetvf_etat, 'comment': camp.projetvf_commentaire},
+    {'name': 'Budget réel', 'slug': 'Budgetreal', 'deadline': camp.Budgetreal_deadline, 'file': camp.Budgetreal, 'state': camp.Budgetreal_etat, 'comment': camp.Budgetreal_commentaire},
+    {'name': 'Documents obligatoires en ACM', 'slug': 'docACM', 'deadline': camp.docACM_deadline, 'file': camp.docACM, 'state': camp.docACM_etat, 'comment': camp.docACM_commentaire},
+    {'name': 'Récepissé', 'slug': 'recepisse', 'deadline': camp.recepisse_deadline, 'file': camp.recepisse, 'state': camp.recepisse_etat, 'comment': camp.recepisse_commentaire},
+    {'name': 'Chemins Explo', 'slug': 'chemins_explo', 'deadline': camp.chemins_explo_deadline, 'file': camp.chemins_explo, 'state': camp.chemins_explo_etat, 'comment': camp.chemins_explo_commentaire},
+    {'name': 'Procuration Banque', 'slug': 'procuration_banque', 'deadline': camp.procuration_banque_deadline, 'file': camp.procuration_banque, 'state': camp.procuration_banque_etat, 'comment': camp.procuration_banque_commentaire},
+    ]
+
 
     if camp.branche== 'BP':
         # Nouveaux documents ajoutés
@@ -400,133 +339,31 @@ def camp_detail(request, numero):
     if camp.branche == 'BC' or 'BM':
     # Liste de tous les documents
         documents = [
-            {
-                'name': 'Demande de prospe',
-                'slug': 'demande_prospe',
-                'deadline': camp.demande_prospe_deadline,
-                'file': camp.demande_prospe,
-                'state': camp.demande_prospe_etat,
-                'comment': camp.demande_prospe_commentaire
-            },
-            {
-                'name': 'Compte-Rendu Prospection',
-                'slug': 'CR_prospe',
-                'deadline': camp.CR_prospe_deadline,
-                'file': camp.CR_prospe,
-                'state': camp.CR_prospe_etat,
-                'comment': camp.CR_prospe_commentaire
-            },
-            {
-                'name': 'Contrat de Location',
-                'slug': 'contrat_location',
-                'deadline': camp.contrat_location_deadline,
-                'file': camp.contrat_location,
-                'state': camp.contrat_location_etat,
-                'comment': camp.contrat_location_commentaire
-            },
-            {
-                'name': 'Upload des prio',
-                'slug': 'PAF',
-                'deadline': camp.PAF_deadline,
-                'state': camp.PAF_etat,
-            },
-            {
-                'name': 'Fil Rouge',
-                'slug': 'fil_rouge',
-                'deadline': camp.fil_rouge_deadline,
-                'file': camp.fil_rouge,
-                'state': camp.fil_rouge_etat,
-                'comment': camp.fil_rouge_commentaire
-            },
-            {
-                'name': 'Fil Bleu',
-                'slug': 'fil_bleu',
-                'deadline': camp.fil_bleu_deadline,
-                'file': camp.fil_bleu,
-                'state': camp.fil_bleu_etat,
-                'comment': camp.fil_bleu_commentaire
-            },
-            {
-                'name': 'Fil Vert',
-                'slug': 'fil_vert',
-                'deadline': camp.fil_vert_deadline,
-                'file': camp.fil_vert,
-                'state': camp.fil_vert_etat,
-                'comment': camp.fil_vert_commentaire
-            },
-            {
-                'name': 'Grille Assurance',
-                'slug': 'grille_assurance',
-                'deadline': camp.grille_assurance_deadline,
-                'file': camp.grille_assurance,
-                'state': camp.grille_assurance_etat,
-                'comment': camp.grille_assurance_commentaire
-            },
-            {
-                'name': 'Grille DDCS',
-                'slug': 'grille_ddcs',
-                'deadline': camp.grille_ddcs_deadline,
-                'file': camp.grille_ddcs,
-                'state': camp.grille_ddcs_etat,
-                'comment': camp.grille_ddcs_commentaire
-            },
-            {
-                'name': 'Budget',
-                'slug': 'Budget',
-                'deadline': camp.Budget_deadline,
-                'file': camp.Budget,
-                'state': camp.Budget_etat,
-                'comment': camp.Budget_commentaire
-            },
-            {
-                'name': 'Grille Intendance',
-                'slug': 'grille_intendance',
-                'deadline': camp.grille_intendance_deadline,
-                'file': camp.grille_intendance,
-                'state': camp.grille_intendance_etat,
-                'comment': camp.grille_intendance_commentaire
-            },
-            {
-                'name': 'Fiche SNCF',
-                'slug': 'fiche_sncf',
-                'deadline': camp.fiche_sncf_deadline,
-                'file': camp.fiche_sncf,
-                'state': camp.fiche_sncf_etat,
-                'comment': camp.fiche_sncf_commentaire
-            },
-            {
-                'name': 'Récepissé',
-                'slug': 'recepisse',
-                'deadline': camp.recepisse_deadline,
-                'file': camp.recepisse,
-                'state': camp.recepisse_etat,
-                'comment': camp.recepisse_commentaire
-            },
-            {
-                'name': 'Chemins Explo',
-                'slug': 'chemins_explo',
-                'deadline': camp.chemins_explo_deadline,
-                'file': camp.chemins_explo,
-                'state': camp.chemins_explo_etat,
-                'comment': camp.chemins_explo_commentaire
-            },
-            {
-                'name': 'Procuration Banque',
-                'slug': 'procuration_banque',
-                'deadline': camp.procuration_banque_deadline,
-                'file': camp.procuration_banque,
-                'state': camp.procuration_banque_etat,
-                'comment': camp.procuration_banque_commentaire
-            },
-            {
-                'name': 'Grille de Camp',
-                'slug': 'grille_camp',
-                'deadline': camp.grille_camp_deadline,
-                'file': camp.grille_camp,
-                'state': camp.grille_camp_etat,
-                'comment': camp.grille_camp_commentaire
-            }
-        ]
+    {'name': 'Demande de prospection', 'slug': 'demande_prospe', 'deadline': camp.demande_prospe_deadline, 'file': camp.demande_prospe, 'state': camp.demande_prospe_etat, 'comment': camp.demande_prospe_commentaire},
+    {'name': 'Compte-Rendu Prospection', 'slug': 'CR_prospe', 'deadline': camp.CR_prospe_deadline, 'file': camp.CR_prospe, 'state': camp.CR_prospe_etat, 'comment': camp.CR_prospe_commentaire},
+    {'name': 'Contrat de location', 'slug': 'contrat_location', 'deadline': camp.contrat_location_deadline, 'file': camp.contrat_location, 'state': camp.contrat_location_etat, 'comment': camp.contrat_location_commentaire},
+    {'name': 'Upload des prio', 'slug': 'PAF', 'deadline': camp.PAF_deadline, 'state': camp.PAF_etat},
+    {'name': 'Maitrise', 'slug': 'grille_ddcs', 'deadline': camp.grille_ddcs_deadline, 'file': camp.grille_ddcs, 'state': camp.grille_ddcs_etat, 'comment': camp.grille_ddcs_commentaire},
+    {'name': 'Grille de Camp', 'slug': 'grille_camp', 'deadline': camp.grille_camp_deadline, 'file': camp.grille_camp, 'state': camp.grille_camp_etat, 'comment': camp.grille_camp_commentaire},
+    {'name': 'Projet pédagogique V1', 'slug': 'projetv1', 'deadline': camp.projetv1_deadline, 'file': camp.projetv1, 'file_retour': camp.projetv1_retour, 'state': camp.projetv1_etat, 'comment': camp.projetv1_commentaire},
+    {'name': 'Grille Intendance', 'slug': 'grille_intendance', 'deadline': camp.grille_intendance_deadline, 'file': camp.grille_intendance, 'state': camp.grille_intendance_etat, 'comment': camp.grille_intendance_commentaire},
+    {'name': 'Fiche SNCF / Cars', 'slug': 'fiche_sncf', 'deadline': camp.fiche_sncf_deadline, 'file': camp.fiche_sncf, 'state': camp.fiche_sncf_etat, 'comment': camp.fiche_sncf_commentaire},
+    {'name': 'Commandes Intendance', 'slug': 'intendance2', 'deadline': camp.intendance2_deadline, 'file': camp.intendance2, 'state': camp.intendance2_etat, 'comment': camp.intendance2_commentaire},
+    {'name': 'Grille Assurance', 'slug': 'grille_assurance', 'deadline': camp.grille_assurance_deadline, 'file': camp.grille_assurance, 'state': camp.grille_assurance_etat, 'comment': camp.grille_assurance_commentaire},
+    {'name': 'Infos JN', 'slug': 'JN', 'deadline': camp.JN_deadline, 'file': camp.JN, 'state': camp.JN_etat, 'comment': camp.JN_commentaire},
+    {'name': 'Projet d activité', 'slug': 'fil_rouge', 'deadline': camp.fil_rouge_deadline, 'file': camp.fil_rouge, 'file_retour': camp.fil_rouge_retour, 'state': camp.fil_rouge_etat, 'comment': camp.fil_rouge_commentaire},
+    {'name': 'Projet vie juive', 'slug': 'fil_bleu', 'deadline': camp.fil_bleu_deadline, 'file': camp.fil_bleu, 'file_retour': camp.fil_bleu_retour, 'state': camp.fil_bleu_etat, 'comment': camp.fil_bleu_commentaire},
+    {'name': 'Projet vie de camp', 'slug': 'fil_vert', 'deadline': camp.fil_vert_deadline, 'file': camp.fil_vert, 'file_retour': camp.fil_vert_retour, 'state': camp.fil_vert_etat, 'comment': camp.fil_vert_commentaire},
+    {'name': 'Budget prévisionnel', 'slug': 'Budget', 'deadline': camp.Budget_deadline, 'file': camp.Budget, 'state': camp.Budget_etat, 'comment': camp.Budget_commentaire},
+    {'name': 'Voiture', 'slug': 'voiture', 'deadline': camp.voiture_deadline, 'file': camp.voiture, 'state': camp.voiture_etat, 'comment': camp.voiture_commentaire},
+    {'name': 'Projet pédagogique VF', 'slug': 'projetvf', 'deadline': camp.projetvf_deadline, 'file': camp.projetvf, 'file_retour': camp.projetvf_retour, 'state': camp.projetvf_etat, 'comment': camp.projetvf_commentaire},
+    {'name': 'Budget réel', 'slug': 'Budgetreal', 'deadline': camp.Budgetreal_deadline, 'file': camp.Budgetreal, 'state': camp.Budgetreal_etat, 'comment': camp.Budgetreal_commentaire},
+    {'name': 'Documents obligatoires en ACM', 'slug': 'docACM', 'deadline': camp.docACM_deadline, 'file': camp.docACM, 'state': camp.docACM_etat, 'comment': camp.docACM_commentaire},
+    {'name': 'Récepissé', 'slug': 'recepisse', 'deadline': camp.recepisse_deadline, 'file': camp.recepisse, 'state': camp.recepisse_etat, 'comment': camp.recepisse_commentaire},
+    {'name': 'Chemins Explo', 'slug': 'chemins_explo', 'deadline': camp.chemins_explo_deadline, 'file': camp.chemins_explo, 'state': camp.chemins_explo_etat, 'comment': camp.chemins_explo_commentaire},
+    {'name': 'Procuration Banque', 'slug': 'procuration_banque', 'deadline': camp.procuration_banque_deadline, 'file': camp.procuration_banque, 'state': camp.procuration_banque_etat, 'comment': camp.procuration_banque_commentaire},
+    ]
+        
     if camp.branche == 'BP':
         documents=[{'name': 'Budget prévisionnel', 'slug': 'BP', 'deadline': '4 Février', 'file': camp.BP, 'state': camp.BP_etat, 'comment': camp.BP_commentaire},
             {'name': 'V1 Grille de camp', 'slug': 'V1GC', 'deadline': '04 Février', 'file': camp.V1GC, 'state': camp.V1GC_etat, 'comment': camp.V1GC_commentaire},
