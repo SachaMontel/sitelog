@@ -427,7 +427,7 @@ def upload_file(request, file_type, camp_id):
     MAX_FILE_SIZE_MB = 5  # Taille maximale en Mo
     MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024  # Convertir en octets
     
-    if request.method == "POST" and request.FILES['file']:
+    if request.method == "POST" and request.FILES.get('file'):
         camp = get_object_or_404(Camp, numero=camp_id)
         uploaded_file = request.FILES['file']
 
@@ -437,346 +437,283 @@ def upload_file(request, file_type, camp_id):
                 f"Erreur : Le fichier est trop volumineux. Taille maximale autorisée : {MAX_FILE_SIZE_MB} Mo.",
                 status=400
             )
-            
-        if file_type == 'fil_rouge':
-            camp.delete_old_file('fil_rouge')
-            camp.fil_rouge = uploaded_file
-            file_label = "Fil rouge"
-            camp.fil_rouge_etat = 'Rendu'
-        elif file_type == 'fil_bleu':
-            camp.delete_old_file('fil_bleu')
-            camp.fil_bleu = uploaded_file   
-            file_label= "Fil bleu"
-            camp.fil_bleu_etat = 'Rendu'
-        elif file_type == 'Budget':
-            camp.delete_old_file('Budget')
-            camp.Budget = uploaded_file
-            file_label = "Budget"
-            camp.Budget_etat = 'Rendu'
-        elif file_type == 'contrat_location':
-            camp.delete_old_file('contrat_location')
-            camp.contrat_location = uploaded_file
-            file_label = "Contrat de location"
-            camp.contrat_location_etat = 'Rendu'
-        elif file_type == 'CR_prospe':
-            camp.delete_old_file('CR_prospe')
-            camp.CR_prospe = uploaded_file
-            file_label = "Compte-rendu de prospection"
-            camp.CR_prospe_etat = 'Rendu'
-        elif file_type == 'fiche_sncf':
-            camp.delete_old_file('fiche_sncf')
-            camp.fiche_sncf = uploaded_file
-            file_label = "Fiche SNCF"
-            camp.fiche_sncf_etat = 'Rendu'
-        elif file_type == 'grille_assurance':
-            camp.delete_old_file('grille_assurance')
-            camp.grille_assurance = uploaded_file
-            file_label = "Grille d'assurance"
-            camp.grille_assurance_etat = 'Rendu'
-        elif file_type == 'grille_ddcs':
-            camp.delete_old_file('grille_ddcs')
-            camp.grille_ddcs = uploaded_file
-            file_label = "Grille DDCS"
-            camp.grille_ddcs_etat = 'Rendu'
-        elif file_type == 'grille_intendance':
-            camp.delete_old_file('grille_intendance')
-            camp.grille_intendance = uploaded_file
-            file_label = "Grille intendance"
-            camp.grille_intendance_etat = 'Rendu'
-        elif file_type == 'procuration_banque':
-            camp.delete_old_file('procuration_banque')
-            camp.procuration_banque = uploaded_file
-            file_label = "Procuration bancaire"
-            camp.procuration_banque_etat = 'Rendu'
-        elif file_type == 'recepisse':
-            camp.delete_old_file('recepisse')
-            camp.recepisse = uploaded_file
-            file_label = "Récépissé"
-            camp.recepisse_etat = 'Rendu'
-        elif file_type == 'chemins_explo':
-            camp.delete_old_file('chemins_explo')
-            camp.chemins_explo = uploaded_file
-            file_label = "Chemins d'explo"
-            camp.chemins_explo_etat = 'Rendu'
-        elif file_type == 'fil_vert':
-            camp.delete_old_file('fil_vert')
-            camp.fil_vert = uploaded_file
-            file_label = "Fil vert"
-            camp.fil_vert_etat = 'Rendu'
-        elif file_type == 'grille_camp':
-            camp.delete_old_file('grille_camp')
-            camp.grille_camp = uploaded_file
-            file_label = "Grille camp"
-            camp.grille_camp_etat = 'Rendu'
-        elif file_type == 'demande_prospe':
-            camp.delete_old_file('demande_prospe')
-            camp.demande_prospe = uploaded_file
-            file_label = "Demande de prospe"
-            camp.demande_prospe_etat = 'Rendu'
-        elif file_type == 'BP':
-            camp.delete_old_file('BP')
-            camp.BP = uploaded_file
-            file_label = "BP"
-            camp.BP_etat = 'Rendu'
-        elif file_type == 'V1GC':
-            camp.delete_old_file('V1GC')
-            camp.V1GC = uploaded_file
-            file_label = "V1GC"
-            camp.V1GC_etat = 'Rendu'
-        elif file_type == 'PPTPV':
-            camp.delete_old_file('PPTPV')
-            camp.PPTPV = uploaded_file
-            file_label = "PPTPV"
-            camp.PPTPV_etat = 'Rendu'
-        elif file_type == 'casting':
-            camp.delete_old_file('casting')
-            camp.casting = uploaded_file
-            file_label = "Casting"
-            camp.casting_etat = 'Rendu'
-        elif file_type == 'devisbillet':
-            camp.delete_old_file('devisbillet')
-            camp.devisbillet = uploaded_file
-            file_label = "Devis Billet"
-            camp.devisbillet_etat = 'Rendu'
-        elif file_type == 'PPP':
-            camp.delete_old_file('PPP')
-            camp.PPP = uploaded_file
-            file_label = "PPP"
-            camp.PPP_etat = 'Rendu'
-        elif file_type == 'devislogement':
-            camp.delete_old_file('devislogement')
-            camp.devislogement = uploaded_file
-            file_label = "Devis Logement"
-            camp.devislogement_etat = 'Rendu'
-        elif file_type == 'PPPc':
-            camp.delete_old_file('PPPc')
-            camp.PPPc = uploaded_file
-            file_label = "PPPc"
-            camp.PPPc_etat = 'Rendu'
-        elif file_type == 'V2GC':
-            camp.delete_old_file('V2GC')
-            camp.V2GC = uploaded_file
-            file_label = "V2GC"
-            camp.V2GC_etat = 'Rendu'
-        elif file_type == 'GI':
-            camp.delete_old_file('GI')
-            camp.GI = uploaded_file
-            file_label = "GI"
-            camp.GI_etat = 'Rendu'
-        elif file_type == 'VFGC':
-            camp.delete_old_file('VFGC')
-            camp.VFGC = uploaded_file
-            file_label = "VFGC"
-            camp.VFGC_etat = 'Rendu'
-        else:
+
+        # Liste des documents avec leurs attributs
+        documents = [
+            {'name': 'Demande de prospection', 'slug': 'demande_prospe'},
+            {'name': 'Compte-Rendu Prospection', 'slug': 'CR_prospe'},
+            {'name': 'Contrat de location', 'slug': 'contrat_location'},
+            {'name': 'Upload des prio', 'slug': 'PAF'},
+            {'name': 'Maitrise', 'slug': 'grille_ddcs'},
+            {'name': 'Grille de Camp', 'slug': 'grille_camp'},
+            {'name': 'Projet pédagogique V1', 'slug': 'projetv1'},
+            {'name': 'Grille Intendance', 'slug': 'grille_intendance'},
+            {'name': 'Fiche SNCF / Cars', 'slug': 'fiche_sncf'},
+            {'name': 'Commandes Intendance', 'slug': 'intendance2'},
+            {'name': 'Grille Assurance', 'slug': 'grille_assurance'},
+            {'name': 'Infos JN', 'slug': 'JN'},
+            {'name': 'Projet d activité', 'slug': 'fil_rouge'},
+            {'name': 'Projet vie juive', 'slug': 'fil_bleu'},
+            {'name': 'Projet vie de camp', 'slug': 'fil_vert'},
+            {'name': 'Budget prévisionnel', 'slug': 'Budget'},
+            {'name': 'Voiture', 'slug': 'voiture'},
+            {'name': 'Projet pédagogique VF', 'slug': 'projetvf'},
+            {'name': 'Budget réel', 'slug': 'Budgetreal'},
+            {'name': 'Documents obligatoires en ACM', 'slug': 'docACM'},
+            {'name': 'Récepissé', 'slug': 'recepisse'},
+            {'name': 'Chemins Explo', 'slug': 'chemins_explo'},
+            {'name': 'Procuration Banque', 'slug': 'procuration_banque'}
+        ]
+
+        # Vérification du fichier envoyé
+        doc_info = next((doc for doc in documents if doc['slug'] == file_type), None)
+
+        if not doc_info:
             return HttpResponse("Type de fichier invalide.", status=400)
+
+        # Mise à jour du champ correspondant dans l'objet Camp
+        camp.delete_old_file(file_type)  # Suppression du fichier précédent
+        setattr(camp, file_type, uploaded_file)  # Assignation du fichier
+        setattr(camp, f"{file_type}_etat", 'Rendu')  # Mise à jour de l'état
+        file_label = doc_info['name']
+
         camp.save()
-        if camp.branche == 'BB':
-            receveur = ['elie.nebot@eeif.org', 'ben.tubiana@eeif.org', 'chloe.studnia@eeif.org', 'elsa.seksik@eeif.org', 'annaelle.seksik@eeif.org', 'responsablesnational@eeif.org']
-        elif camp.branche == 'BC':
-            receveur = ['raphael.jaoui@eeif.org', 'ronel.atlan@eeif.org', 'ben.tubiana@eeif.org', 'chloe.studnia@eeif.org', 'elsa.seksik@eeif.org', 'annaelle.seksik@eeif.org', 'responsablesnational@eeif.org']
-        elif camp.branche == 'BM':
-            #receveur = ['sacha.montel@eeif.org']
-            receveur = ['david.allali@eeif.org', 'noam.tordjman@eeif.org', 'ben.tubiana@eeif.org', 'chloe.studnia@eeif.org', 'elsa.seksik@eeif.org', 'annaelle.seksik@eeif.org', 'responsablesnational@eeif.org']
-        elif camp.branche == 'BP':
-            receveur = ['emma.elkaim-weil@eeif.org', 'ben.tubiana@eeif.org', 'chloe.studnia@eeif.org', 'elsa.seksik@eeif.org', 'annaelle.seksik@eeif.org', 'responsablesnational@eeif.org']
+
+        # Définition des destinataires en fonction de la branche
+        destinataires = {
+            'BB': ['elie.nebot@eeif.org', 'ben.tubiana@eeif.org', 'chloe.studnia@eeif.org', 
+                   'elsa.seksik@eeif.org', 'annaelle.seksik@eeif.org', 'responsablesnational@eeif.org'],
+            'BC': ['raphael.jaoui@eeif.org', 'ronel.atlan@eeif.org', 'ben.tubiana@eeif.org', 
+                   'chloe.studnia@eeif.org', 'elsa.seksik@eeif.org', 'annaelle.seksik@eeif.org', 
+                   'responsablesnational@eeif.org'],
+            'BM': ['david.allali@eeif.org', 'noam.tordjman@eeif.org', 'ben.tubiana@eeif.org', 
+                   'chloe.studnia@eeif.org', 'elsa.seksik@eeif.org', 'annaelle.seksik@eeif.org', 
+                   'responsablesnational@eeif.org'],
+            'BP': ['emma.elkaim-weil@eeif.org', 'ben.tubiana@eeif.org', 'chloe.studnia@eeif.org', 
+                   'elsa.seksik@eeif.org', 'annaelle.seksik@eeif.org', 'responsablesnational@eeif.org']
+        }
+
+        receveur = destinataires.get(camp.branche, [])
+
+        # Envoi d'un email de notification
         send_mail(
             subject='Un fichier a été téléversé',
-            message=f'Un fichier de type "{file_label}" a été téléversé pour le camp {camp.numero}. Connectez-vous sur https://eeif.rezel.net/home/',
+            message=f'Un fichier de type "{file_label}" a été téléversé pour le camp {camp.numero}. '
+                    f'Connectez-vous sur https://eeif.rezel.net/home/',
             from_email='eeif@rezel.net',  # Remplacez par votre adresse e-mail
             recipient_list=receveur,
         )
+
         return redirect('cdc')
+
+    return HttpResponse("Invalid request", status=400)
+
+def upload_file_qg(request, file_type, camp_id):
+    MAX_FILE_SIZE_MB = 5  # Taille maximale en Mo
+    MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024  # Convertir en octets
+    
+    if request.method == "POST" and request.FILES.get('file'):
+        camp = get_object_or_404(Camp, numero=camp_id)
+        uploaded_file = request.FILES['file']
+
+        # Vérification de la taille du fichier
+        if uploaded_file.size > MAX_FILE_SIZE_BYTES:
+            return HttpResponse(
+                f"Erreur : Le fichier est trop volumineux. Taille maximale autorisée : {MAX_FILE_SIZE_MB} Mo.",
+                status=400
+            )
+
+        # Liste des documents avec leurs attributs
+        documents = [
+            {'name': 'Demande de prospection', 'slug': 'demande_prospe'},
+            {'name': 'Compte-Rendu Prospection', 'slug': 'CR_prospe'},
+            {'name': 'Contrat de location', 'slug': 'contrat_location'},
+            {'name': 'Upload des prio', 'slug': 'PAF'},
+            {'name': 'Maitrise', 'slug': 'grille_ddcs'},
+            {'name': 'Grille de Camp', 'slug': 'grille_camp'},
+            {'name': 'Projet pédagogique V1', 'slug': 'projetv1'},
+            {'name': 'Grille Intendance', 'slug': 'grille_intendance'},
+            {'name': 'Fiche SNCF / Cars', 'slug': 'fiche_sncf'},
+            {'name': 'Commandes Intendance', 'slug': 'intendance2'},
+            {'name': 'Grille Assurance', 'slug': 'grille_assurance'},
+            {'name': 'Infos JN', 'slug': 'JN'},
+            {'name': 'Projet d activité', 'slug': 'fil_rouge'},
+            {'name': 'Projet vie juive', 'slug': 'fil_bleu'},
+            {'name': 'Projet vie de camp', 'slug': 'fil_vert'},
+            {'name': 'Budget prévisionnel', 'slug': 'Budget'},
+            {'name': 'Voiture', 'slug': 'voiture'},
+            {'name': 'Projet pédagogique VF', 'slug': 'projetvf'},
+            {'name': 'Budget réel', 'slug': 'Budgetreal'},
+            {'name': 'Documents obligatoires en ACM', 'slug': 'docACM'},
+            {'name': 'Récepissé', 'slug': 'recepisse'},
+            {'name': 'Chemins Explo', 'slug': 'chemins_explo'},
+            {'name': 'Procuration Banque', 'slug': 'procuration_banque'}
+        ]
+
+        # Vérification du fichier envoyé
+        doc_info = next((doc for doc in documents if doc['slug'] == file_type), None)
+
+        if not doc_info:
+            return HttpResponse("Type de fichier invalide.", status=400)
+
+        # Mise à jour du champ correspondant dans l'objet Camp
+        retour_field = f"{file_type}_retour"
+        camp.delete_old_file(retour_field)  # Suppression du fichier précédent
+        setattr(camp, retour_field, uploaded_file)  # Assignation du fichier
+        setattr(camp, f"{file_type}_etat", 'Retour fait')  # Mise à jour de l'état
+        file_label = doc_info['name']
+
+        camp.save()
+
+        # Envoi d'un email de notification
+        send_mail(
+            subject='Retour QG',
+            message=f'Un fichier de type "{file_label}" a été téléversé pour le camp {camp.numero}. '
+                    f'Connectez-vous sur https://eeif.rezel.net/home/',
+            from_email='eeif@rezel.net',  # Remplacez par votre adresse e-mail
+            recipient_list=[camp.mail],
+        )
+
+        return redirect('camp_detail', numero=camp_id)
+
     return HttpResponse("Invalid request", status=400)
 
 @login_required
 def delete_file(request, file_type, camp_id):
     camp = get_object_or_404(Camp, numero=camp_id)
 
-    # Supprime le fichier spécifié
-    if file_type == 'fil_rouge' and camp.fil_rouge:
-        camp.delete_old_file('fil_rouge')
-        camp.fil_rouge = None
-        camp.fil_rouge_etat = 'Non rendu'
-    elif file_type == 'fil_bleu' and camp.fil_bleu:
-        camp.delete_old_file('fil_bleu')
-        camp.fil_bleu = None
-        camp.fil_bleu_etat = 'Non rendu'
-    elif file_type == 'Budget' and camp.Budget:
-        camp.delete_old_file('Budget')
-        camp.Budget = None
-        camp.Budget_etat = 'Non rendu'
-    elif file_type == 'contrat_location' and camp.contrat_location:
-        camp.delete_old_file('contrat_location')
-        camp.contrat_location = None
-        camp.contrat_location_etat = 'Non rendu'
-    elif file_type == 'CR_prospe' and camp.CR_prospe:
-        camp.delete_old_file('CR_prospe')
-        camp.CR_prospe = None
-        camp.CR_prospe_etat = 'Non rendu'
-    elif file_type == 'fiche_sncf' and camp.fiche_sncf:
-        camp.delete_old_file('fiche_sncf')
-        camp.fiche_sncf = None
-        camp.fiche_sncf_etat = 'Non rendu'
-    elif file_type == 'grille_assurance':
-        camp.delete_old_file('grille_assurance')
-        camp.grille_assurance = None
-        camp.grille_assurance_etat = 'Non rendu'
-    elif file_type == 'grille_ddcs':
-        camp.delete_old_file('grille_ddcs')
-        camp.grille_ddcs = None
-        camp.grille_ddcs_etat = 'Non rendu'
-    elif file_type == 'grille_intendance':
-        camp.delete_old_file('grille_intendance')
-        camp.grille_intendance = None
-        camp.grille_intendance_etat = 'Non rendu'
-    elif file_type == 'procuration_banque':
-        camp.delete_old_file('procuration_banque')
-        camp.procuration_banque = None
-        camp.procuration_banque_etat = 'Non rendu'
-    elif file_type == 'recepisse':
-        camp.delete_old_file('recepisse')
-        camp.recepisse = None
-        camp.recepisse_etat = 'Non rendu'
-    elif file_type == 'chemins_explo':
-        camp.delete_old_file('chemins_explo')
-        camp.chemins_explo = None
-        camp.chemins_explo_etat = 'Non rendu'
-    elif file_type == 'fil_vert':
-        camp.delete_old_file('fil_vert')
-        camp.fil_vert = None
-        camp.fil_vert_etat = 'Non rendu'
-    elif file_type == 'grille_camp':
-        camp.delete_old_file('grille_camp')
-        camp.grille_camp = None
-        camp.grille_camp_etat = 'Non rendu'
-    elif file_type == 'demande_prospe':
-        camp.delete_old_file('demande_prospe')
-        camp.demande_prospe = None
-        camp.demande_prospe_etat = 'Non rendu'
-    elif file_type == 'BP':
-        camp.delete_old_file('BP')
-        camp.BP = None
-        camp.BP_etat = 'Non rendu'
-    elif file_type == 'V1GC':
-        camp.delete_old_file('V1GC')
-        camp.V1GC = None
-        camp.V1GC_etat = 'Non rendu'
-    elif file_type == 'PPTPV':
-        camp.delete_old_file('PPTPV')
-        camp.PPTPV = None
-        camp.PPTPV_etat = 'Non rendu'
-    elif file_type == 'casting':
-        camp.delete_old_file('casting')
-        camp.casting = None
-        camp.casting_etat = 'Non rendu'
-    elif file_type == 'devisbillet':
-        camp.delete_old_file('devisbillet')
-        camp.devisbillet = None
-        camp.devisbillet_etat = 'Non rendu'
-    elif file_type == 'PPP':
-        camp.delete_old_file('PPP')
-        camp.PPP = None
-        camp.PPP_etat = 'Non rendu'
-    elif file_type == 'devislogement':
-        camp.delete_old_file('devislogement')
-        camp.devislogement = None
-        camp.devislogement_etat = 'Non rendu'
-    elif file_type == 'PPPc':
-        camp.delete_old_file('PPPc')
-        camp.PPPc = None
-        camp.PPPc_etat = 'Non rendu'
-    elif file_type == 'V2GC':
-        camp.delete_old_file('V2GC')
-        camp.V2GC = None
-        camp.V2GC_etat = 'Non rendu'
-    elif file_type == 'GI':
-        camp.delete_old_file('GI')
-        camp.GI = None
-        camp.GI_etat = 'Non rendu'
-    elif file_type == 'VFGC':
-        camp.delete_old_file('VFGC')
-        camp.VFGC = None
-        camp.VFGC_etat = 'Non rendu'
-    else:
+    # Liste des documents disponibles avec leurs slugs
+    documents = [
+        {'name': 'Demande de prospection', 'slug': 'demande_prospe'},
+        {'name': 'Compte-Rendu Prospection', 'slug': 'CR_prospe'},
+        {'name': 'Contrat de location', 'slug': 'contrat_location'},
+        {'name': 'Upload des prio', 'slug': 'PAF'},
+        {'name': 'Maitrise', 'slug': 'grille_ddcs'},
+        {'name': 'Grille de Camp', 'slug': 'grille_camp'},
+        {'name': 'Projet pédagogique V1', 'slug': 'projetv1'},
+        {'name': 'Grille Intendance', 'slug': 'grille_intendance'},
+        {'name': 'Fiche SNCF / Cars', 'slug': 'fiche_sncf'},
+        {'name': 'Commandes Intendance', 'slug': 'intendance2'},
+        {'name': 'Grille Assurance', 'slug': 'grille_assurance'},
+        {'name': 'Infos JN', 'slug': 'JN'},
+        {'name': 'Projet d activité', 'slug': 'fil_rouge'},
+        {'name': 'Projet vie juive', 'slug': 'fil_bleu'},
+        {'name': 'Projet vie de camp', 'slug': 'fil_vert'},
+        {'name': 'Budget prévisionnel', 'slug': 'Budget'},
+        {'name': 'Voiture', 'slug': 'voiture'},
+        {'name': 'Projet pédagogique VF', 'slug': 'projetvf'},
+        {'name': 'Budget réel', 'slug': 'Budgetreal'},
+        {'name': 'Documents obligatoires en ACM', 'slug': 'docACM'},
+        {'name': 'Récepissé', 'slug': 'recepisse'},
+        {'name': 'Chemins Explo', 'slug': 'chemins_explo'},
+        {'name': 'Procuration Banque', 'slug': 'procuration_banque'}
+    ]
+
+    # Vérifier si le type de fichier est valide
+    slugs = {doc['slug'] for doc in documents}
+    if file_type not in slugs:
         return HttpResponse("Type de fichier invalide.", status=400)
+
+    # Supprimer le fichier et mettre à jour l'état
+    camp.delete_old_file(file_type)
+    setattr(camp, file_type, None)  # Supprimer le fichier
+    setattr(camp, f"{file_type}_etat", 'Non rendu')  # Mettre l'état à "Non rendu"
+
     camp.save()
     return redirect('cdc')
+
+def delete_file_qg(request, file_type, camp_id):
+    camp = get_object_or_404(Camp, numero=camp_id)
+
+    # Liste des documents disponibles avec leurs slugs
+    documents = [
+        {'name': 'Demande de prospection', 'slug': 'demande_prospe'},
+        {'name': 'Compte-Rendu Prospection', 'slug': 'CR_prospe'},
+        {'name': 'Contrat de location', 'slug': 'contrat_location'},
+        {'name': 'Upload des prio', 'slug': 'PAF'},
+        {'name': 'Maitrise', 'slug': 'grille_ddcs'},
+        {'name': 'Grille de Camp', 'slug': 'grille_camp'},
+        {'name': 'Projet pédagogique V1', 'slug': 'projetv1'},
+        {'name': 'Grille Intendance', 'slug': 'grille_intendance'},
+        {'name': 'Fiche SNCF / Cars', 'slug': 'fiche_sncf'},
+        {'name': 'Commandes Intendance', 'slug': 'intendance2'},
+        {'name': 'Grille Assurance', 'slug': 'grille_assurance'},
+        {'name': 'Infos JN', 'slug': 'JN'},
+        {'name': 'Projet d activité', 'slug': 'fil_rouge'},
+        {'name': 'Projet vie juive', 'slug': 'fil_bleu'},
+        {'name': 'Projet vie de camp', 'slug': 'fil_vert'},
+        {'name': 'Budget prévisionnel', 'slug': 'Budget'},
+        {'name': 'Voiture', 'slug': 'voiture'},
+        {'name': 'Projet pédagogique VF', 'slug': 'projetvf'},
+        {'name': 'Budget réel', 'slug': 'Budgetreal'},
+        {'name': 'Documents obligatoires en ACM', 'slug': 'docACM'},
+        {'name': 'Récepissé', 'slug': 'recepisse'},
+        {'name': 'Chemins Explo', 'slug': 'chemins_explo'},
+        {'name': 'Procuration Banque', 'slug': 'procuration_banque'}
+    ]
+
+    # Vérifier si le type de fichier est valide
+    slugs = {doc['slug'] for doc in documents}
+    if file_type not in slugs:
+        return HttpResponse("Type de fichier invalide.", status=400)
+
+    # Supprimer le fichier et mettre à jour l'état
+    retour_field = f"{file_type}_retour"
+    camp.delete_old_file(retour_field)
+    setattr(camp, retour_field, None)  # Supprimer le fichier
+    setattr(camp, f"{file_type}_etat", 'Rendu')  # Mettre l'état à "Non rendu"
+
+    camp.save()
+    return redirect('camp_detail', numero=camp_id)
+
 
 def update_file_state_cdc(request, file_type, camp_id):
     if request.method == "POST":
         new_state = request.POST.get("new_state")
         camp = get_object_or_404(Camp, numero=camp_id)
 
-        # Mettre à jour l'état du fichier correspondant
-        if file_type == "fil_rouge":
-            camp.fil_rouge_etat = new_state
-        elif file_type == "fil_bleu":
-            camp.fil_bleu_etat = new_state
-        elif file_type == "fil_vert":
-            camp.fil_vert_etat = new_state
-        elif file_type == "PAF":
-            camp.PAF_etat = new_state
-        elif file_type == "CR_prospe":
-            camp.CR_prospe_etat = new_state
-        elif file_type == "grille_assurance":
-            camp.grille_assurance_etat = new_state
-        elif file_type == "grille_ddcs":
-            camp.grille_ddcs_etat = new_state
-        elif file_type == "grille_intendance":
-            camp.grille_intendance_etat = new_state
-        elif file_type == "fiche_sncf":
-            camp.fiche_sncf_etat = new_state
-        elif file_type == "procuration_banque":
-            camp.procuration_banque_etat = new_state
-        elif file_type == "recepisse":
-            camp.recepisse_etat = new_state
-        elif file_type == "chemins_explo":
-            camp.chemins_explo_etat = new_state
-        elif file_type == "contrat_location":
-            camp.contrat_location_etat = new_state
-        elif file_type == "Budget":
-            camp.Budget_etat = new_state
-        elif file_type == "grille_camp":
-            camp.grille_camp_etat = new_state
-        elif file_type == "demande_prospe":
-            camp.demande_prospe_etat = new_state
-        elif file_type == "BP":
-            camp.BP_etat = new_state
-        elif file_type == "V1GC":
-            camp.V1GC_etat = new_state
-        elif file_type == "PPTPV":
-            camp.PPTPV_etat = new_state
-        elif file_type == "casting":
-            camp.casting_etat = new_state
-        elif file_type == "devisbillet":
-            camp.devisbillet_etat = new_state
-        elif file_type == "PPP":
-            camp.PPP_etat = new_state
-        elif file_type == "devislogement":
-            camp.devislogement_etat = new_state
-        elif file_type == "PPPc":
-            camp.PPPc_etat = new_state
-        elif file_type == "V2GC":
-            camp.V2GC_etat = new_state
-        elif file_type == "GI":
-            camp.GI_etat = new_state
-        elif file_type == "VFGC":
-            camp.VFGC_etat = new_state
+        # Liste des documents disponibles avec leurs slugs
+        documents = [
+            {'name': 'Demande de prospection', 'slug': 'demande_prospe'},
+            {'name': 'Compte-Rendu Prospection', 'slug': 'CR_prospe'},
+            {'name': 'Contrat de location', 'slug': 'contrat_location'},
+            {'name': 'Upload des prio', 'slug': 'PAF'},
+            {'name': 'Maitrise', 'slug': 'grille_ddcs'},
+            {'name': 'Grille de Camp', 'slug': 'grille_camp'},
+            {'name': 'Projet pédagogique V1', 'slug': 'projetv1'},
+            {'name': 'Grille Intendance', 'slug': 'grille_intendance'},
+            {'name': 'Fiche SNCF / Cars', 'slug': 'fiche_sncf'},
+            {'name': 'Commandes Intendance', 'slug': 'intendance2'},
+            {'name': 'Grille Assurance', 'slug': 'grille_assurance'},
+            {'name': 'Infos JN', 'slug': 'JN'},
+            {'name': 'Projet d activité', 'slug': 'fil_rouge'},
+            {'name': 'Projet vie juive', 'slug': 'fil_bleu'},
+            {'name': 'Projet vie de camp', 'slug': 'fil_vert'},
+            {'name': 'Budget prévisionnel', 'slug': 'Budget'},
+            {'name': 'Voiture', 'slug': 'voiture'},
+            {'name': 'Projet pédagogique VF', 'slug': 'projetvf'},
+            {'name': 'Budget réel', 'slug': 'Budgetreal'},
+            {'name': 'Documents obligatoires en ACM', 'slug': 'docACM'},
+            {'name': 'Récepissé', 'slug': 'recepisse'},
+            {'name': 'Chemins Explo', 'slug': 'chemins_explo'},
+            {'name': 'Procuration Banque', 'slug': 'procuration_banque'}
+        ]
 
-        else:
+        # Vérifier si le type de fichier est valide
+        slugs = {doc['slug'] for doc in documents}
+        if file_type not in slugs:
             return HttpResponse("Type de fichier invalide.", status=400)
-        # Sauvegarder les changements
-        camp.save()
-        send_mail(
-            subject='Retour du QG',
-            message=f'L état du fichier {file_type} a été modifié pour le camp {camp.numero}. Connectez-vous sur https://eeif.rezel.net/home',
-            from_email='eeif@rezel.net',  # Remplacez par votre adresse e-mail
-            recipient_list=[camp.mail],
-        )
 
-        # Rediriger vers la page de détails du camp
+        # Mettre à jour l'état du fichier dynamiquement
+        setattr(camp, f"{file_type}_etat", new_state)
+
+        # Sauvegarder les modifications
+        camp.save()
+
+        # Envoi d'un email de notification
+
         return redirect('cdc')
+
     return redirect('cdc')
 
 @login_required
@@ -785,145 +722,103 @@ def update_file_state(request, file_type, camp_id):
         new_state = request.POST.get("new_state")
         camp = get_object_or_404(Camp, numero=camp_id)
 
-        # Mettre à jour l'état du fichier correspondant
-        if file_type == "fil_rouge":
-            camp.fil_rouge_etat = new_state
-        elif file_type == "fil_bleu":
-            camp.fil_bleu_etat = new_state
-        elif file_type == "fil_vert":
-            camp.fil_vert_etat = new_state
-        elif file_type == "PAF":
-            camp.PAF_etat = new_state
-        elif file_type == "CR_prospe":
-            camp.CR_prospe_etat = new_state
-        elif file_type == "grille_assurance":
-            camp.grille_assurance_etat = new_state
-        elif file_type == "grille_ddcs":
-            camp.grille_ddcs_etat = new_state
-        elif file_type == "grille_intendance":
-            camp.grille_intendance_etat = new_state
-        elif file_type == "fiche_sncf":
-            camp.fiche_sncf_etat = new_state
-        elif file_type == "procuration_banque":
-            camp.procuration_banque_etat = new_state
-        elif file_type == "recepisse":
-            camp.recepisse_etat = new_state
-        elif file_type == "chemins_explo":
-            camp.chemins_explo_etat = new_state
-        elif file_type == "contrat_location":
-            camp.contrat_location_etat = new_state
-        elif file_type == "Budget":
-            camp.Budget_etat = new_state
-        elif file_type == "grille_camp":
-            camp.grille_camp_etat = new_state
-        elif file_type == "demande_prospe":
-            camp.demande_prospe_etat = new_state
-        elif file_type == "BP":
-            camp.BP_etat = new_state
-        elif file_type == "V1GC":
-            camp.V1GC_etat = new_state
-        elif file_type == "PPTPV":
-            camp.PPTPV_etat = new_state
-        elif file_type == "casting":
-            camp.casting_etat = new_state
-        elif file_type == "devisbillet":
-            camp.devisbillet_etat = new_state
-        elif file_type == "PPP":
-            camp.PPP_etat = new_state
-        elif file_type == "devislogement":
-            camp.devislogement_etat = new_state
-        elif file_type == "PPPc":
-            camp.PPPc_etat = new_state
-        elif file_type == "V2GC":
-            camp.V2GC_etat = new_state
-        elif file_type == "GI":
-            camp.GI_etat = new_state
-        elif file_type == "VFGC":
-            camp.VFGC_etat = new_state
+        # Liste des documents disponibles avec leurs slugs
+        documents = [
+            {'name': 'Demande de prospection', 'slug': 'demande_prospe'},
+            {'name': 'Compte-Rendu Prospection', 'slug': 'CR_prospe'},
+            {'name': 'Contrat de location', 'slug': 'contrat_location'},
+            {'name': 'Upload des prio', 'slug': 'PAF'},
+            {'name': 'Maitrise', 'slug': 'grille_ddcs'},
+            {'name': 'Grille de Camp', 'slug': 'grille_camp'},
+            {'name': 'Projet pédagogique V1', 'slug': 'projetv1'},
+            {'name': 'Grille Intendance', 'slug': 'grille_intendance'},
+            {'name': 'Fiche SNCF / Cars', 'slug': 'fiche_sncf'},
+            {'name': 'Commandes Intendance', 'slug': 'intendance2'},
+            {'name': 'Grille Assurance', 'slug': 'grille_assurance'},
+            {'name': 'Infos JN', 'slug': 'JN'},
+            {'name': 'Projet d activité', 'slug': 'fil_rouge'},
+            {'name': 'Projet vie juive', 'slug': 'fil_bleu'},
+            {'name': 'Projet vie de camp', 'slug': 'fil_vert'},
+            {'name': 'Budget prévisionnel', 'slug': 'Budget'},
+            {'name': 'Voiture', 'slug': 'voiture'},
+            {'name': 'Projet pédagogique VF', 'slug': 'projetvf'},
+            {'name': 'Budget réel', 'slug': 'Budgetreal'},
+            {'name': 'Documents obligatoires en ACM', 'slug': 'docACM'},
+            {'name': 'Récepissé', 'slug': 'recepisse'},
+            {'name': 'Chemins Explo', 'slug': 'chemins_explo'},
+            {'name': 'Procuration Banque', 'slug': 'procuration_banque'}
+        ]
 
-        else:
+        # Vérifier si le type de fichier est valide
+        slugs = {doc['slug'] for doc in documents}
+        if file_type not in slugs:
             return HttpResponse("Type de fichier invalide.", status=400)
-        # Sauvegarder les changements
+
+        # Mettre à jour l'état du fichier dynamiquement
+        setattr(camp, f"{file_type}_etat", new_state)
+
+        # Sauvegarder les modifications
         camp.save()
+
+        # Envoi d'un email de notification
         send_mail(
             subject='Retour du QG',
-            message=f'L état du fichier {file_type} a été modifié pour le camp {camp.numero}. Connectez-vous sur https://eeif.rezel.net/home',
+            message=f"L'état du fichier {file_type} a été modifié pour le camp {camp.numero}. Connectez-vous sur https://eeif.rezel.net/home",
             from_email='eeif@rezel.net',  # Remplacez par votre adresse e-mail
             recipient_list=[camp.mail],
         )
 
-        # Rediriger vers la page de détails du camp
         return redirect('camp_detail', numero=camp_id)
+
     return redirect('camp_detail', numero=camp_id)
 
 def modifier_commentaire(request, file_type, camp_id):
     if request.method == 'POST':
-        # Récupérer l'objet commission à partir de l'ID
         camp = get_object_or_404(Camp, numero=camp_id)
-        
-        # Récupérer le commentaire envoyé via le formulaire
         nouveau_commentaire = request.POST.get('commentaire')
-        
-        if file_type == 'fil_rouge':
-            camp.fil_rouge_commentaire = nouveau_commentaire
-        elif file_type == 'fil_bleu':
-            camp.fil_bleu_commentaire = nouveau_commentaire
-        elif file_type == 'fil_vert':
-            camp.fil_vert_commentaire = nouveau_commentaire
-        elif file_type == 'CR_prospe':
-            camp.CR_prospe_commentaire = nouveau_commentaire
-        elif file_type == 'grille_assurance':
-            camp.grille_assurance_commentaire = nouveau_commentaire
-        elif file_type == 'grille_ddcs':
-            camp.grille_ddcs_commentaire = nouveau_commentaire
-        elif file_type == 'grille_intendance':
-            camp.grille_intendance_commentaire = nouveau_commentaire
-        elif file_type == 'fiche_sncf':
-            camp.fiche_sncf_commentaire = nouveau_commentaire
-        elif file_type == 'procuration_banque':
-            camp.procuration_banque_commentaire = nouveau_commentaire
-        elif file_type == 'recepisse':
-            camp.recepisse_commentaire = nouveau_commentaire
-        elif file_type == 'chemins_explo':
-            camp.chemins_explo_commentaire = nouveau_commentaire
-        elif file_type == 'contrat_location':
-            camp.contrat_location_commentaire = nouveau_commentaire
-        elif file_type == 'Budget':
-            camp.Budget_commentaire = nouveau_commentaire
-        elif file_type == 'grille_camp':
-            camp.grille_camp_commentaire = nouveau_commentaire
-        elif file_type == 'demande_prospe':
-            camp.demande_prospe_commentaire = nouveau_commentaire
-        elif file_type == 'BP':
-            camp.BP_commentaire = nouveau_commentaire
-        elif file_type == 'V1GC':
-            camp.V1GC_commentaire = nouveau_commentaire
-        elif file_type == 'PPTPV':
-            camp.PPTPV_commentaire = nouveau_commentaire
-        elif file_type == 'casting':
-            camp.casting_commentaire = nouveau_commentaire
-        elif file_type == 'devisbillet':
-            camp.devisbillet_commentaire = nouveau_commentaire
-        elif file_type == 'PPP':
-            camp.PPP_commentaire = nouveau_commentaire
-        elif file_type == 'devislogement':
-            camp.devislogement_commentaire = nouveau_commentaire
-        elif file_type == 'PPPc':
-            camp.PPPc_commentaire = nouveau_commentaire
-        elif file_type == 'V2GC':
-            camp.V2GC_commentaire = nouveau_commentaire
-        elif file_type == 'GI':
-            camp.GI_commentaire = nouveau_commentaire
-        elif file_type == 'VFGC':
-            camp.VFGC_commentaire = nouveau_commentaire
 
-        else:
+        # Liste des documents disponibles avec leurs slugs
+        documents = [
+            {'name': 'Demande de prospection', 'slug': 'demande_prospe'},
+            {'name': 'Compte-Rendu Prospection', 'slug': 'CR_prospe'},
+            {'name': 'Contrat de location', 'slug': 'contrat_location'},
+            {'name': 'Upload des prio', 'slug': 'PAF'},
+            {'name': 'Maitrise', 'slug': 'grille_ddcs'},
+            {'name': 'Grille de Camp', 'slug': 'grille_camp'},
+            {'name': 'Projet pédagogique V1', 'slug': 'projetv1'},
+            {'name': 'Grille Intendance', 'slug': 'grille_intendance'},
+            {'name': 'Fiche SNCF / Cars', 'slug': 'fiche_sncf'},
+            {'name': 'Commandes Intendance', 'slug': 'intendance2'},
+            {'name': 'Grille Assurance', 'slug': 'grille_assurance'},
+            {'name': 'Infos JN', 'slug': 'JN'},
+            {'name': 'Projet d activité', 'slug': 'fil_rouge'},
+            {'name': 'Projet vie juive', 'slug': 'fil_bleu'},
+            {'name': 'Projet vie de camp', 'slug': 'fil_vert'},
+            {'name': 'Budget prévisionnel', 'slug': 'Budget'},
+            {'name': 'Voiture', 'slug': 'voiture'},
+            {'name': 'Projet pédagogique VF', 'slug': 'projetvf'},
+            {'name': 'Budget réel', 'slug': 'Budgetreal'},
+            {'name': 'Documents obligatoires en ACM', 'slug': 'docACM'},
+            {'name': 'Récepissé', 'slug': 'recepisse'},
+            {'name': 'Chemins Explo', 'slug': 'chemins_explo'},
+            {'name': 'Procuration Banque', 'slug': 'procuration_banque'}
+        ]
+
+        # Vérifier si le type de fichier est valide
+        slugs = {doc['slug'] for doc in documents}
+        if file_type not in slugs:
             return HttpResponse("Type de fichier invalide.", status=400)
-        # Sauvegarder les changements
+
+        # Mettre à jour dynamiquement le commentaire
+        setattr(camp, f"{file_type}_commentaire", nouveau_commentaire)
+
+        # Sauvegarder les modifications
         camp.save()
+
+        # Envoi d'un email de notification
         send_mail(
             subject='Retour du QG',
-            message=f'Le commentaire concernant le fichier {file_type} a été modifié pour le camp {camp.numero}. Connectez-vous sur https://eeif.rezel.net/home',
+            message=f"Le commentaire concernant le fichier {file_type} a été modifié pour le camp {camp.numero}. Connectez-vous sur https://eeif.rezel.net/home",
             from_email='eeif@rezel.net',  # Remplacez par votre adresse e-mail
             recipient_list=[camp.mail],
         )

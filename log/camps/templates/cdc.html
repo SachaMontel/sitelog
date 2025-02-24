@@ -149,9 +149,16 @@
                             <button type="submit" class="file-state-button">Mettre à jour</button>
                         </div>
                     </form>
+                    {% elif document.slug == "projetv1" or document.slug == "projetvf" or document.slug == "fil_rouge" or document.slug == "fil_bleu" or document.slug == "fil_vert" %}
+                        {% if document.file_retour %}
+                            <a href="{{ document.file_retour.url }}" target="_blank">Télécharger</a>
+                        {% else %}
+                            Pas de projet retourné pour l'instant
+                        {% endif %}
                     {% else %}
-                        {{ document.comment|default:"" }}</td>
+                        {{ document.comment|default:"" }}
                     {% endif %}
+                </td>
                 </tr>
                 {% endfor %}
             </tbody>
