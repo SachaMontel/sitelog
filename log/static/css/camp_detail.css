@@ -380,10 +380,16 @@ button.delete-btn {
 
 
 
-.drive-link {
+.drive-container {
     position: fixed;
     top: 10px;
     right: 10px;
+    display: flex;
+    flex-direction: row; /* Aligner les boutons en colonne */
+    gap: 10px; /* Espacement entre les boutons */
+}
+
+.drive-link {
     text-align: center;
     text-decoration: none;
     background-color: rgb(0,39,152);
@@ -394,6 +400,7 @@ button.delete-btn {
     display: flex;
     align-items: center;
     gap: 8px;
+    color: white;
 }
 
 .drive-link:hover {
@@ -407,7 +414,6 @@ button.delete-btn {
 }
 
 .drive-title {
-    color: white;
     font-size: 14px;
     font-weight: 500;
 }
