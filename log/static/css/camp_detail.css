@@ -298,54 +298,86 @@ button.delete-btn {
     color: white;
     border: 1px solid #ccc;
     border-radius: 4px;
-    background-color: rgba(0, 128, 0, 0.5); /* Par défaut, transparent */
+    background-color: rgba(0, 128, 0, 0.8); /* Par défaut, vert */
     transition: background-color 0.3s ease;
 }
+
+/* Dégradé du rouge foncé au vert foncé avec plus d'orange et de jaune */
 .color-scale[data-value="0"] {
-    background-color: rgba(255, 0, 0, 0.5); /* Rouge */
+    background-color: rgba(102, 0, 0, 0.8); /* Rouge très foncé */
 }
 .color-scale[data-value="1"] {
-    background-color: rgba(255, 51, 0, 0.5); /* Rouge légèrement éclairci */
+    background-color: rgba(153, 0, 0, 0.8); /* Rouge foncé */
 }
 .color-scale[data-value="2"] {
-    background-color: rgba(255, 102, 0, 0.5); /* Orange rougeâtre */
+    background-color: rgba(204, 0, 0, 0.8); /* Rouge */
 }
 .color-scale[data-value="3"] {
-    background-color: rgba(255, 153, 0, 0.5); /* Orange foncé */
+    background-color: rgba(255, 0, 0, 0.8); /* Rouge vif */
 }
 .color-scale[data-value="4"] {
-    background-color: rgba(255, 204, 0, 0.5); /* Orange clair */
+    background-color: rgba(255, 51, 0, 0.8);
 }
 .color-scale[data-value="5"] {
-    background-color: rgba(255, 230, 0, 0.5); /* Jaune orangé */
+    background-color: rgba(255, 102, 0, 0.8); /* Rouge-orangé */
 }
 .color-scale[data-value="6"] {
-    background-color: rgba(255, 255, 0, 0.5); /* Jaune */
+    background-color: rgba(255, 153, 0, 0.8); /* Orange foncé */
 }
 .color-scale[data-value="7"] {
-    background-color: rgba(204, 255, 51, 0.5); /* Vert-jaune clair */
+    background-color: rgba(255, 178, 51, 0.8); /* Orange doré */
 }
 .color-scale[data-value="8"] {
-    background-color: rgba(153, 255, 102, 0.5); /* Vert clair */
+    background-color: rgba(255, 204, 51, 0.8); /* Orange clair */
 }
 .color-scale[data-value="9"] {
-    background-color: rgba(102, 255, 102, 0.5); /* Vert un peu plus dense */
+    background-color: rgba(255, 230, 51, 0.8); /* Jaune-orangé */
 }
 .color-scale[data-value="10"] {
-    background-color: rgba(51, 204, 51, 0.5); /* Vert moyen */
+    background-color: rgba(255, 255, 0, 0.8); /* Jaune */
 }
 .color-scale[data-value="11"] {
-    background-color: rgba(0, 153, 51, 0.5); /* Vert légèrement foncé */
+    background-color: rgba(230, 255, 51, 0.8); /* Jaune-vert clair */
 }
 .color-scale[data-value="12"] {
-    background-color: rgba(0, 128, 0, 0.5); /* Vert pur */
+    background-color: rgba(204, 255, 102, 0.8); /* Vert-jaune */
 }
 .color-scale[data-value="13"] {
-    background-color: rgba(0, 102, 0, 0.5); /* Vert foncé */
+    background-color: rgba(153, 255, 102, 0.8);
 }
 .color-scale[data-value="14"] {
-    background-color: rgba(0, 77, 0, 0.5); /* Vert très foncé */
+    background-color: rgba(102, 255, 102, 0.8); /* Vert clair */
 }
+.color-scale[data-value="15"] {
+    background-color: rgba(51, 255, 102, 0.8);
+}
+.color-scale[data-value="16"] {
+    background-color: rgba(0, 255, 102, 0.8);
+}
+.color-scale[data-value="17"] {
+    background-color: rgba(0, 255, 51, 0.8);
+}
+.color-scale[data-value="18"] {
+    background-color: rgba(0, 255, 0, 0.8); /* Vert */
+}
+.color-scale[data-value="19"] {
+    background-color: rgba(0, 204, 0, 0.8);
+}
+.color-scale[data-value="20"] {
+    background-color: rgba(0, 180, 0, 0.8);
+}
+.color-scale[data-value="21"] {
+    background-color: rgba(0, 153, 0, 0.8);
+}
+.color-scale[data-value="22"] {
+    background-color: rgba(0, 102, 0, 0.8);
+}
+.color-scale[data-value="23"] {
+    background-color: rgba(0, 77, 0, 0.8); /* Vert très foncé */
+}
+
+
+
 
 
 .drive-link {
