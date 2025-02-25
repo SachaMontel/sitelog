@@ -10,7 +10,7 @@ from camps.models import Camp
 def create_deadline():
     for camp in Camp.objects.all():
         if camp.branche != 'BP':
-            camp.grille_assurance_deadline = '15 avril'
+            camp.grille_camp_deadline = '12 mars'
             camp.save()
             print(f"DL créé pour {camp}")
 
@@ -75,4 +75,4 @@ def add_link():
             camp.save()
             print(f"Link ajouté pour {camp}")
 
-add_link()
+create_deadline()
