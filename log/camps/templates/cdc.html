@@ -175,6 +175,19 @@
                             <button type="submit" class="file-state-button">Mettre à jour</button>
                         </div>
                     </form>
+                    {% elif document.slug == "grille_camp" or document.slug == "grille_intendance" or document.slug == "intendace2" or document.slug == "grille_assurance" or document.slug == "Budget" or document.slug == "Budgetreal" or document.slug == "doc_ACM"%}
+                    <form method="post" action="{% url 'update_file_state_cdc' document.slug camp.numero %}" class="state-form">
+                        {% csrf_token %}
+                        <div class="file-state-actions">
+                            <div class="select-wrapper">
+                                <select name="new_state" class="file-state-select">
+                                    <option value="Non rendu" {% if document.state == "Non rendu" %}selected{% endif %}>Non Rendu</option>
+                                    <option value="Rendu" {% if document.state == "Rendu" %}selected{% endif %}>Rendu</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="file-state-button">Mettre à jour</button>
+                        </div>
+                    </form>
                     {% elif document.slug == "projetv1" or document.slug == "projetvf" or document.slug == "fil_rouge" or document.slug == "fil_bleu" or document.slug == "fil_vert" %}
                         {% if document.file_retour %}
                             <a href="{{ document.file_retour.url }}" target="_blank">Télécharger</a>
