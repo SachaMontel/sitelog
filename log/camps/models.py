@@ -153,7 +153,7 @@ class Camp(models.Model):
     enfants = models.CharField("Nombre d'enfants", max_length=50, blank=True, null=True)
     animateurs = models.CharField("Nombre d'animateurs", max_length=50, blank=True, null=True)
     date_JN = models.DateField("Date des JN", blank=True, null=True)
-    drive = models.CharField("Lien du drive", max_length=50, blank=True, null=True)
+    drive = models.CharField("Lien du drive", max_length=100, blank=True, null=True)
 
     fil_rouge = models.FileField(upload_to='media/fichiers_camps/fil_rouge/depot/', blank=True, null=True)
     fil_rouge_retour = models.FileField(upload_to='media/fichiers_camps/fil_rouge/retour/', blank=True, null=True)
