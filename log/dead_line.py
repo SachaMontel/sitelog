@@ -10,7 +10,7 @@ from camps.models import Camp
 def create_deadline():
     for camp in Camp.objects.all():
         if camp.branche != 'BP':
-            camp.grille_camp_deadline = '12 mars'
+            camp.grille_ddcs_deadline = '23 mars'
             camp.save()
             print(f"DL créé pour {camp}")
 
