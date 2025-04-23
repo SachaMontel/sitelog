@@ -74,7 +74,7 @@
                 <td>
                     {% if camp.branche == "BM" %}
                     {% if document.slug != 'PAF' %}
-                    {% if document.slug == "projetv1" or document.slug == "grille_camp" or document.slug == "grille_ddcs" or document.slug == "grille_intendance" or document.slug == "intendace2" or document.slug == "grille_assurance" or document.slug == "Budget" or document.slug == "Budgetreal" or document.slug == "doc_ACM"%}
+                    {% if document.slug == "projetv1" or document.slug == "projetvf" or document.slug == "grille_camp" or document.slug == "grille_ddcs" or document.slug == "grille_intendance" or document.slug == "intendace2" or document.slug == "grille_assurance" or document.slug == "Budget" or document.slug == "Budgetreal" or document.slug == "doc_ACM"%}
                         <a href="{{ camp.drive }}" target="_blank" class="drive-link">
                             <span class="drive-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -164,7 +164,7 @@
                 </td>
                 <td>
                     {% if camp.branche == "BM" %}
-                    {% if document.slug == "projetvf" or document.slug == "fil_rouge" or document.slug == "fil_bleu" or document.slug == "fil_vert" %}
+                    {% if document.slug == "fil_rouge" or document.slug == "fil_bleu" or document.slug == "fil_vert" %}
                     <form method="post" enctype="multipart/form-data" action="{% url 'upload_file_qg' document.slug camp.numero %}" class="inline-form">
                         {% csrf_token %}
                         <input type="file" name="file" required>
@@ -176,7 +176,7 @@
                         <button type="submit" class="delete-btn">Supprimer</button>
                     </form>
                     {% endif %}
-                    {% elif document.slug == "projetv1" or document.slug == "grille_camp" or document.slug == "grille_ddcs" or document.slug == "grille_intendance" or document.slug == "intendace2" or document.slug == "grille_assurance" or document.slug == "Budget" or document.slug == "Budgetreal" or document.slug == "doc_ACM"%}
+                    {% elif document.slug == "projetv1" or document.slug == "projetvf" or document.slug == "grille_camp" or document.slug == "grille_ddcs" or document.slug == "grille_intendance" or document.slug == "intendace2" or document.slug == "grille_assurance" or document.slug == "Budget" or document.slug == "Budgetreal" or document.slug == "doc_ACM"%}
                         
                     {% else %}
                     <form action="{% url 'modifier_commentaire' document.slug camp.numero %}" method="POST">
