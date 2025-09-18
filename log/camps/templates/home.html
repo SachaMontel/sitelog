@@ -24,7 +24,7 @@
                     <li><a href="{% url 'simulation' %}">Jeu Zadeck</a></li>
                     {% if user.is_authenticated %}
                         {% if is_superuser%}
-                            <li><a href="{% url 'admin:index' %}">Espace Admin</a></li>
+                            <li><a href="{% url 'admin:index' %}">Espace Admi</a></li>
                             <li><a href="{% url 'logistique' %}">Espace Logistique</a></li>
                         {% elif is_in_anbm %}
                             <li><a href="{% url 'anbm' %}">Espace ANBM</a></li>
