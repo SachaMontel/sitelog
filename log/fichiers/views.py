@@ -13,7 +13,7 @@ DOSSIER_TEMP = "media/fiches_sanitaires"
 ZIP_PATH = "media/fiches_sanitaires.zip"
 
 # Nom exact de la colonne contenant les liens
-COLONNE_FICHES = "Fiche sanitaire - à télécharger sur la page d'inscription"
+COLONNE_FICHES = "Fiche sanitaire - A télécharger dans le menu  [ Accueil > Documents ]"
 
 # Assurer que le dossier existe avant toute opération
 if not os.path.exists(DOSSIER_TEMP):

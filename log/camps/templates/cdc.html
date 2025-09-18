@@ -198,8 +198,11 @@
                     etat-encours
                 {% endif %}
                     ">
-                    
-                        {{ document.state }}
+                        {% if document.state == 'Retour fait' %}
+                            Modifications à apporter
+                        {% else %}
+                            {{ document.state }}
+                        {% endif %}
                     </td>
                     <td>
                         {% if camp.branche == "BC" %}

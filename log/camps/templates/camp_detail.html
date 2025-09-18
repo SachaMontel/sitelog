@@ -127,7 +127,11 @@
                         etat-encours
                     {% endif %}
                 ">
-                    {{ document.state }}
+                    {% if document.state == 'Retour fait' %}
+                        Modifications à apporter
+                    {% else %}
+                        {{ document.state }}
+                    {% endif %}
                 </td>
                 <td class="file-state-cell">
                     {% if document.slug == 'PAF' %}

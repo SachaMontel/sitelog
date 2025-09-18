@@ -87,9 +87,9 @@ def cdc(request):
     {'name': 'Voiture', 'slug': 'voiture', 'deadline': camp.voiture_deadline, 'file': camp.voiture, 'state': camp.voiture_etat, 'comment': camp.voiture_commentaire},
     {'name': 'Projet pédagogique VF', 'slug': 'projetvf', 'deadline': camp.projetvf_deadline, 'file': camp.projetvf, 'file_retour': camp.projetvf_retour, 'state': camp.projetvf_etat, 'comment': camp.projetvf_commentaire},
     {'name': 'Budget réel', 'slug': 'Budgetreal', 'deadline': camp.Budgetreal_deadline, 'file': camp.Budgetreal, 'state': camp.Budgetreal_etat, 'comment': camp.Budgetreal_commentaire},
-    {'name': 'Documents obligatoires en ACM', 'slug': 'docACM', 'deadline': camp.docACM_deadline, 'file': camp.docACM, 'state': camp.docACM_etat, 'comment': camp.docACM_commentaire},
-    {'name': 'Récepissé', 'slug': 'recepisse', 'deadline': camp.recepisse_deadline, 'file': camp.recepisse, 'state': camp.recepisse_etat, 'comment': camp.recepisse_commentaire},
-    {'name': 'Procuration Banque', 'slug': 'procuration_banque', 'deadline': camp.procuration_banque_deadline, 'file': camp.procuration_banque, 'state': camp.procuration_banque_etat, 'comment': camp.procuration_banque_commentaire},
+    #{'name': 'Documents obligatoires en ACM', 'slug': 'docACM', 'deadline': camp.docACM_deadline, 'file': camp.docACM, 'state': camp.docACM_etat, 'comment': camp.docACM_commentaire},
+    #{'name': 'Récepissé', 'slug': 'recepisse', 'deadline': camp.recepisse_deadline, 'file': camp.recepisse, 'state': camp.recepisse_etat, 'comment': camp.recepisse_commentaire},
+    #{'name': 'Procuration Banque', 'slug': 'procuration_banque', 'deadline': camp.procuration_banque_deadline, 'file': camp.procuration_banque, 'state': camp.procuration_banque_etat, 'comment': camp.procuration_banque_commentaire},
     ]
 
 
@@ -157,9 +157,9 @@ def statbb(request):
         {'name': 'Projet pédagogique VF', 'slug': 'projetvf'},
         {'name': 'Budget réel', 'slug': 'Budgetreal'},
         {'name': 'Documents obligatoires en ACM', 'slug': 'docACM'},
-        {'name': 'Récepissé', 'slug': 'recepisse'},
-        {'name': 'Chemins Explo', 'slug': 'chemins_explo'},
-        {'name': 'Procuration Banque', 'slug': 'procuration_banque'}
+        #{'name': 'Récepissé', 'slug': 'recepisse'},
+        #{'name': 'Chemins Explo', 'slug': 'chemins_explo'},
+        #{'name': 'Procuration Banque', 'slug': 'procuration_banque'}
     ]
 
     # Liste des slugs pour accès rapide
@@ -220,9 +220,9 @@ def statbc(request):
         {'name': 'Voiture', 'slug': 'voiture'},
         {'name': 'Projet pédagogique VF', 'slug': 'projetvf'},
         {'name': 'Budget réel', 'slug': 'Budgetreal'},
-        {'name': 'Documents obligatoires en ACM', 'slug': 'docACM'},
-        {'name': 'Récepissé', 'slug': 'recepisse'},
-        {'name': 'Procuration Banque', 'slug': 'procuration_banque'}
+        #{'name': 'Documents obligatoires en ACM', 'slug': 'docACM'},
+        #{'name': 'Récepissé', 'slug': 'recepisse'},
+        #{'name': 'Procuration Banque', 'slug': 'procuration_banque'}
     ]
 
     # Liste des slugs pour accès rapide
@@ -281,10 +281,10 @@ def statbm(request):
         {'name': 'Budget prévisionnel', 'slug': 'Budget'},
         {'name': 'Voiture', 'slug': 'voiture'},
         {'name': 'Projet pédagogique VF', 'slug': 'projetvf'},
-        {'name': 'Budget réel', 'slug': 'Budgetreal'},
-        {'name': 'Documents obligatoires en ACM', 'slug': 'docACM'},
-        {'name': 'Récepissé', 'slug': 'recepisse'},
-        {'name': 'Procuration Banque', 'slug': 'procuration_banque'}
+        {'name': 'Budget réel', 'slug': 'Budgetreal'}
+        #{'name': 'Documents obligatoires en ACM', 'slug': 'docACM'},
+        #{'name': 'Récepissé', 'slug': 'recepisse'},
+        #{'name': 'Procuration Banque', 'slug': 'procuration_banque'}
     ]
 
     # Liste des slugs pour accès rapide
