@@ -8,7 +8,23 @@
     <link rel="preload" href="{% static 'images/login.jpg' %}" as="image">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/home1.css' %}">
+    <style>
+        body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background: linear-gradient(135deg, rgba(0, 86, 179, 0.1) 0%, rgba(255, 107, 0, 0.1) 100%),
+                url("/static/images/photo2.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    min-height: 100vh;
+    position: relative;
+}
+    </style>
 </head>
+
 <body>
     <header>
         <a href="/" class="logo" aria-label="Retour à l'accueil">
