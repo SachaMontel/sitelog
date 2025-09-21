@@ -135,7 +135,20 @@
         <tr>
             <td>Grille DDCS</td>
             <td></td>
-            <td>{{ user.lienlog }}</td>
+            <td>
+                {% if user.lienlog %}
+                    <a href="{{ user.lienlog }}" target="_blank" class="drive-link">
+                        <span class="drive-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                            </svg>
+                        </span>
+                        <span class="drive-title">Drive Log</span>
+                    </a>
+                {% else %}
+                    Non défini
+                {% endif %}
+            </td>
             <td>
                 <form method="post" action="{% url 'change_etat' %}" class="state-form">
                     {% csrf_token %}
@@ -160,7 +173,20 @@
         <tr>
             <td>Grille de l'année</td>
             <td></td>
-            <td>{{ user.lienlog }}</td>
+            <td>
+                {% if user.lienlog %}
+                    <a href="{{ user.lienlog }}" target="_blank" class="drive-link">
+                        <span class="drive-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                            </svg>
+                        </span>
+                        <span class="drive-title">Drive Log</span>
+                    </a>
+                {% else %}
+                    Non défini
+                {% endif %}
+            </td>
             <td>
                 <form method="post" action="{% url 'change_etat' %}" class="state-form">
                     {% csrf_token %}
@@ -199,7 +225,20 @@
         <tr>
             <td>Projet d'activité BM</td>
             <td>Dimanche 28 septembre</td>
-            <td>{{ user.lienbm }}</td>
+            <td>
+                {% if user.lienbm %}
+                    <a href="{{ user.lienbm }}" target="_blank" class="drive-link">
+                        <span class="drive-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                            </svg>
+                        </span>
+                        <span class="drive-title">Drive BM</span>
+                    </a>
+                {% else %}
+                    Non défini
+                {% endif %}
+            </td>
             <td>
                 <form method="post" action="{% url 'change_etat' %}" class="state-form">
                     {% csrf_token %}
@@ -223,7 +262,20 @@
         </tr>
         <tr><td>Projet vie juive BM</td>
             <td>Dimanche 28 septembre</td>
-            <td>{{ user.lienbm }}</td>
+            <td>
+                {% if user.lienbm %}
+                    <a href="{{ user.lienbm }}" target="_blank" class="drive-link">
+                        <span class="drive-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                            </svg>
+                        </span>
+                        <span class="drive-title">Drive BM</span>
+                    </a>
+                {% else %}
+                    Non défini
+                {% endif %}
+            </td>
             <td>
                 <form method="post" action="{% url 'change_etat' %}" class="state-form">
                     {% csrf_token %}
@@ -248,7 +300,20 @@
         <tr>
             <td>Ébauche projet d'activité BC</td>
             <td>1 semaine avant les JN</td>
-            <td>{{ user.lienbc }}</td>
+            <td>
+                {% if user.lienbc %}
+                    <a href="{{ user.lienbc }}" target="_blank" class="drive-link">
+                        <span class="drive-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                            </svg>
+                        </span>
+                        <span class="drive-title">Drive BC</span>
+                    </a>
+                {% else %}
+                    Non défini
+                {% endif %}
+            </td>
             <td>
                 <form method="post" action="{% url 'change_etat' %}" class="state-form">
                     {% csrf_token %}
@@ -273,7 +338,20 @@
         <tr>
             <td>Ébauche projet vie juive BC</td>
             <td>1 semaine avant les JN</td>
-            <td>{{ user.lienbc }}</td>
+            <td>
+                {% if user.lienbc %}
+                    <a href="{{ user.lienbc }}" target="_blank" class="drive-link">
+                        <span class="drive-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                            </svg>
+                        </span>
+                        <span class="drive-title">Drive BC</span>
+                    </a>
+                {% else %}
+                    Non défini
+                {% endif %}
+            </td>
             <td>
                 <form method="post" action="{% url 'change_etat' %}" class="state-form">
                     {% csrf_token %}
@@ -298,7 +376,20 @@
         <tr>
             <td>Projet d'activité BC</td>
             <td>1 semaine après les JN</td>
-            <td>{{ user.lienbc }}</td>
+            <td>
+                {% if user.lienbc %}
+                    <a href="{{ user.lienbc }}" target="_blank" class="drive-link">
+                        <span class="drive-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                            </svg>
+                        </span>
+                        <span class="drive-title">Drive BC</span>
+                    </a>
+                {% else %}
+                    Non défini
+                {% endif %}
+            </td>
             <td>
                 <form method="post" action="{% url 'change_etat' %}" class="state-form">
                     {% csrf_token %}
@@ -323,7 +414,20 @@
         <tr>
             <td>Projet vie juive BC</td>
             <td>1 semaine après les JN</td>
-            <td>{{ user.lienbc }}</td>
+            <td>
+                {% if user.lienbc %}
+                    <a href="{{ user.lienbc }}" target="_blank" class="drive-link">
+                        <span class="drive-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                            </svg>
+                        </span>
+                        <span class="drive-title">Drive BC</span>
+                    </a>
+                {% else %}
+                    Non défini
+                {% endif %}
+            </td>
             <td>
                 <form method="post" action="{% url 'change_etat' %}" class="state-form">
                     {% csrf_token %}
