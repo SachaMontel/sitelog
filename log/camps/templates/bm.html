@@ -1,0 +1,186 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page BM - Suivi des Groupes Locaux</title>
+    <link rel="stylesheet" href="{% static 'css/camp_detail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/stats.css' %}">
+    <style>
+        body {
+            background-image: url("{% static 'images/login.jpg' %}");
+        }
+        th {
+    background-color: #0056b3;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    text-align: center;
+    font-size: 1.1em;
+}
+        caption {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #ffffff;
+            background: linear-gradient(90deg, #0056b3, #ff6b00);
+            padding: 12px 18px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            letter-spacing: 1px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        caption:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        caption::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        caption:hover::before {
+            left: 100%;
+        }
+        
+        caption::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        caption:hover::after {
+            opacity: 1;
+        }
+        
+        .no-data {
+            color: #666;
+            font-style: italic;
+        }
+        
+        .gl-link {
+            color: #0056b3;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .gl-link:hover {
+            background-color: #0056b3;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+    </style>    
+</head>
+<body>
+    <a href="{% url 'home' %}" class="home-button">Home</a>
+    <a href="{% url 'bmstats' %}" class="stats-button">Stats BM</a>
+    <h1>Suivi des Groupes Locaux - Page BM</h1>
+    
+    <table border="1">
+        <caption>État des projets BM par Groupe Local</caption>
+        <thead>
+            <tr>
+                <th>Groupe Local</th>
+                <th>Lien du Drive</th>
+                <th>État Projet Fil Rouge</th>
+                <th>État Projet Fil Bleu</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if users %}
+                {% for user in users %}
+                <tr>
+                    <td>
+                        {% if user.gl %}
+                            <a href="{% url 'gl2' user.username %}" class="gl-link">{{ user.gl }}</a>
+                        {% else %}
+                            Non défini
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if user.lienbm %}
+                            <a href="{{ user.lienbm }}" target="_blank" class="drive-link">
+                                <span class="drive-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                                    </svg>
+                                </span>
+                                <span class="drive-title">Drive BM</span>
+                            </a>
+                        {% else %}
+                            <span class="no-data">Aucun lien</span>
+                        {% endif %}
+                        </td>
+                    <td class="
+                        {% if user.etatfrbm == 'Non rendu' %}
+                            etat-non-rendu
+                        {% elif user.etatfrbm == 'Rendu' %}
+                            etat-rendu
+                        {% elif user.etatfrbm == 'Validé' %}
+                            etat-valide
+                        {% elif user.etatfrbm == 'Refusé' %}
+                            etat-refuse
+                        {% elif user.etatfrbm == 'Retour fait' %}
+                            etat-retour
+                        {% elif user.etatfrbm == 'En cours' %}
+                            etat-encours
+                        {% endif %}
+                    ">
+                        {{ user.etatfrbm|default:"Non défini" }}
+                    </td>
+                    <td class="
+                        {% if user.etatfbbm == 'Non rendu' %}
+                            etat-non-rendu
+                        {% elif user.etatfbbm == 'Rendu' %}
+                            etat-rendu
+                        {% elif user.etatfbbm == 'Validé' %}
+                            etat-valide
+                        {% elif user.etatfbbm == 'Refusé' %}
+                            etat-refuse
+                        {% elif user.etatfbbm == 'Retour fait' %}
+                            etat-retour
+                        {% elif user.etatfbbm == 'En cours' %}
+                            etat-encours
+                        {% endif %}
+                    ">
+                        {{ user.etatfbbm|default:"Non défini" }}
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4" class="no-data">
+                        Aucun utilisateur trouvé dans le groupe "gl"
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</body>
+</html>

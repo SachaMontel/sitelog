@@ -3,6 +3,13 @@
     --secondary-color: #ff6b00;
     --text-color: #333;
     --background-color: #f8f9fa;
+    --white: #ffffff;
+    --light-gray: #f5f5f5;
+    --dark-gray: #666;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.15);
+    --border-radius: 12px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
@@ -15,11 +22,26 @@ body {
     font-family: 'Roboto', sans-serif;
     line-height: 1.6;
     color: var(--text-color);
+    background: linear-gradient(135deg, rgba(0, 86, 179, 0.1) 0%, rgba(255, 107, 0, 0.1) 100%),
+                url("../images/photo2.jpeg");
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
-    background-image: url("../images/photo2.jpeg");
+    min-height: 100vh;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(1px);
+    z-index: -1;
 }
 
 .container {
@@ -31,19 +53,19 @@ body {
 /* Header Styling */
 header {
     display: flex;
-    justify-content: space-between; /* Espacement entre logo et navigation */
+    justify-content: space-between;
     align-items: center;
-    padding: 0 20px; /* Marges internes pour respirer */
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: sticky; /* Garde le header visible au défilement */
+    padding: 0 20px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    box-shadow: var(--shadow);
+    position: sticky;
     top: 0;
-    z-index: 10;
-    height: 70px; /* Hauteur fixe */
+    z-index: 1000;
+    height: 80px;
     box-sizing: border-box;
     width: 100%;
-    max-width: 100%;
-    flex-wrap: wrap;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .logo {
@@ -53,16 +75,21 @@ header {
     margin-right: auto;
 }
 .logo img {
-    height: 70px; /* Ajustez la taille globale */
-    width: 70px; /* Assurez que la largeur est égale à la hauteur */
-    border-radius: 50%; /* Forme circulaire */
-    background-color: white; /* Fond blanc pour le contraste */
-    padding: 5px; /* Ajoute un espace intérieur */
-    border: 3px solid #f0f0f0; /* Bordure légère pour le contraste */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Ombre subtile */
-    object-fit: cover; /* Permet de zoomer et remplir le cercle */
-    object-position: center; /* Centre l'image dans le cercle */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    background-color: var(--white);
+    padding: 8px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    box-shadow: var(--shadow);
+    object-fit: cover;
+    object-position: center;
+    transition: var(--transition);
+}
+
+.logo img:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: var(--shadow-hover);
 }
 
 nav {
@@ -80,30 +107,38 @@ nav ul {
 }
 
 nav ul li a {
-    color: white;
+    color: var(--white);
     text-decoration: none;
     font-weight: 500;
     position: relative;
-    transition: color 0.3s ease;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: var(--transition);
+    backdrop-filter: blur(10px);
 }
 
-nav ul li a::after {
+nav ul li a::before {
     content: '';
     position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: -5px; /* Position sous le texte */
+    top: 0;
     left: 0;
-    background-color: var(--secondary-color); /* Couleur orange pour le soulignement */
-    transition: width 0.3s ease; /* Animation de la largeur */
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    opacity: 0;
+    transition: var(--transition);
+    z-index: -1;
 }
 
 nav ul li a:hover {
-    color: var(--secondary-color); /* Change la couleur du texte au survol */
+    color: var(--white);
+    transform: translateY(-2px);
 }
 
-nav ul li a:hover::after {
-    width: 100%; /* Étend le soulignement sur toute la largeur du lien */
+nav ul li a:hover::before {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.2);
 }
 
 
@@ -115,36 +150,118 @@ nav ul li a:hover::after {
 .auth-links a,
 .auth-links button {
     text-decoration: none;
-    color: white;
-    border: 2px solid white;
+    color: var(--white);
+    border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 25px;
-    padding: 8px 20px;
+    padding: 10px 24px;
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: var(--transition);
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
 }
 
 .auth-links a:hover,
 .auth-links button:hover {
-    background-color: white;
+    background: var(--white);
     color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--white);
+}
+
+/* Mobile Navigation */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.mobile-menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background: var(--white);
+    margin: 3px 0;
+    transition: var(--transition);
+    border-radius: 2px;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: flex;
+    }
+    
+    nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        box-shadow: var(--shadow);
+        padding: 20px;
+    }
+    
+    nav.active {
+        display: block;
+    }
+    
     nav ul {
-        flex-direction: column; /* Passe les liens en colonne sur petits écrans */
-        gap: 10px; /* Réduit l'espacement */
+        flex-direction: column;
+        gap: 15px;
         align-items: center;
+    }
+    
+    nav ul li a {
+        padding: 12px 20px;
+        width: 100%;
+        text-align: center;
     }
 
     .auth-links {
-        flex-direction: column; /* Passe les boutons en colonne */
+        flex-direction: column;
         gap: 10px;
+        margin-top: 20px;
     }
 
     header {
-        flex-wrap: wrap; /* Permet aux éléments de se placer sur plusieurs lignes */
-        height: auto; /* Ajuste la hauteur selon le contenu */
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 80px;
+    }
+    
+    .hero-container {
+        flex-direction: column;
+        gap: 20px;
+        padding: 0 10px;
+    }
+    
+    .card {
+        width: 100%;
+        padding: 20px;
+        max-height: 450px;
+    }
+    
+    .card h2 {
+        font-size: 1.5rem;
+    }
+    
+    .files-container {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 12px;
+    }
+    
+    .file-item {
+        padding: 12px;
+        min-height: 100px;
+    }
+    
+    .file-item img {
+        height: 40px;
+        max-width: 40px;
+        margin-bottom: 8px;
     }
 }
 
@@ -275,42 +392,60 @@ main {
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); /* Ombre plus marquée au survol */
 }
 .hero {
-    flex: 1; /* Prend toute la hauteur disponible dans le main */
+    flex: 1;
     display: flex;
-    justify-content: center; /* Centre horizontalement */
-    align-items: center; /* Centre verticalement */
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    background-size: cover;
-    background-position: center;
     position: relative;
-    padding: 20px; /* Ajoute un espace intérieur */
-    box-sizing: border-box; /* Inclut le padding dans les dimensions */
+    padding: 30px 20px;
+    box-sizing: border-box;
+    min-height: calc(100vh - 200px);
 }
 
 .hero-container {
     display: flex;
-    justify-content: center; /* Centre horizontalement tous les encadrés */
-    align-items: flex-start; /* Aligne verticalement en haut */
-    gap: 40px; /* Augmente l'espace entre les conteneurs */
-    width: 95%; /* Largeur occupée par les conteneurs */
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
+    width: 100%;
     max-width: 1600px;
-    max-height: 100%; /* Largeur maximale des conteneurs */
+    flex-wrap: nowrap;
 }
 
 .card {
-    background: rgba(255, 255, 255, 0.9); /* Fond blanc légèrement moins transparent */
-    border-radius: 10px; /* Coins arrondis */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre subtile */
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
     display: flex;
-    flex-direction: column; /* Organisation verticale des éléments */
-    align-items: center; /* Centre horizontalement le contenu */
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    padding: 15px;
-    width: 500px; /* Augmente la largeur des conteneurs */
-    max-height: 600px; /* Augmente la hauteur maximale des conteneurs */
-    overflow-y: auto; /* Barre de défilement verticale si nécessaire */
-    scrollbar-width: thin; /* Réduit la largeur de la barre de défilement */
-    scrollbar-color: rgba(0, 0, 0, 0.5) rgba(255, 255, 255, 0.5); /* Couleur personnalisée pour la scrollbar */
+    padding: 25px;
+    flex: 1;
+    min-width: 350px;
+    max-width: 450px;
+    max-height: 550px;
+    overflow-y: auto;
+    transition: var(--transition);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    position: relative;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
 }
 
 .card::-webkit-scrollbar {
@@ -329,35 +464,77 @@ main {
 }
 
 .card img {
-    width: 100%; /* L'image prend toute la largeur */
-    height: auto; /* Ajuste automatiquement la hauteur */
-    border-radius: 10px; /* Coins légèrement arrondis pour l'image */
-    object-fit: cover; /* Remplit l'espace sans déformation */
-    object-position: center; /* Centre l'image */
-    margin-bottom: 5px; /* Espacement entre les images */
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius);
+    object-fit: cover;
+    object-position: center;
+    margin-bottom: 10px;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .card h2 {
-    font-size: 1.5rem; /* Taille du titre ajustée */
-    margin: -10px 0;
-    color: #333;
-    z-index: 2; /* Met le texte au premier plan */
-    background: rgba(255, 255, 255, 0.8); /* Fond blanc translucide derrière le titre */
-    padding: 5px 15px; /* Ajoute un padding pour le confort visuel */
-    border-radius: 5px; /* Coins arrondis pour le titre */
-    position: sticky; /* Le titre reste visible lors du défilement */
-    top: 0; /* Le titre reste collé en haut du conteneur */
+    font-size: 1.8rem;
+    margin: 0 0 20px 0;
+    color: var(--primary-color);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 15px;
+    border-radius: 8px;
+    z-index: 10;
+    backdrop-filter: blur(10px);
 }
 
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .hero-container {
-        flex-direction: column; /* Les encadrés passent en colonne */
-        gap: 20px; /* Réduit l'espacement vertical entre les encadrés */
-    }
+.card h2::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border-radius: 2px;
+}
 
+/* Large Desktop Design */
+@media (min-width: 1200px) {
+    .hero-container {
+        gap: 40px;
+    }
+    
     .card {
-        width: 100%; /* Les encadrés prennent toute la largeur */
+        min-width: 400px;
+        max-width: 500px;
+    }
+}
+
+/* Tablet Design */
+@media (max-width: 1199px) and (min-width: 769px) {
+    .hero-container {
+        flex-wrap: wrap;
+        gap: 25px;
+    }
+    
+    .card {
+        min-width: 300px;
+        max-width: 400px;
+        padding: 20px;
+        max-height: 450px;
+    }
+    
+    .card h2 {
+        font-size: 1.6rem;
     }
 }
 
@@ -384,12 +561,12 @@ main {
 }
 
 .files-container {
-    display: grid; /* Utilisation de la grille pour un placement dynamique */
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Colonnes flexibles */
-    gap: 20px; /* Espacement entre les éléments */
-    width: 100%; /* Prend toute la largeur du conteneur */
-    justify-content: center; /* Centre les fichiers dans le conteneur */
-    align-items: center; /* Centre verticalement si besoin */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
     box-sizing: border-box;
 }
 
@@ -398,67 +575,175 @@ main {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: var(--border-radius);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    min-height: 120px;
+}
+
+.file-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    transform: scaleX(0);
+    transition: var(--transition);
 }
 
 .file-item:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.file-item:hover::before {
+    transform: scaleX(1);
 }
 
 .file-item img {
-    width: 100%; /* Ajuste automatiquement la largeur de l'image */
-    height: auto; /* Préserve le ratio */
-    max-width: 60px; /* Largeur maximale pour les icônes */
+    width: 100%;
+    height: 60px;
+    max-width: 60px;
     margin-bottom: 10px;
-    object-fit: contain; /* Ajuste l'image sans déformer */
+    object-fit: contain;
+    transition: var(--transition);
+}
+
+.file-item:hover img {
+    transform: scale(1.1);
 }
 
 .file-item p {
     font-size: 0.9rem;
-    color: #333;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .files-container {
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Réduit la taille minimale des colonnes */
-    }
-
-    .file-item img {
-        max-width: 50px; /* Réduit la taille des icônes sur petits écrans */
-    }
-}
-
-@media (max-width: 768px) {
-    header {
-      flex-direction: column; /* Organise les éléments verticalement pour les petits écrans */
-      padding: 10px; /* Ajoute un peu d'espace pour éviter le chevauchement */
-    }
-  
-    .menu {
-      display: block;
-    }
-  
-    .menu-item {
-      margin: 5px 0; /* Ajoute de l'espacement entre les éléments du menu */
-    }
-  }
-  .navbar {
-    display: flex;
-    flex-direction: column; /* Change l'organisation pour mobile */
-    align-items: center;
+    color: var(--text-color);
+    font-weight: 500;
+    margin: 0;
     text-align: center;
-  }
-  
-  @media (min-width: 768px) {
-    .navbar {
-      flex-direction: row; /* Revenir à une organisation horizontale pour les écrans plus larges */
+}
+
+/* Small Mobile Design */
+@media (max-width: 480px) {
+    .hero {
+        padding: 20px 10px;
     }
-  }
+    
+    .hero-container {
+        gap: 15px;
+    }
+    
+    .card {
+        padding: 15px;
+        max-height: 350px;
+    }
+    
+    .card h2 {
+        font-size: 1.3rem;
+    }
+    
+    .files-container {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 10px;
+    }
+    
+    .file-item {
+        padding: 10px;
+        min-height: 90px;
+    }
+    
+    .file-item img {
+        height: 35px;
+        max-width: 35px;
+        margin-bottom: 6px;
+    }
+    
+    .file-item p {
+        font-size: 0.8rem;
+    }
+}
+
+/* Animation pour le chargement */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.card:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* Amélioration des scrollbars */
+.card::-webkit-scrollbar {
+    width: 6px;
+}
+
+.card::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.card::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 10px;
+}
+
+.card::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+}
+
+/* Effet de parallaxe léger */
+.hero {
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* Amélioration des transitions pour les performances */
+* {
+    will-change: auto;
+}
+
+.card:hover,
+.file-item:hover,
+nav ul li a:hover,
+.auth-links a:hover,
+.auth-links button:hover {
+    will-change: transform;
+}
+
+/* Focus states pour l'accessibilité */
+nav ul li a:focus,
+.auth-links a:focus,
+.auth-links button:focus,
+.file-item a:focus {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+}
+
+/* Amélioration du contraste pour les textes */
+.card h2 {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
     

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    {% if user.is_authenticated %}
+    <p>Connecté sous {{ user.username }} | <a href="{% url 'accounts:logout' %}">Déconnexion</a></p>
+    {% endif %}
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+<head>
+    <title>Bienvenue</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/stylean.css' %}">
+    <style>
+        body {
+            background-image: url("{% static 'images/login.jpg' %}");
+        }
+    </style>    
+</head>
+<body>
+    <h1>Bienvenue dans l'espace de ton GL</h1>
+
+    <table border="1">
+        <tr>
+            <td>Branche</td>
+            <td>Projets envoyés</td>
+            <td>Envoyer ou supprimer un projet</td>
+            <td>États</td>
+            <td>Retour du projet</td>
+            <td>Commentaires</td>
+        </tr>
+    </table>
+</body>
+</html>

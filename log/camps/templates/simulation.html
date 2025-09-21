@@ -173,6 +173,9 @@
                 $.ajax({
                     url: '/simulation/', // URL configurée dans urls.py
                     method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
                     data: {
                         'pfeu': pfeu,
                         'zfeu': zfeu,

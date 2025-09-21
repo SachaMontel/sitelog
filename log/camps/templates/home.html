@@ -25,19 +25,23 @@
                     {% if user.is_authenticated %}
                         {% if is_superuser%}
                             <li><a href="{% url 'admin:index' %}">Espace Admin</a></li>
-                            <li><a href="{% url 'logistique' %}">Espace Logistique</a></li>
+                            <li><a href="{% url 'cga' %}">Espace Logistique</a></li>
                         {% elif is_in_anbm %}
-                            <li><a href="{% url 'anbm' %}">Espace ANBM</a></li>
+                            <li><a href="{% url 'bm' %}">Espace ANBM</a></li>
                         {% elif is_in_anbc %}
-                            <li><a href="{% url 'anbc' %}">Espace ANBC</a></li>
+                            <li><a href="{% url 'bc' %}">Espace ANBC</a></li>
                         {% elif is_in_anbp %}
-                            <li><a href="{% url 'anbp' %}">Espace ANBP</a></li>
-                        {% elif is_in_anbb %}
-                            <li><a href="{% url 'anbb' %}">Espace ANBB</a></li>
+                            <li><a href="{% url 'bp' %}">Espace ANBP</a></li>
+                        {% elif is_in_anrgl %}
+                            <li><a href="{% url 'log' %}">Espace ANRGL</a></li>
                         {% elif is_in_logistique %}
-                            <li><a href="{% url 'logistique' %}">Espace Logistique</a></li>
+                            <li><a href="{% url 'log' %}">Espace Logistique</a></li>
                         {% elif is_in_masai %}
-                            <li><a href="{% url 'logistique' %}">Espace Masaï</a></li>
+                            <li><a href="{% url 'cga' %}">Espace Masaï</a></li>
+                        {% elif is_in_gl %}
+                            <li><a href="{% url 'gl' %}">Espace GL</a></li>
+                        {% elif is_in_cga %}
+                            <li><a href="{% url 'cga' %}">Espace CGA</a></li>
                         {% else %}
                             <li><a href="{% url 'cdc' %}">Espace CDC</a></li>
                         {% endif %}
@@ -61,17 +65,14 @@
             <div class="hero-container">
                 <div class="card">
                     <h2>Actualités</h2>
-                    <img src="{% static 'images/toubich.jpeg' %}" alt="Image 1">
-                    <img src="{% static 'images/inscription.jpeg' %}" alt="Image 1">
-                    <img src="{% static 'images/auschwitz.jpg' %}" alt="Image 1">
-                    <img src="{% static 'images/nml.jpeg' %}" alt="Image 1">
-                    <img src="{% static 'images/bitakhon.jpeg' %}" alt="Image 1">
-                    <img src="{% static 'images/Sanstitre2.jpg' %}" alt="Image 1">
                     <img src="{% static 'images/fleg.jpg' %}" alt="Image 1">
+                    <img src="{% static 'images/ava.png' %}" alt="Image 1">
                 </div>
                 <div class="card">
                     <h2>Prochainement</h2>
-                    <img src="{% static 'images/neoum.jpeg' %}" alt="Image 2">
+                    <img src="{% static 'images/lancement.png' %}" alt="Image 2">
+                    <img src="{% static 'images/selihot.png' %}" alt="Image 2">
+                    <img src="{% static 'images/bbq.png' %}" alt="Image 2">
                 </div>
                 <div class="card resources">
                     <h2>Ressources</h2>
@@ -98,6 +99,12 @@
                             <a href="{% static 'files/Tyoul.pdf' %}" aria-label="Référentiel">
                                 <img src="{% static 'images/feu.jpg' %}" alt="PDF File">
                                 <p>Fiche Tyoul</p>
+                            </a>
+                        </div>
+                        <div class="file-item">
+                            <a href="{% static 'files/Birkat.pdf' %}" aria-label="Référentiel">
+                                <img src="{% static 'images/sidour.jpg' %}" alt="PDF File">
+                                <p>Birkat</p>
                             </a>
                         </div>
                         <!-- Ajoutez plus de fichiers si nécessaire -->

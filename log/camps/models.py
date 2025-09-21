@@ -6,7 +6,7 @@ from django.contrib.auth.models import Group
 GL_CHOICES = (
     ('Aix-en-Provence', 'Aix-en-Provence'),
     ('Antony', 'Antony'),
-    ('Bar Cokhba', 'Bar Cokhba'),
+    ('Barcokhba', 'Barcokhba'),
     ('Bordeaux', 'Bordeaux'),
     ('Buffault', 'Buffault'),
     ('Canada', 'Canada'),
@@ -14,7 +14,7 @@ GL_CHOICES = (
     ('Colmar-Mulhouse', 'Colmar-Mulhouse'),
     ('Copernic', 'Copernic'),
     ('Courbevoie', 'Courbevoie'),
-    ('Dufrénoy', 'Dufrénoy'),
+    ('Dufrenoy', 'Dufrenoy'),
     ('Golda Meir', 'Golda Meir'),
     ('Grenoble', 'Grenoble'),
     ('Henri Schilli', 'Henri Schilli'),
@@ -36,16 +36,20 @@ GL_CHOICES = (
     ('Ori SLG', 'Ori SLG'),
     ('La Roquette', 'La Roquette'),
     ('Paris 17', 'Paris 17'),
-    ('Pavillons-sous-Bois', 'Pavillons-sous-Bois'),
-    ('Saint Brice', 'Saint Brice'),
+    ('Pavillons-sous-bois', 'Pavillons-sous-bois'),
+    ('Saint-Brice', 'Saint-Brice'),
     ('Ségur', 'Ségur'),
-    ('Shema Israël Bleu', 'Shema Israël Bleu'),
-    ('Shema Israël Noir', 'Shema Israël Noir'),
+    ('Shema Israel Bleu', 'Shema Israel Bleu'),
+    ('Shema Israel Noir', 'Shema Israel Noir'),
     ('Strasbourg', 'Strasbourg'),
     ('Toulon', 'Toulon'),
     ('Toulouse', 'Toulouse'),
     ('Versailles', 'Versailles'),
     ('Yona', 'Yona'),
+    ('NML', 'NML'),
+    ('Dor Vador', 'Dor Vador'),
+    ('Edmond Fleg', 'Edmond Fleg'),
+    ('Neuilly Laurent Kern', 'Neuilly Laurent Kern'),
 )
 
 NUMERO_CAMP_CHOICES = (
@@ -127,10 +131,57 @@ class CustomUser(AbstractUser):
     phone = models.CharField("Numéro de téléphone", max_length=15, blank=True, null=True)
     gl = models.CharField("Groupe local", max_length=30, choices=GL_CHOICES, blank=True, null=True)
     camp = models.ForeignKey('Camp', on_delete=models.SET_NULL, null=True, blank=True, related_name='users')
-    group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name='users')    
+    group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name='users')
+    
+    # Nouveaux attributs de liens
+    lienlog = models.URLField("Lien logistique", max_length=500, blank=True, null=True, help_text="Lien vers la page logistique")
+    lienbc = models.URLField("Lien BC", max_length=500, blank=True, null=True, help_text="Lien vers la page BC")
+    lienbm = models.URLField("Lien BM", max_length=500, blank=True, null=True, help_text="Lien vers la page BM")
+
+    etatfrbm = models.CharField("État du fil rouge BM", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    etatfbbm = models.CharField("État du fil bleu BM", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    etatfrbc = models.CharField("État du fil rouge BC", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    etatfbbc = models.CharField("État du fil bleu BC", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    
+    etatddcs = models.CharField("État de la grille DDCS", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    etatgrille = models.CharField("État de la grille de l'annee", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    
+    # Nouvelles étapes BC
+    etatprojetactivitebc = models.CharField("État de l'ébauche projet d'activité BC", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    etatprojetviejuvebc = models.CharField("État de l'ébauche projet vie juive BC", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    
+    commentairefrbm = models.TextField("Commentaire du fil rouge BM", blank=True, null=True, default='')
+    commentairefbbm = models.TextField("Commentaire du fil bleu BM", blank=True, null=True, default='')
+    commentairefrbc = models.TextField("Commentaire du fil rouge BC", blank=True, null=True, default='')
+    commentairefbbc = models.TextField("Commentaire du fil bleu BC", blank=True, null=True, default='')
+    commentaireddcs = models.TextField("Commentaire de la grille DDCS", blank=True, null=True, default='')
+    commentairegrille = models.TextField("Commentaire de la grille de l'annee", blank=True, null=True, default='')
+    
+    # Nouveaux commentaires BC
+    commentaireprojetactivitebc = models.TextField("Commentaire de l'ébauche projet d'activité BC", blank=True, null=True, default='')
+    commentaireprojetviejuvebc = models.TextField("Commentaire de l'ébauche projet vie juive BC", blank=True, null=True, default='')
 
     def __str__(self):
         return self.username
+    
+    def change_etat(self, etat_field, new_etat):
+        """Change l'état d'un champ spécifique"""
+        if hasattr(self, etat_field):
+            setattr(self, etat_field, new_etat)
+            self.save()
+            return True
+        return False
+    
+    def get_etat_choices(self):
+        """Retourne les choix d'état simplifiés pour l'interface GL"""
+        return [
+            ('Non rendu', 'Non rendu'),
+            ('Rendu', 'Rendu'),
+            ('Validé', 'Validé'),
+            ('Refusé', 'Refusé'),
+            ('Retour fait', 'Retour fait'),
+            ('En cours', 'En cours'),
+        ]
 
 class Camp(models.Model):
 

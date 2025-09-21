@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistiques GL par Groupe Local</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/stats.css' %}">
+</head>
+<style type="text/css">
+    body {
+        background-image: url("{% static 'images/fond.jpg' %}");
+        background-size: cover;
+        background-position: center;
+    }
+    #charts-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Colonnes flexibles */
+        gap: 20px; /* Espacement entre les graphiques */
+        padding: 20px; /* Espacement autour de la grille */
+    }
+    
+    div > canvas {
+        overflow: hidden; /* Évitez tout débordement */
+    }
+    canvas {
+        max-width: 100%; /* Limite la largeur au conteneur */
+        max-height: 300px; /* Limite la hauteur à 300px */
+        display: block; /* Supprime l'effet inline pour éviter les marges inattendues */
+        margin: 0 auto; /* Centre le graphique */
+    }
+    h1 {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+        justify-content: center;
+        text-align: center;
+    }
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        justify-content: center;
+        text-align: center;
+    }
+</style>
+<body>
+    <a href="{% url 'home' %}" class="home-button">Home</a>
+    <a href="{% url 'log' %}" class="stats-button">Page Logistique</a>
+    <h1>Statistiques par Groupe Local</h1>
+
+    <div id="charts-container">
+        {% for etape_title, details in compteurs.items %}
+        <div>
+            <h2>{{ etape_title }}</h2>
+            <canvas id="chart_{{ details.id }}"></canvas>
+            <!-- Conteneur pour afficher les groupes locaux -->
+            <p id="info_{{ details.id }}" style="text-align: center; font-weight: bold;"></p>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <script>
+        const compteurs = {{ compteurs|safe }}; // Insérer le dictionnaire des compteurs dans le JavaScript
+    
+        Object.keys(compteurs).forEach((etapeTitle) => {
+            const details = compteurs[etapeTitle];
+            const ctx = document.getElementById(`chart_${details.id}`).getContext('2d');
+            const infoElement = document.getElementById(`info_${details.id}`);
+    
+            const chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Non rendu', 'Rendu', 'Validé', 'Refusé', 'Retour fait', 'En cours'],
+                    datasets: [{
+                        data: details.data, // Les données pour les 6 états
+                        backgroundColor: ['#f44336', '#ff9800', '#4caf50', '#9c27b0', '#2196f3', '#ffeb3b'], // Couleurs
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    onHover: (event, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index; // Index de la section survolée
+                            const label = chart.data.labels[index]; // Étiquette de l'état
+                            const groupes = details.groupes[label]; // Groupes locaux associés
+                            infoElement.innerText = `Groupes : ${groupes.join(", ")}`;
+                        } else {
+                            infoElement.innerText = ""; // Effacer le texte si aucune section n'est survolée
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+<head>
+    <title>Bienvenue</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/camp_detail.css' %}">
+    <style>
+        body {
+            background-image: url("{% static 'images/login.jpg' %}");
+        }
+        caption {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #ffffff;
+            background: linear-gradient(90deg, #0056b3, #ff6b00);
+            padding: 12px 18px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            letter-spacing: 1px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        caption:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        th {
+    background-color: #0056b3;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+        caption::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        caption:hover::before {
+            left: 100%;
+        }
+        
+        caption::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        caption:hover::after {
+            opacity: 1;
+        }
+        
+        .no-data {
+            color: #666;
+            font-style: italic;
+        }
+        
+        .comment-form {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .comment-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .comment-input {
+            flex: 1;
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+            resize: none;
+            overflow: hidden;
+            min-height: 32px;
+            max-height: 120px;
+            font-family: inherit;
+            line-height: 1.4;
+        }
+        
+        .comment-input:focus {
+            outline: none;
+            border-color: #0056b3;
+            background-color: white;
+            box-shadow: 0 0 5px rgba(0, 86, 179, 0.3);
+        }
+        
+        .comment-save-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            min-width: 35px;
+        }
+        
+        .comment-save-btn:hover {
+            background-color: #218838;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .comment-save-btn:active {
+            transform: translateY(0);
+        }
+    </style>
+    
+    <script>
+        // Fonction pour ajuster automatiquement la hauteur des textarea
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+        }
+        
+        // Appliquer l'auto-resize à tous les textarea de commentaires
+        document.addEventListener('DOMContentLoaded', function() {
+            const textareas = document.querySelectorAll('.comment-input');
+            textareas.forEach(function(textarea) {
+                // Ajuster la hauteur au chargement
+                autoResize(textarea);
+                
+                // Ajuster la hauteur lors de la saisie
+                textarea.addEventListener('input', function() {
+                    autoResize(this);
+                });
+                
+                // Ajuster la hauteur lors du focus
+                textarea.addEventListener('focus', function() {
+                    autoResize(this);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <a href="{% url 'home' %}" class="home-button">Home</a>
+    {% if target_user %}
+        <h1>Bienvenue dans l'espace de {{ target_user.username }}</h1>
+
+        <table border="1">
+            <caption>Étapes liées au GL</caption>
+            <theader>
+                <th>Étapes</th>
+                <th>Deadline</th>
+                <th>Drive</th>
+                <th>Changer l'état</th>
+                <th>Etat de l'étape</th>
+                <th>Commentaire</th>
+            </theader>
+            <tbody>
+            <tr>
+                <td>Grille DDCS</td>
+                <td></td>
+                <td>
+                    {% if target_user.lienlog %}
+                        <a href="{{ target_user.lienlog }}" target="_blank" class="drive-link">
+                            <span class="drive-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                                </svg>
+                            </span>
+                            <span class="drive-title">Drive Logistique</span>
+                        </a>
+                    {% else %}
+                        <span class="no-data">Aucun lien</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="post" action="{% url 'change_etat' %}" class="state-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="etat_field" value="etatddcs">
+                        <input type="hidden" name="username" value="{{ target_user.username }}">
+                        <div class="file-state-actions">
+                            <div class="select-wrapper">
+                                <select name="new_etat" class="file-state-select" onchange="this.form.submit()">
+                                    <option value="">Choisir...</option>
+                                    {% for choice in etat_choices %}
+                                        <option value="{{ choice.0 }}" {% if target_user.etatddcs == choice.0 %}selected{% endif %}>
+                                            {{ choice.1 }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+                <td class="
+                    {% if target_user.etatddcs == 'Non rendu' %}
+                        etat-non-rendu
+                    {% elif target_user.etatddcs == 'Rendu' %}
+                        etat-rendu
+                    {% elif target_user.etatddcs == 'Validé' %}
+                        etat-valide
+                    {% elif target_user.etatddcs == 'Refusé' %}
+                        etat-refuse
+                    {% elif target_user.etatddcs == 'Retour fait' %}
+                        etat-retour
+                    {% elif target_user.etatddcs == 'En cours' %}
+                        etat-encours
+                    {% endif %}
+                ">{{ target_user.etatddcs }}</td>
+                <td>
+                    <form method="post" action="{% url 'update_comment' %}" class="comment-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="comment_field" value="commentaireddcs">
+                        <input type="hidden" name="username" value="{{ target_user.username }}">
+                        <div class="comment-input-wrapper">
+                            <textarea name="new_comment" class="comment-input" placeholder="Ajouter un commentaire..." rows="1">{{ target_user.commentaireddcs|default:'' }}</textarea>
+                            <button type="submit" class="comment-save-btn">💾</button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>Grille de l'année</td>
+                <td></td>
+                <td>
+                    {% if target_user.lienlog %}
+                        <a href="{{ target_user.lienlog }}" target="_blank" class="drive-link">
+                            <span class="drive-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                                </svg>
+                            </span>
+                            <span class="drive-title">Drive Logistique</span>
+                        </a>
+                    {% else %}
+                        <span class="no-data">Aucun lien</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="post" action="{% url 'change_etat' %}" class="state-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="etat_field" value="etatgrille">
+                        <input type="hidden" name="username" value="{{ target_user.username }}">
+                        <div class="file-state-actions">
+                            <div class="select-wrapper">
+                                <select name="new_etat" class="file-state-select" onchange="this.form.submit()">
+                                    <option value="">Choisir...</option>
+                                    {% for choice in etat_choices %}
+                                        <option value="{{ choice.0 }}" {% if target_user.etatgrille == choice.0 %}selected{% endif %}>
+                                            {{ choice.1 }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+                <td class="
+                    {% if target_user.etatgrille == 'Non rendu' %}
+                        etat-non-rendu
+                    {% elif target_user.etatgrille == 'Rendu' %}
+                        etat-rendu
+                    {% elif target_user.etatgrille == 'Validé' %}
+                        etat-valide
+                    {% elif target_user.etatgrille == 'Refusé' %}
+                        etat-refuse
+                    {% elif target_user.etatgrille == 'Retour fait' %}
+                        etat-retour
+                    {% elif target_user.etatgrille == 'En cours' %}
+                        etat-encours
+                    {% endif %}
+                ">{{ target_user.etatgrille }}</td>
+                <td>
+                    <form method="post" action="{% url 'update_comment' %}" class="comment-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="comment_field" value="commentairegrille">
+                        <input type="hidden" name="username" value="{{ target_user.username }}">
+                        <div class="comment-input-wrapper">
+                            <textarea name="new_comment" class="comment-input" placeholder="Ajouter un commentaire..." rows="1">{{ target_user.commentairegrille|default:'' }}</textarea>
+                            <button type="submit" class="comment-save-btn">💾</button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table border="1">
+            <caption>Étapes liées à la pédago</caption>
+            <theader>
+                <th>Étapes</th>
+                <th>Deadline</th>
+                <th>Drive</th>
+                <th>Changer l'état</th>
+                <th>Etat de l'étape</th>
+                <th>Commentaire</th>
+            </theader>
+            <tbody>
+            <tr>
+                <td>Projet d'activité BM</td>
+                <td>Dimanche 28 septembre</td>
+                <td>
+                    {% if target_user.lienbm %}
+                        <a href="{{ target_user.lienbm }}" target="_blank" class="drive-link">
+                            <span class="drive-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                                </svg>
+                            </span>
+                            <span class="drive-title">Drive BM</span>
+                        </a>
+                    {% else %}
+                        <span class="no-data">Aucun lien</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="post" action="{% url 'change_etat' %}" class="state-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="etat_field" value="etatfrbm">
+                        <input type="hidden" name="username" value="{{ target_user.username }}">
+                        <div class="file-state-actions">
+                            <div class="select-wrapper">
+                                <select name="new_etat" class="file-state-select" onchange="this.form.submit()">
+                                    <option value="">Choisir...</option>
+                                    {% for choice in etat_choices %}
+                                        <option value="{{ choice.0 }}" {% if target_user.etatfrbm == choice.0 %}selected{% endif %}>
+                                            {{ choice.1 }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+                <td class="
+                    {% if target_user.etatfrbm == 'Non rendu' %}
+                        etat-non-rendu
+                    {% elif target_user.etatfrbm == 'Rendu' %}
+                        etat-rendu
+                    {% elif target_user.etatfrbm == 'Validé' %}
+                        etat-valide
+                    {% elif target_user.etatfrbm == 'Refusé' %}
+                        etat-refuse
+                    {% elif target_user.etatfrbm == 'Retour fait' %}
+                        etat-retour
+                    {% elif target_user.etatfrbm == 'En cours' %}
+                        etat-encours
+                    {% endif %}
+                ">{{ target_user.etatfrbm }}</td>
+                <td>
+                    <form method="post" action="{% url 'update_comment' %}" class="comment-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="comment_field" value="commentairefrbm">
+                        <input type="hidden" name="username" value="{{ target_user.username }}">
+                        <div class="comment-input-wrapper">
+                            <textarea name="new_comment" class="comment-input" placeholder="Ajouter un commentaire..." rows="1">{{ target_user.commentairefrbm|default:'' }}</textarea>
+                            <button type="submit" class="comment-save-btn">💾</button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>Projet vie juive BM</td>
+                <td>Dimanche 28 septembre</td>
+                <td>
+                    {% if target_user.lienbm %}
+                        <a href="{{ target_user.lienbm }}" target="_blank" class="drive-link">
+                            <span class="drive-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                                </svg>
+                            </span>
+                            <span class="drive-title">Drive BM</span>
+                        </a>
+                    {% else %}
+                        <span class="no-data">Aucun lien</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="post" action="{% url 'change_etat' %}" class="state-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="etat_field" value="etatfbbm">
+                        <input type="hidden" name="username" value="{{ target_user.username }}">
+                        <div class="file-state-actions">
+                            <div class="select-wrapper">
+                                <select name="new_etat" class="file-state-select" onchange="this.form.submit()">
+                                    <option value="">Choisir...</option>
+                                    {% for choice in etat_choices %}
+                                        <option value="{{ choice.0 }}" {% if target_user.etatfbbm == choice.0 %}selected{% endif %}>
+                                            {{ choice.1 }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+                <td class="
+                    {% if target_user.etatfbbm == 'Non rendu' %}
+                        etat-non-rendu
+                    {% elif target_user.etatfbbm == 'Rendu' %}
+                        etat-rendu
+                    {% elif target_user.etatfbbm == 'Validé' %}
+                        etat-valide
+                    {% elif target_user.etatfbbm == 'Refusé' %}
+                        etat-refuse
+                    {% elif target_user.etatfbbm == 'Retour fait' %}
+                        etat-retour
+                    {% elif target_user.etatfbbm == 'En cours' %}
+                        etat-encours
+                    {% endif %}
+                ">{{ target_user.etatfbbm }}</td>
+                <td>
+                    <form method="post" action="{% url 'update_comment' %}" class="comment-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="comment_field" value="commentairefbbm">
+                        <input type="hidden" name="username" value="{{ target_user.username }}">
+                        <div class="comment-input-wrapper">
+                            <textarea name="new_comment" class="comment-input" placeholder="Ajouter un commentaire..." rows="1">{{ target_user.commentairefbbm|default:'' }}</textarea>
+                            <button type="submit" class="comment-save-btn">💾</button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>Ébauche projet d'activité BC</td>
+                <td>1 semaine avant les JN</td>
+                <td>
+                    {% if target_user.lienbc %}
+                        <a href="{{ target_user.lienbc }}" target="_blank" class="drive-link">
+                            <span class="drive-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                                </svg>
+                            </span>
+                            <span class="drive-title">Drive BC</span>
+                        </a>
+                    {% else %}
+                        <span class="no-data">Aucun lien</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="post" action="{% url 'change_etat' %}" class="state-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="etat_field" value="etatprojetactivitebc">
+                        <input type="hidden" name="username" value="{{ target_user.username }}">
+                        <div class="file-state-actions">
+                            <div class="select-wrapper">
+                                <select name="new_etat" class="file-state-select" onchange="this.form.submit()">
+                                    <option value="">Choisir...</option>
+                                    {% for choice in etat_choices %}
+                                        <option value="{{ choice.0 }}" {% if target_user.etatprojetactivitebc == choice.0 %}selected{% endif %}>
+                                            {{ choice.1 }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+                <td class="{% if target_user.etatprojetactivitebc == 'Non rendu' %}etat-non-rendu{% elif target_user.etatprojetactivitebc == 'Rendu' %}etat-rendu{% elif target_user.etatprojetactivitebc == 'Validé' %}etat-valide{% elif target_user.etatprojetactivitebc == 'Refusé' %}etat-refuse{% elif target_user.etatprojetactivitebc == 'Retour fait' %}etat-retour{% elif target_user.etatprojetactivitebc == 'En cours' %}etat-encours{% endif %}">{{ target_user.etatprojetactivitebc }}</td>
+                <td>
+                    <form method="post" action="{% url 'update_comment' %}" class="comment-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="comment_field" value="commentaireprojetactivitebc">
+                        <input type="hidden" name="username" value="{{ target_user.username }}">
+                        <div class="comment-input-wrapper">
+                            <textarea name="new_comment" class="comment-input" placeholder="Ajouter un commentaire..." rows="1">{{ target_user.commentaireprojetactivitebc|default:'' }}</textarea>
+                            <button type="submit" class="comment-save-btn">💾</button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>Ébauche projet vie juive BC</td>
+                <td>1 semaine avant les JN</td>
+                <td>
+                    {% if target_user.lienbc %}
+                        <a href="{{ target_user.lienbc }}" target="_blank" class="drive-link">
+                            <span class="drive-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                                </svg>
+                            </span>
+                            <span class="drive-title">Drive BC</span>
+                        </a>
+                    {% else %}
+                        <span class="no-data">Aucun lien</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="post" action="{% url 'change_etat' %}" class="state-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="etat_field" value="etatprojetviejuvebc">
+                        <input type="hidden" name="username" value="{{ target_user.username }}">
+                        <div class="file-state-actions">
+                            <div class="select-wrapper">
+                                <select name="new_etat" class="file-state-select" onchange="this.form.submit()">
+                                    <option value="">Choisir...</option>
+                                    {% for choice in etat_choices %}
+                                        <option value="{{ choice.0 }}" {% if target_user.etatprojetviejuvebc == choice.0 %}selected{% endif %}>
+                                            {{ choice.1 }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+                <td class="{% if target_user.etatprojetviejuvebc == 'Non rendu' %}etat-non-rendu{% elif target_user.etatprojetviejuvebc == 'Rendu' %}etat-rendu{% elif target_user.etatprojetviejuvebc == 'Validé' %}etat-valide{% elif target_user.etatprojetviejuvebc == 'Refusé' %}etat-refuse{% elif target_user.etatprojetviejuvebc == 'Retour fait' %}etat-retour{% elif target_user.etatprojetviejuvebc == 'En cours' %}etat-encours{% endif %}">{{ target_user.etatprojetviejuvebc }}</td>
+                <td>
+                    <form method="post" action="{% url 'update_comment' %}" class="comment-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="comment_field" value="commentaireprojetviejuvebc">
+                        <input type="hidden" name="username" value="{{ target_user.username }}">
+                        <div class="comment-input-wrapper">
+                            <textarea name="new_comment" class="comment-input" placeholder="Ajouter un commentaire..." rows="1">{{ target_user.commentaireprojetviejuvebc|default:'' }}</textarea>
+                            <button type="submit" class="comment-save-btn">💾</button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>Projet d'activité BC</td>
+                <td>1 semaine après les JN</td>
+                <td>
+                    {% if target_user.lienbc %}
+                        <a href="{{ target_user.lienbc }}" target="_blank" class="drive-link">
+                            <span class="drive-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                                </svg>
+                            </span>
+                            <span class="drive-title">Drive BC</span>
+                        </a>
+                    {% else %}
+                        <span class="no-data">Aucun lien</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="post" action="{% url 'change_etat' %}" class="state-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="etat_field" value="etatfrbc">
+                        <input type="hidden" name="username" value="{{ target_user.username }}">
+                        <div class="file-state-actions">
+                            <div class="select-wrapper">
+                                <select name="new_etat" class="file-state-select" onchange="this.form.submit()">
+                                    <option value="">Choisir...</option>
+                                    {% for choice in etat_choices %}
+                                        <option value="{{ choice.0 }}" {% if target_user.etatfrbc == choice.0 %}selected{% endif %}>
+                                            {{ choice.1 }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+                <td class="
+                    {% if target_user.etatfrbc == 'Non rendu' %}
+                        etat-non-rendu
+                    {% elif target_user.etatfrbc == 'Rendu' %}
+                        etat-rendu
+                    {% elif target_user.etatfrbc == 'Validé' %}
+                        etat-valide
+                    {% elif target_user.etatfrbc == 'Refusé' %}
+                        etat-refuse
+                    {% elif target_user.etatfrbc == 'Retour fait' %}
+                        etat-retour
+                    {% elif target_user.etatfrbc == 'En cours' %}
+                        etat-encours
+                    {% endif %}
+                ">{{ target_user.etatfrbc }}</td>
+                <td>
+                    <form method="post" action="{% url 'update_comment' %}" class="comment-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="comment_field" value="commentairefrbc">
+                        <input type="hidden" name="username" value="{{ target_user.username }}">
+                        <div class="comment-input-wrapper">
+                            <textarea name="new_comment" class="comment-input" placeholder="Ajouter un commentaire..." rows="1">{{ target_user.commentairefrbc|default:'' }}</textarea>
+                            <button type="submit" class="comment-save-btn">💾</button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>Projet vie juive BC</td>
+                <td>1 semaine après les JN</td>
+                <td>
+                    {% if target_user.lienbc %}
+                        <a href="{{ target_user.lienbc }}" target="_blank" class="drive-link">
+                            <span class="drive-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                                </svg>
+                            </span>
+                            <span class="drive-title">Drive BC</span>
+                        </a>
+                    {% else %}
+                        <span class="no-data">Aucun lien</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="post" action="{% url 'change_etat' %}" class="state-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="etat_field" value="etatfbbc">
+                        <input type="hidden" name="username" value="{{ target_user.username }}">
+                        <div class="file-state-actions">
+                            <div class="select-wrapper">
+                                <select name="new_etat" class="file-state-select" onchange="this.form.submit()">
+                                    <option value="">Choisir...</option>
+                                    {% for choice in etat_choices %}
+                                        <option value="{{ choice.0 }}" {% if target_user.etatfbbc == choice.0 %}selected{% endif %}>
+                                            {{ choice.1 }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+                <td class="
+                    {% if target_user.etatfbbc == 'Non rendu' %}
+                        etat-non-rendu
+                    {% elif target_user.etatfbbc == 'Rendu' %}
+                        etat-rendu
+                    {% elif target_user.etatfbbc == 'Validé' %}
+                        etat-valide
+                    {% elif target_user.etatfbbc == 'Refusé' %}
+                        etat-refuse
+                    {% elif target_user.etatfbbc == 'Retour fait' %}
+                        etat-retour
+                    {% elif target_user.etatfbbc == 'En cours' %}
+                        etat-encours
+                    {% endif %}
+                ">{{ target_user.etatfbbc }}</td>
+                <td>
+                    <form method="post" action="{% url 'update_comment' %}" class="comment-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="comment_field" value="commentairefbbc">
+                        <input type="hidden" name="username" value="{{ target_user.username }}">
+                        <div class="comment-input-wrapper">
+                            <textarea name="new_comment" class="comment-input" placeholder="Ajouter un commentaire..." rows="1">{{ target_user.commentairefbbc|default:'' }}</textarea>
+                            <button type="submit" class="comment-save-btn">💾</button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    {% else %}
+        <h1>Utilisateur non trouvé</h1>
+        <p>L'utilisateur demandé n'existe pas.</p>
+    {% endif %}
+</body>
+</html>

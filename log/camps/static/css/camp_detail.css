@@ -1,3 +1,40 @@
+/* Amélioration de la visibilité des titres */
+caption {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #2c3e50;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Amélioration des en-têtes de tableau */
+th {
+    background-color: #34495e !important;
+    color: white !important;
+    font-weight: bold;
+    padding: 12px;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+/* Amélioration du titre principal */
+h1 {
+    color: #e74c3c;
+    font-size: 2.5em;
+    font-weight: bold;
+    text-align: center;
+    margin: 20px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 /* Conteneur principal pour les actions liées à l'état */
 .file-state-cell {
     padding: 0.75rem;
@@ -135,12 +172,21 @@ table, th, td {
 }
 
 th {
-    background-color: rgb(0,39,152);
+    background-color: #0056b3;
     color: white;
+    font-weight: bold;
+    padding: 12px;
+    text-align: center;
+    font-size: 1.1em;
 }
 
 td {
     vertical-align: top;
+}
+
+caption {
+    background-color: rgb(0,39,152);
+    color: white;
 }
 
 .home-button {

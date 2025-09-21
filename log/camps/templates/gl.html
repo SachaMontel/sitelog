@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+<head>
+    <title>Bienvenue</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/camp_detail.css' %}">
+    <style>
+        body {
+            background-image: url("{% static 'images/login.jpg' %}");
+        }
+        caption {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #ffffff;
+            background: linear-gradient(90deg, #0056b3, #ff6b00);
+            padding: 12px 18px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            letter-spacing: 1px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        caption:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        caption::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        caption:hover::before {
+            left: 100%;
+        }
+        
+        caption::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        caption:hover::after {
+            opacity: 1;
+        }
+
+        th {
+    background-color: #0056b3;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    text-align: center;
+    font-size: 1.1em;
+}
+    </style>    
+</head>
+<body>
+    <a href="{% url 'home' %}" class="home-button">Home</a>
+    <a href="{% url 'glstats' %}" class="stats-button">Stats GL</a>
+    <h1>Bienvenue dans l'espace de ton GL</h1>
+
+    <table border="1">
+        <caption>Étapes liées au GL</caption>
+        <theader>
+            <th>Étapes</th>
+            <th>Deadline</th>
+            <th>Drive</th>
+            <th>Changer l'état</th>
+            <th>Etat de l'étape</th>
+            <th>Commentaire</th>
+        </theader>
+        <tbody>
+        <tr>
+            <td>Grille DDCS</td>
+            <td></td>
+            <td>{{ user.lienlog }}</td>
+            <td>
+                <form method="post" action="{% url 'change_etat' %}" class="state-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="etat_field" value="etatddcs">
+                    <div class="file-state-actions">
+                        <div class="select-wrapper">
+                            <select name="new_etat" class="file-state-select" onchange="this.form.submit()">
+                                <option value="">Choisir...</option>
+                                {% for choice in user.get_etat_choices %}
+                                    <option value="{{ choice.0 }}" {% if user.etatddcs == choice.0 %}selected{% endif %}>
+                                        {{ choice.1 }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </td>
+            <td class="{% if user.etatddcs == 'Non rendu' %}etat-non-rendu{% elif user.etatddcs == 'Rendu' %}etat-rendu{% endif %}">{{ user.etatddcs }}</td>
+            <td>{{ user.commentaireddcs }}</td>
+        </tr>
+        <tr>
+            <td>Grille de l'année</td>
+            <td></td>
+            <td>{{ user.lienlog }}</td>
+            <td>
+                <form method="post" action="{% url 'change_etat' %}" class="state-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="etat_field" value="etatgrille">
+                    <div class="file-state-actions">
+                        <div class="select-wrapper">
+                            <select name="new_etat" class="file-state-select" onchange="this.form.submit()">
+                                <option value="">Choisir...</option>
+                                {% for choice in user.get_etat_choices %}
+                                    <option value="{{ choice.0 }}" {% if user.etatgrille == choice.0 %}selected{% endif %}>
+                                        {{ choice.1 }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </td>
+            <td class="{% if user.etatgrille == 'Non rendu' %}etat-non-rendu{% elif user.etatgrille == 'Rendu' %}etat-rendu{% endif %}">{{ user.etatgrille }}</td>
+            <td>{{ user.commentairegrille }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table border="1">
+        <caption>Étapes liées à la pédago</caption>
+        <theader>
+            <th>Étapes</th>
+            <th>Deadline</th>
+            <th>Drive</th>
+            <th>Changer l'état</th>
+            <th>Etat de l'étape</th>
+            <th>Commentaire</th>
+        </theader>
+        <tbody>
+        <tr>
+            <td>Projet d'activité BM</td>
+            <td>Dimanche 28 septembre</td>
+            <td>{{ user.lienbm }}</td>
+            <td>
+                <form method="post" action="{% url 'change_etat' %}" class="state-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="etat_field" value="etatfrbm">
+                    <div class="file-state-actions">
+                        <div class="select-wrapper">
+                            <select name="new_etat" class="file-state-select" onchange="this.form.submit()">
+                                <option value="">Choisir...</option>
+                                {% for choice in user.get_etat_choices %}
+                                    <option value="{{ choice.0 }}" {% if user.etatfrbm == choice.0 %}selected{% endif %}>
+                                        {{ choice.1 }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </td>
+            <td class="{% if user.etatfrbm == 'Non rendu' %}etat-non-rendu{% elif user.etatfrbm == 'Rendu' %}etat-rendu{% endif %}">{{ user.etatfrbm }}</td>
+            <td>{{ user.commentairefrbm }}</td>
+        </tr>
+        <tr><td>Projet vie juive BM</td>
+            <td>Dimanche 28 septembre</td>
+            <td>{{ user.lienbm }}</td>
+            <td>
+                <form method="post" action="{% url 'change_etat' %}" class="state-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="etat_field" value="etatfbbm">
+                    <div class="file-state-actions">
+                        <div class="select-wrapper">
+                            <select name="new_etat" class="file-state-select" onchange="this.form.submit()">
+                                <option value="">Choisir...</option>
+                                {% for choice in user.get_etat_choices %}
+                                    <option value="{{ choice.0 }}" {% if user.etatfbbm == choice.0 %}selected{% endif %}>
+                                        {{ choice.1 }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </td>
+            <td class="{% if user.etatfbbm == 'Non rendu' %}etat-non-rendu{% elif user.etatfbbm == 'Rendu' %}etat-rendu{% endif %}">{{ user.etatfbbm }}</td>
+            <td>{{ user.commentairefbbm }}</td>
+        </tr>
+        <tr>
+            <td>Ébauche projet d'activité BC</td>
+            <td>1 semaine avant les JN</td>
+            <td>{{ user.lienbc }}</td>
+            <td>
+                <form method="post" action="{% url 'change_etat' %}" class="state-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="etat_field" value="etatprojetactivitebc">
+                    <div class="file-state-actions">
+                        <div class="select-wrapper">
+                            <select name="new_etat" class="file-state-select" onchange="this.form.submit()">
+                                <option value="">Choisir...</option>
+                                {% for choice in user.get_etat_choices %}
+                                    <option value="{{ choice.0 }}" {% if user.etatprojetactivitebc == choice.0 %}selected{% endif %}>
+                                        {{ choice.1 }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </td>
+            <td class="{% if user.etatprojetactivitebc == 'Non rendu' %}etat-non-rendu{% elif user.etatprojetactivitebc == 'Rendu' %}etat-rendu{% elif user.etatprojetactivitebc == 'Validé' %}etat-valide{% elif user.etatprojetactivitebc == 'Refusé' %}etat-refuse{% elif user.etatprojetactivitebc == 'Retour fait' %}etat-retour{% elif user.etatprojetactivitebc == 'En cours' %}etat-encours{% endif %}">{{ user.etatprojetactivitebc }}</td>
+            <td>{{ user.commentaireprojetactivitebc }}</td>
+        </tr>
+        <tr>
+            <td>Ébauche projet vie juive BC</td>
+            <td>1 semaine avant les JN</td>
+            <td>{{ user.lienbc }}</td>
+            <td>
+                <form method="post" action="{% url 'change_etat' %}" class="state-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="etat_field" value="etatprojetviejuvebc">
+                    <div class="file-state-actions">
+                        <div class="select-wrapper">
+                            <select name="new_etat" class="file-state-select" onchange="this.form.submit()">
+                                <option value="">Choisir...</option>
+                                {% for choice in user.get_etat_choices %}
+                                    <option value="{{ choice.0 }}" {% if user.etatprojetviejuvebc == choice.0 %}selected{% endif %}>
+                                        {{ choice.1 }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </td>
+            <td class="{% if user.etatprojetviejuvebc == 'Non rendu' %}etat-non-rendu{% elif user.etatprojetviejuvebc == 'Rendu' %}etat-rendu{% elif user.etatprojetviejuvebc == 'Validé' %}etat-valide{% elif user.etatprojetviejuvebc == 'Refusé' %}etat-refuse{% elif user.etatprojetviejuvebc == 'Retour fait' %}etat-retour{% elif user.etatprojetviejuvebc == 'En cours' %}etat-encours{% endif %}">{{ user.etatprojetviejuvebc }}</td>
+            <td>{{ user.commentaireprojetviejuvebc }}</td>
+        </tr>
+        <tr>
+            <td>Projet d'activité BC</td>
+            <td>1 semaine après les JN</td>
+            <td>{{ user.lienbc }}</td>
+            <td>
+                <form method="post" action="{% url 'change_etat' %}" class="state-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="etat_field" value="etatfrbc">
+                    <div class="file-state-actions">
+                        <div class="select-wrapper">
+                            <select name="new_etat" class="file-state-select" onchange="this.form.submit()">
+                                <option value="">Choisir...</option>
+                                {% for choice in user.get_etat_choices %}
+                                    <option value="{{ choice.0 }}" {% if user.etatfrbc == choice.0 %}selected{% endif %}>
+                                        {{ choice.1 }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </td>
+            <td class="{% if user.etatfrbc == 'Non rendu' %}etat-non-rendu{% elif user.etatfrbc == 'Rendu' %}etat-rendu{% endif %}">{{ user.etatfrbc }}</td>
+            <td>{{ user.commentairefrbc }}</td>
+        </tr>
+        <tr>
+            <td>Projet vie juive BC</td>
+            <td>1 semaine après les JN</td>
+            <td>{{ user.lienbc }}</td>
+            <td>
+                <form method="post" action="{% url 'change_etat' %}" class="state-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="etat_field" value="etatfbbc">
+                    <div class="file-state-actions">
+                        <div class="select-wrapper">
+                            <select name="new_etat" class="file-state-select" onchange="this.form.submit()">
+                                <option value="">Choisir...</option>
+                                {% for choice in user.get_etat_choices %}
+                                    <option value="{{ choice.0 }}" {% if user.etatfbbc == choice.0 %}selected{% endif %}>
+                                        {{ choice.1 }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </td>
+            <td class="{% if user.etatfbbc == 'Non rendu' %}etat-non-rendu{% elif user.etatfbbc == 'Rendu' %}etat-rendu{% endif %}">{{ user.etatfbbc }}</td>
+            <td>{{ user.commentairefbbc }}</td>
+        </tr>
+    
+        </tbody>
+    </table>
+</body>
+</html>

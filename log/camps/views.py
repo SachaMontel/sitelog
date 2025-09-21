@@ -11,6 +11,159 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib import messages
+from django.http import JsonResponse
+from django.conf import settings
+
+
+def send_notification_email(user, field_name, old_value, new_value, modified_by):
+    """Envoie un email de notification à l'utilisateur quand ses informations sont modifiées"""
+    # Vérifier si l'utilisateur qui a fait la modification appartient aux groupes autorisés
+    authorized_groups = ['cga', 'log', 'anbc', 'anbm', 'anrgl', 'masai', 'gl']
+    user_groups = [group.name for group in modified_by.groups.all()]
+    
+    if not any(group in user_groups for group in authorized_groups):
+        return
+    
+    # Noms d'affichage des champs
+    field_names = {
+        'etatfrbc': 'État du fil rouge BC',
+        'etatfrbm': 'État du fil rouge BM',
+        'etatfbbm': 'État du fil bleu BM',
+        'etatfbbc': 'État du fil bleu BC',
+        'etatddcs': 'État de la grille DDCS',
+        'etatgrille': 'État de la grille de l\'année',
+        'etatprojetactivitebc': 'État de l\'ébauche projet d\'activité BC',
+        'etatprojetviejuvebc': 'État de l\'ébauche projet vie juive BC',
+        'commentairefrbm': 'Commentaire du fil rouge BM',
+        'commentairefbbm': 'Commentaire du fil bleu BM',
+        'commentairefrbc': 'Commentaire du fil rouge BC',
+        'commentairefbbc': 'Commentaire du fil bleu BC',
+        'commentaireddcs': 'Commentaire de la grille DDCS',
+        'commentairegrille': 'Commentaire de la grille de l\'année',
+        'commentaireprojetactivitebc': 'Commentaire de l\'ébauche projet d\'activité BC',
+        'commentaireprojetviejuvebc': 'Commentaire de l\'ébauche projet vie juive BC',
+    }
+    
+    field_display = field_names.get(field_name, field_name)
+    
+    # Déterminer le type de modification
+    if field_name.startswith('etat'):
+        change_type = 'état'
+        message_content = f"L'{field_display} a été modifié de '{old_value}' vers '{new_value}'"
+    else:
+        change_type = 'commentaire'
+        message_content = f"Le {field_display} a été modifié"
+    
+    # Créer le message
+    subject = f'Modification de vos informations - {user.first_name} {user.last_name}'
+    message = f"""
+Bonjour {user.first_name} {user.last_name},
+
+Vos informations ont été modifiées par {modified_by.first_name} {modified_by.last_name}.
+
+{message_content}
+
+Connectez-vous sur https://eeif.rezel.net/home/ pour voir les détails.
+
+Cordialement,
+L'équipe EEIF
+"""
+    
+    # Envoyer l'email
+    try:
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user.email],
+            fail_silently=True,  # Ne pas faire planter l'application si l'email échoue
+        )
+        print(f"Email de notification envoyé à {user.email} pour la modification de {field_name} par {modified_by.username}")
+    except Exception as e:
+        print(f"Erreur lors de l'envoi de l'email à {user.email}: {str(e)}")
+        # Optionnel : log l'erreur dans un fichier ou base de données
+
+
+def send_group_notification_email(field_name, old_value, new_value, modified_by, target_user):
+    """Envoie un email de notification aux groupes spécifiques quand un utilisateur GL modifie certains états"""
+    # Vérifier si l'utilisateur qui a fait la modification appartient au groupe GL
+    if not modified_by.groups.filter(name='gl').exists():
+        return
+    
+    # Définir les mappings des champs vers les emails des groupes
+    field_to_group_email = {
+        'etatfrbm': 'anbm@eeif.org',
+        'etatfbbm': 'anbm@eeif.org',
+        'etatfrbc': 'anbc@eeif.org',
+        'etatfbbc': 'anbc@eeif.org',
+        'etatprojetactivitebc': 'anbc@eeif.org',
+        'etatprojetviejuvebc': 'anbc@eeif.org',
+        'etatddcs': 'anrgl@eeif.org',
+        'etatgrille': 'anrgl@eeif.org',
+    }
+    
+    # Vérifier si le champ nécessite une notification de groupe
+    if field_name not in field_to_group_email:
+        return
+    
+    group_email = field_to_group_email[field_name]
+    
+    # Noms d'affichage des champs
+    field_names = {
+        'etatfrbc': 'État du fil rouge BC',
+        'etatfrbm': 'État du fil rouge BM',
+        'etatfbbm': 'État du fil bleu BM',
+        'etatfbbc': 'État du fil bleu BC',
+        'etatprojetactivitebc': 'État de l\'ébauche projet d\'activité BC',
+        'etatprojetviejuvebc': 'État de l\'ébauche projet vie juive BC',
+        'etatddcs': 'État de la grille DDCS',
+        'etatgrille': 'État de la grille de l\'année',
+    }
+    
+    field_display = field_names.get(field_name, field_name)
+    
+    # Déterminer le groupe destinataire
+    group_names = {
+        'anbm@eeif.org': 'ANBM',
+        'anbc@eeif.org': 'ANBC',
+        'anrgl@eeif.org': 'ANRGL',
+    }
+    group_name = group_names.get(group_email, 'Groupe')
+    
+    # Créer le message
+    subject = f'Modification d\'état par un utilisateur GL - {target_user.first_name} {target_user.last_name}'
+    message = f"""
+Bonjour {group_name},
+
+Un utilisateur du groupe GL a modifié un état.
+
+Détails de la modification :
+- Utilisateur modifié : {target_user.first_name} {target_user.last_name} ({target_user.username})
+- Groupe local : {target_user.gl}
+- Champ modifié : {field_display}
+- Ancienne valeur : {old_value}
+- Nouvelle valeur : {new_value}
+- Modifié par : {modified_by.first_name} {modified_by.last_name} ({modified_by.username})
+
+Connectez-vous sur https://eeif.rezel.net/home/ pour voir les détails.
+
+Cordialement,
+L'équipe EEIF
+"""
+    
+    # Envoyer l'email
+    try:
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[group_email],
+            fail_silently=True,
+        )
+        print(f"Email de notification de groupe envoyé à {group_email} pour la modification de {field_name} par {modified_by.username}")
+    except Exception as e:
+        print(f"Erreur lors de l'envoi de l'email de groupe à {group_email}: {str(e)}")
 
 
 def get_document_slugs(documents):
@@ -133,6 +286,11 @@ def anbm(request):
 def anbp(request):
     camps_bp = Camp.objects.filter(branche="BP")
     return render(request, 'anbp.html', {'camps_bp': camps_bp})
+
+@group_required(['logistique','masai' ,'superuser','anbb','anbc','anbm','anbp', 'gl'])
+def gl(request):
+    return render(request, 'gl.html')
+
 
 @group_required(['logistique','masai' ,'superuser','anbb'])
 def statbb(request):
@@ -260,6 +418,146 @@ def statbc(request):
     }
 
     return render(request, 'statbc.html', {'camps_bb': camps_bb, 'compteurs': compteurs_readable})
+
+@group_required(['logistique','masai' ,'superuser','anbc'])
+def bcstats(request):
+    """Vue pour les statistiques des étapes BC par groupe local"""
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    
+    # Récupération des utilisateurs du groupe GL
+    users = User.objects.filter(groups__name='gl')
+    
+    # Définition des étapes BC
+    etapes_bc = [
+        {'name': 'Ébauche Projet d\'Activité BC', 'slug': 'etatprojetactivitebc'},
+        {'name': 'Ébauche Projet Vie Juive BC', 'slug': 'etatprojetviejuvebc'},
+        {'name': 'Projet d\'Activité BC', 'slug': 'etatfrbc'},
+        {'name': 'Projet Vie Juive BC', 'slug': 'etatfbbc'},
+    ]
+    
+    # Définition des états possibles
+    etats = ["Non rendu", "Rendu", "Validé", "Refusé", "Retour fait", "En cours"]
+    
+    # Initialisation des compteurs
+    compteurs = {
+        etape['slug']: {"data": [0] * len(etats), "groupes": {etat: [] for etat in etats}}
+        for etape in etapes_bc
+    }
+    
+    # Remplissage des compteurs
+    for user in users:
+        for etape in etapes_bc:
+            etat = getattr(user, etape['slug'], None)
+            if etat in etats:
+                index = etats.index(etat)
+                compteurs[etape['slug']]['data'][index] += 1
+                if user.gl:  # Ajouter le groupe local seulement s'il est défini
+                    compteurs[etape['slug']]['groupes'][etat].append(user.gl)
+    
+    # Création du dictionnaire lisible pour le template
+    compteurs_readable = {
+        etape['name']: {
+            "data": compteurs[etape['slug']]['data'],
+            "groupes": compteurs[etape['slug']]['groupes'],
+            "id": etape['slug']
+        }
+        for etape in etapes_bc
+    }
+    
+    return render(request, 'bcstats.html', {'users': users, 'compteurs': compteurs_readable})
+
+@group_required(['logistique','masai' ,'superuser','anbm'])
+def bmstats(request):
+    """Vue pour les statistiques des étapes BM par groupe local"""
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    
+    # Récupération des utilisateurs du groupe GL
+    users = User.objects.filter(groups__name='gl')
+    
+    # Définition des étapes BM
+    etapes_bm = [
+        {'name': 'Projet d\'Activité BM', 'slug': 'etatfrbm'},
+        {'name': 'Projet Vie Juive BM', 'slug': 'etatfbbm'},
+    ]
+    
+    # Définition des états possibles
+    etats = ["Non rendu", "Rendu", "Validé", "Refusé", "Retour fait", "En cours"]
+    
+    # Initialisation des compteurs
+    compteurs = {
+        etape['slug']: {"data": [0] * len(etats), "groupes": {etat: [] for etat in etats}}
+        for etape in etapes_bm
+    }
+    
+    # Remplissage des compteurs
+    for user in users:
+        for etape in etapes_bm:
+            etat = getattr(user, etape['slug'], None)
+            if etat in etats:
+                index = etats.index(etat)
+                compteurs[etape['slug']]['data'][index] += 1
+                if user.gl:  # Ajouter le groupe local seulement s'il est défini
+                    compteurs[etape['slug']]['groupes'][etat].append(user.gl)
+    
+    # Création du dictionnaire lisible pour le template
+    compteurs_readable = {
+        etape['name']: {
+            "data": compteurs[etape['slug']]['data'],
+            "groupes": compteurs[etape['slug']]['groupes'],
+            "id": etape['slug']
+        }
+        for etape in etapes_bm
+    }
+    
+    return render(request, 'bmstats.html', {'users': users, 'compteurs': compteurs_readable})
+
+@group_required(['logistique','masai' ,'superuser','anrgl'])
+def glstats(request):
+    """Vue pour les statistiques des étapes GL par groupe local"""
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    
+    # Récupération des utilisateurs du groupe GL
+    users = User.objects.filter(groups__name='gl')
+    
+    # Définition des étapes GL
+    etapes_gl = [
+        {'name': 'Grille DDCS', 'slug': 'etatddcs'},
+        {'name': 'Grille de l\'Année', 'slug': 'etatgrille'},
+    ]
+    
+    # Définition des états possibles
+    etats = ["Non rendu", "Rendu", "Validé", "Refusé", "Retour fait", "En cours"]
+    
+    # Initialisation des compteurs
+    compteurs = {
+        etape['slug']: {"data": [0] * len(etats), "groupes": {etat: [] for etat in etats}}
+        for etape in etapes_gl
+    }
+    
+    # Remplissage des compteurs
+    for user in users:
+        for etape in etapes_gl:
+            etat = getattr(user, etape['slug'], None)
+            if etat in etats:
+                index = etats.index(etat)
+                compteurs[etape['slug']]['data'][index] += 1
+                if user.gl:  # Ajouter le groupe local seulement s'il est défini
+                    compteurs[etape['slug']]['groupes'][etat].append(user.gl)
+    
+    # Création du dictionnaire lisible pour le template
+    compteurs_readable = {
+        etape['name']: {
+            "data": compteurs[etape['slug']]['data'],
+            "groupes": compteurs[etape['slug']]['groupes'],
+            "id": etape['slug']
+        }
+        for etape in etapes_gl
+    }
+    
+    return render(request, 'glstats.html', {'users': users, 'compteurs': compteurs_readable})
 
 @group_required(['logistique','masai' ,'superuser','anbm'])
 def statbm(request):
@@ -828,7 +1126,6 @@ def get_int_from_post(request, key):
 
 def simulation(request):
     if request.method == "POST":
-# views.py
         pfeu = get_int_from_post(request, 'pfeu')
         zfeu = get_int_from_post(request, 'zfeu')
         efeu = get_int_from_post(request, 'efeu')
@@ -901,6 +1198,192 @@ def simulation(request):
             except ValueError:
                 return "Entrée invalide"
 
+        # Appeler la fonction et passer le résultat au template
         result = my_function(pbois, zbois, ebois, pterre, zterre, eterre, peau, zeau, eeau, pvaisselle, zvaisselle, evaisselle, pfeu, zfeu, efeu, pbouffe, zbouffe, ebouffe, pdecoupe, zdecoupe, edecoupe, pcuire, zcuire, ecuire, ptable, ztable, etable, peteindre, zeteindre, eeteindre)
-        return JsonResponse({'result': result})
+        
+        # Vérifier si c'est une requête AJAX
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            from django.http import JsonResponse
+            return JsonResponse({'result': result})
+        
+        return render(request, 'simulation.html', {'result': result})
+    
+    # Si ce n'est pas une requête POST, afficher le formulaire
     return render(request, 'simulation.html')
+
+
+@login_required
+def bc(request):
+    """Vue pour afficher la page BC"""
+    from django.contrib.auth.models import Group
+    try:
+        gl_group = Group.objects.get(name='gl')
+        users = gl_group.user_set.all()
+    except Group.DoesNotExist:
+        users = []
+    context = {
+        'users': users,
+    }
+    return render(request, 'bc.html', context)
+
+
+@login_required
+def bm(request):
+    """Vue pour afficher la page BM"""
+    from django.contrib.auth.models import Group
+    try:
+        gl_group = Group.objects.get(name='gl')
+        users = gl_group.user_set.all()
+    except Group.DoesNotExist:
+        users = []
+    context = {
+        'users': users,
+    }
+    return render(request, 'bm.html', context)
+
+
+@login_required
+def log(request):
+    """Vue pour afficher la page logistique"""
+    from django.contrib.auth.models import Group
+    try:
+        gl_group = Group.objects.get(name='gl')
+        users = gl_group.user_set.all()
+    except Group.DoesNotExist:
+        users = []
+    context = {
+        'users': users,
+    }
+    return render(request, 'log.html', context)
+
+
+@login_required
+def cga(request):
+    """Vue pour afficher la page CGA"""
+    return render(request, 'cga.html')
+
+
+@login_required
+def anrgl(request):
+    """Vue pour afficher la page ANRGL"""
+    from django.contrib.auth.models import Group
+    try:
+        gl_group = Group.objects.get(name='gl')
+        users = gl_group.user_set.all()
+    except Group.DoesNotExist:
+        users = []
+    context = {
+        'users': users,
+    }
+    return render(request, 'log.html', context)
+
+
+@login_required
+def gl2(request, username):
+    """Vue pour afficher les informations d'un utilisateur spécifique"""
+    from django.contrib.auth import get_user_model
+    from .models import ETAT_CHOICES
+    
+    User = get_user_model()
+    try:
+        target_user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        target_user = None
+    
+    context = {
+        'target_user': target_user,
+        'etat_choices': ETAT_CHOICES,
+    }
+    return render(request, 'gl2.html', context)
+
+
+@login_required
+def change_etat(request):
+    """Vue pour changer l'état d'une étape"""
+    if request.method == 'POST':
+        etat_field = request.POST.get('etat_field')
+        new_etat = request.POST.get('new_etat')
+        username = request.POST.get('username')  # Récupérer l'username si présent
+        
+        if etat_field and new_etat:
+            # Si on a un username, on change l'état de cet utilisateur
+            if username:
+                from django.contrib.auth import get_user_model
+                User = get_user_model()
+                try:
+                    target_user = User.objects.get(username=username)
+                    old_value = getattr(target_user, etat_field)
+                    
+                    if hasattr(target_user, etat_field):
+                        setattr(target_user, etat_field, new_etat)
+                        target_user.save()
+                        
+                        # Envoyer l'email de notification à l'utilisateur
+                        send_notification_email(target_user, etat_field, old_value, new_etat, request.user)
+                        
+                        # Envoyer l'email de notification aux groupes spécifiques
+                        send_group_notification_email(etat_field, old_value, new_etat, request.user, target_user)
+                        
+                        messages.success(request, f'État de {etat_field} mis à jour avec succès!')
+                    else:
+                        messages.error(request, 'Champ d\'état invalide.')
+                except User.DoesNotExist:
+                    messages.error(request, 'Utilisateur non trouvé.')
+            else:
+                # Sinon, on change l'état de l'utilisateur connecté
+                old_value = getattr(request.user, etat_field)
+                success = request.user.change_etat(etat_field, new_etat)
+                if success:
+                    # Envoyer l'email de notification à l'utilisateur
+                    send_notification_email(request.user, etat_field, old_value, new_etat, request.user)
+                    
+                    # Envoyer l'email de notification aux groupes spécifiques
+                    send_group_notification_email(etat_field, old_value, new_etat, request.user, request.user)
+                    
+                    messages.success(request, f'État de {etat_field} mis à jour avec succès!')
+                else:
+                    messages.error(request, 'Erreur lors de la mise à jour de l\'état.')
+        else:
+            messages.error(request, 'Données manquantes.')
+    
+    # Déterminer la page de redirection
+    if username:
+        return redirect('gl2', username=username)
+    else:
+        return redirect('gl')
+
+
+@login_required
+def update_comment(request):
+    """Vue pour mettre à jour un commentaire"""
+    if request.method == 'POST':
+        comment_field = request.POST.get('comment_field')
+        new_comment = request.POST.get('new_comment')
+        username = request.POST.get('username')
+        
+        if comment_field and username:
+            from django.contrib.auth import get_user_model
+            User = get_user_model()
+            try:
+                target_user = User.objects.get(username=username)
+                old_value = getattr(target_user, comment_field)
+                
+                if hasattr(target_user, comment_field):
+                    setattr(target_user, comment_field, new_comment)
+                    target_user.save()
+                    
+                    # Envoyer l'email de notification
+                    send_notification_email(target_user, comment_field, old_value, new_comment, request.user)
+                    
+                    messages.success(request, f'Commentaire de {comment_field} mis à jour avec succès!')
+                else:
+                    messages.error(request, 'Champ de commentaire invalide.')
+            except User.DoesNotExist:
+                messages.error(request, 'Utilisateur non trouvé.')
+        else:
+            messages.error(request, 'Données manquantes.')
+    
+    if username:
+        return redirect('gl2', username=username)
+    else:
+        return redirect('gl')
