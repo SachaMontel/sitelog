@@ -202,6 +202,7 @@ nav ul li a:hover::before {
         background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
         box-shadow: var(--shadow);
         padding: 20px;
+        z-index: 1000;
     }
     
     nav.active {
@@ -218,6 +219,7 @@ nav ul li a:hover::before {
         padding: 12px 20px;
         width: 100%;
         text-align: center;
+        font-size: 1rem;
     }
 
     .auth-links {
@@ -230,6 +232,7 @@ nav ul li a:hover::before {
         flex-wrap: wrap;
         height: auto;
         min-height: 80px;
+        padding: 0 15px;
     }
     
     .hero-container {
@@ -242,6 +245,8 @@ nav ul li a:hover::before {
         width: 100%;
         padding: 20px;
         max-height: 450px;
+        min-width: 100%;
+        max-width: 100%;
     }
     
     .card h2 {
@@ -262,6 +267,11 @@ nav ul li a:hover::before {
         height: 40px;
         max-width: 40px;
         margin-bottom: 8px;
+    }
+    
+    /* Améliorations pour les tablettes */
+    .hero {
+        min-height: calc(100vh - 180px);
     }
 }
 
@@ -634,15 +644,19 @@ main {
 @media (max-width: 480px) {
     .hero {
         padding: 20px 10px;
+        min-height: calc(100vh - 160px);
     }
     
     .hero-container {
         gap: 15px;
+        flex-direction: column;
     }
     
     .card {
         padding: 15px;
         max-height: 350px;
+        min-width: 100%;
+        max-width: 100%;
     }
     
     .card h2 {
@@ -667,6 +681,32 @@ main {
     
     .file-item p {
         font-size: 0.8rem;
+    }
+    
+    /* Améliorations pour les très petits écrans */
+    header {
+        padding: 0 10px;
+        height: 70px;
+    }
+    
+    .logo img {
+        height: 50px;
+        width: 50px;
+    }
+    
+    nav ul {
+        gap: 15px;
+    }
+    
+    nav ul li a {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .auth-links a,
+    .auth-links button {
+        padding: 8px 16px;
+        font-size: 0.9rem;
     }
 }
 

@@ -124,6 +124,17 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+# Configuration pour la production
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'camps/static/'),
+    os.path.join(BASE_DIR, 'fichiers/static/'),
+    os.path.join(BASE_DIR, 'annee/static/'),
+]
+
+# Configuration des fichiers statiques pour la production
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
 
