@@ -41,13 +41,16 @@
     /* Media query spécifique pour iOS */
     @supports (-webkit-touch-callout: none) {
         body {
-            background: none;
+            background: linear-gradient(135deg, rgba(0, 86, 179, 0.1) 0%, rgba(255, 107, 0, 0.1) 100%),
+                        url("{% static 'images/photo2.jpeg' %}");
+            background-size: cover;
+            background-repeat: repeat;
+            background-position: center;
+            background-attachment: scroll;
         }
         
         body::before {
-            position: absolute;
-            height: 100vh;
-            height: -webkit-fill-available;
+            display: none;
         }
     }
     </style>

@@ -40,13 +40,15 @@
         /* Media query spécifique pour iOS */
         @supports (-webkit-touch-callout: none) {
             body {
-                background: none;
+                background-image: url("{% static 'images/login.jpg' %}");
+                background-size: cover;
+                background-repeat: repeat;
+                background-position: center;
+                background-attachment: scroll;
             }
             
             body::before {
-                position: absolute;
-                height: 100vh;
-                height: -webkit-fill-available;
+                display: none;
             }
         }
         caption {
