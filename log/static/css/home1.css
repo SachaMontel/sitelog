@@ -18,6 +18,13 @@
     box-sizing: border-box;
 }
 
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    min-height: 100vh;
+    position: relative;
+}
 
 body::before {
     content: '';
