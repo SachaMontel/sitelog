@@ -229,24 +229,37 @@
             background: rgba(255, 255, 255, 0.95);
             padding: 30px;
             border-radius: 15px;
-            width: min(320px, 80vw);
+            width: 320px;
+            height: 200px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             animation: fadeIn 1s ease-in;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
         }
 
         .random-message .texte {
-            font-size: 24px;
             color: #333;
             margin-bottom: 15px;
-            line-height: 1.6;
+            line-height: 1.5;
             font-style: italic;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 6;
+            -webkit-box-orient: vertical;
+            flex: 1;
+            font-size: clamp(12px, 2.5vw, 20px);
         }
 
         .random-message .auteur {
-            font-size: 18px;
+            font-size: 14px;
             color: #666;
             text-align: right;
             font-weight: bold;
+            margin-top: auto;
+            flex-shrink: 0;
         }
 
         @keyframes fadeIn {
@@ -439,6 +452,51 @@
         // Mettre à jour les comptes à rebours au chargement et toutes les heures
         updateCountdowns();
         setInterval(updateCountdowns, 3600000); // Toutes les heures
+
+        // Ajuster la taille de la police des messages pour qu'ils rentrent dans la bulle
+        function adjustMessageFontSize() {
+            const messages = document.querySelectorAll('.random-message .texte');
+            messages.forEach(function(messageEl) {
+                const container = messageEl.closest('.random-message');
+                const maxHeight = container.offsetHeight - 60; // Hauteur disponible (container - padding - auteur)
+                const text = messageEl.textContent;
+                const textLength = text.length;
+                
+                // Taille de police initiale basée sur la longueur du texte
+                let fontSize = 20;
+                if (textLength > 500) {
+                    fontSize = 10;
+                } else if (textLength > 300) {
+                    fontSize = 12;
+                } else if (textLength > 200) {
+                    fontSize = 14;
+                } else if (textLength > 150) {
+                    fontSize = 16;
+                } else if (textLength > 100) {
+                    fontSize = 18;
+                }
+                
+                // Ajuster progressivement jusqu'à ce que le texte rentre
+                messageEl.style.fontSize = fontSize + 'px';
+                messageEl.style.overflow = 'hidden';
+                
+                // Vérifier si le texte dépasse et réduire si nécessaire
+                let attempts = 0;
+                while (messageEl.scrollHeight > maxHeight && fontSize > 8 && attempts < 10) {
+                    fontSize -= 1;
+                    messageEl.style.fontSize = fontSize + 'px';
+                    attempts++;
+                }
+            });
+        }
+
+        // Ajuster les tailles de police au chargement et après un court délai
+        window.addEventListener('load', function() {
+            setTimeout(adjustMessageFontSize, 100);
+            setTimeout(adjustMessageFontSize, 500);
+        });
+        setTimeout(adjustMessageFontSize, 100);
+        setTimeout(adjustMessageFontSize, 500);
 
         // Gestion des modals
         function openPhotoModal() {
