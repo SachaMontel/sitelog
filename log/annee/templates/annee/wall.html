@@ -198,8 +198,23 @@
             font-weight: bold;
             color: white;
             text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.8);
-            margin-bottom: 40px;
+            margin-bottom: 20px;
             font-family: 'Courier New', monospace;
+        }
+
+        /* Comptes à rebours */
+        .countdowns {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .countdown-item {
+            font-size: 18px;
+            color: white;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+            font-weight: 500;
         }
 
         /* Message aléatoire */
@@ -307,6 +322,11 @@
     <!-- Contenu central -->
     <div class="center-content">
         <div class="clock" id="clock"></div>
+        <div class="countdowns">
+            <div class="countdown-item" id="countdown-concours"></div>
+            <div class="countdown-item" id="countdown-anniversaire"></div>
+            <div class="countdown-item" id="countdown-camp"></div>
+        </div>
         {% if selected_messages %}
         <div class="messages-grid">
             {% for msg in selected_messages %}
@@ -366,9 +386,59 @@
             document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
         }
 
+        // Calculer les jours restants jusqu'à une date
+        function daysUntil(targetDate) {
+            const now = new Date();
+            now.setHours(0, 0, 0, 0);
+            const target = new Date(targetDate);
+            target.setHours(0, 0, 0, 0);
+            const diffTime = target - now;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
+        }
+
+        // Mettre à jour les comptes à rebours
+        function updateCountdowns() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth();
+            const currentDate = now.getDate();
+
+            // Concours : 11 décembre de l'année en cours
+            let concoursDate = new Date(currentYear, 11, 11); // 11 = décembre (0-indexed)
+            if (concoursDate < now) {
+                concoursDate = new Date(currentYear + 1, 11, 11);
+            }
+            const joursConcours = daysUntil(concoursDate);
+            document.getElementById('countdown-concours').textContent = 
+                joursConcours >= 0 ? `J-${joursConcours} avant le concours` : 'Le concours est passé';
+
+            // Anniversaire de Sacha : 6 décembre de l'année en cours
+            let anniversaireDate = new Date(currentYear, 11, 6); // 11 = décembre
+            if (anniversaireDate < now) {
+                anniversaireDate = new Date(currentYear + 1, 11, 6);
+            }
+            const joursAnniversaire = daysUntil(anniversaireDate);
+            document.getElementById('countdown-anniversaire').textContent = 
+                joursAnniversaire >= 0 ? `J-${joursAnniversaire} avant l'anniversaire de Sacha le boss` : "L'anniversaire de Sacha est passé";
+
+            // Camp d'été : 7 juillet
+            let campDate = new Date(currentYear, 6, 7); // 6 = juillet
+            if (campDate < now) {
+                campDate = new Date(currentYear + 1, 6, 7);
+            }
+            const joursCamp = daysUntil(campDate);
+            document.getElementById('countdown-camp').textContent = 
+                joursCamp >= 0 ? `J-${joursCamp} avant le camp d'été` : 'Le camp d\'été est passé';
+        }
+
         // Mettre à jour l'heure toutes les secondes
         updateClock();
         setInterval(updateClock, 1000);
+
+        // Mettre à jour les comptes à rebours au chargement et toutes les heures
+        updateCountdowns();
+        setInterval(updateCountdowns, 3600000); // Toutes les heures
 
         // Gestion des modals
         function openPhotoModal() {
