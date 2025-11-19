@@ -324,11 +324,12 @@
         <div class="modal-content">
             <span class="close" onclick="closePhotoModal()">&times;</span>
             <h2>Ajouter une Photo</h2>
-            <form method="post" action="{% url 'annee:upload_photo' %}" enctype="multipart/form-data">
+            <form method="post" action="{% url 'annee:upload_photo' %}" enctype="multipart/form-data" id="photoUploadForm">
                 {% csrf_token %}
                 <div class="form-group">
                     {{ photo_form.photo.label_tag }}
                     {{ photo_form.photo }}
+                    <small style="color: #666; display: block; margin-top: 5px;">Taille maximale : 5 Mo</small>
                 </div>
                 <button type="submit" class="submit-btn">Ajouter</button>
             </form>
@@ -409,6 +410,20 @@
                 }, 500);
             });
         }, 5000);
+
+        // Validation de la taille du fichier avant upload
+        document.getElementById('photoUploadForm').addEventListener('submit', function(e) {
+            const fileInput = this.querySelector('input[type="file"]');
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const maxSize = 5 * 1024 * 1024; // 5 Mo en octets
+                if (file.size > maxSize) {
+                    e.preventDefault();
+                    alert('Le fichier est trop volumineux. Taille maximale autorisée : 5 Mo.');
+                    return false;
+                }
+            }
+        });
     </script>
 </body>
 </html>
