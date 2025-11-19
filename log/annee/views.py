@@ -1,4 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
+import os
+import random
+import csv
+import uuid
+from django.conf import settings
+from .forms import PhotoUploadForm, MessageForm
+from .models import Message
 
 # Create your views here.
 def index(request):
@@ -9,3 +17,112 @@ def gl(request):
 
 def logout(request):
     return render(request, 'home.html')
+
+def wall(request):
+    """Page principale avec l'heure, photos aléatoires et messages"""
+    try:
+        # Récupérer les photos disponibles
+        photos_dir = os.path.join(settings.MEDIA_ROOT, 'annee', 'photos')
+        photos = []
+        if os.path.exists(photos_dir):
+            try:
+                photos = [
+                    f"annee/photos/{f}"
+                    for f in os.listdir(photos_dir)
+                    if f.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp'))
+                ]
+            except (OSError, PermissionError):
+                photos = []
+        
+        # Récupérer les messages depuis le CSV
+        messages_csv = []
+        csv_path = os.path.join(settings.BASE_DIR, 'log', 'annee', 'static', 'messages.csv')
+        if os.path.exists(csv_path):
+            try:
+                with open(csv_path, 'r', encoding='utf-8') as f:
+                    reader = csv.DictReader(f)
+                    messages_csv = list(reader)
+            except Exception:
+                messages_csv = []
+        
+        # Récupérer aussi les messages de la base de données
+        try:
+            messages_db = Message.objects.all()
+            messages_db_list = [{'texte': msg.texte, 'auteur': msg.auteur} for msg in messages_db]
+        except Exception:
+            messages_db_list = []
+        
+        # Sélectionner plusieurs messages et photos
+        all_messages = messages_csv + messages_db_list
+        max_messages = 4
+        if all_messages and len(all_messages) > 0:
+            selected_messages = random.sample(all_messages, min(len(all_messages), max_messages))
+        else:
+            selected_messages = []
+        
+        max_photos = 12
+        if photos and len(photos) > 0:
+            selected_photos = random.sample(photos, min(len(photos), max_photos))
+        else:
+            selected_photos = []
+        
+        context = {
+            'selected_photos': selected_photos,
+            'selected_messages': selected_messages,
+            'photo_form': PhotoUploadForm(),
+            'message_form': MessageForm(),
+            'MEDIA_URL': settings.MEDIA_URL,
+        }
+        return render(request, 'annee/wall.html', context)
+    except Exception as e:
+        # En cas d'erreur, retourner une page avec des valeurs par défaut
+        import traceback
+        print(f"Erreur dans wall(): {e}")
+        print(traceback.format_exc())
+        context = {
+            'selected_photos': [],
+            'selected_messages': [],
+            'photo_form': PhotoUploadForm(),
+            'message_form': MessageForm(),
+            'MEDIA_URL': settings.MEDIA_URL,
+        }
+        return render(request, 'annee/wall.html', context)
+
+def upload_photo(request):
+    """Gérer l'upload d'une photo"""
+    if request.method == 'POST':
+        form = PhotoUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            photo = request.FILES['photo']
+            # Créer le dossier s'il n'existe pas
+            photos_dir = os.path.join(settings.MEDIA_ROOT, 'annee', 'photos')
+            os.makedirs(photos_dir, exist_ok=True)
+            
+            # Générer un nom de fichier unique pour éviter les collisions
+            file_extension = os.path.splitext(photo.name)[1]
+            unique_filename = f"{uuid.uuid4()}{file_extension}"
+            photo_path = os.path.join(photos_dir, unique_filename)
+            
+            # Sauvegarder la photo
+            with open(photo_path, 'wb+') as destination:
+                for chunk in photo.chunks():
+                    destination.write(chunk)
+            
+            messages.success(request, 'Photo ajoutée avec succès!')
+        else:
+            messages.error(request, 'Erreur lors de l\'upload de la photo.')
+    return redirect('annee:wall')
+
+def add_message(request):
+    """Ajouter un message (dans la base de données)"""
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            Message.objects.create(
+                texte=form.cleaned_data['texte'],
+                auteur=form.cleaned_data['auteur']
+            )
+            messages.success(request, 'Message ajouté avec succès!')
+        else:
+            messages.error(request, 'Erreur lors de l\'ajout du message.')
+    return redirect('annee:wall')
