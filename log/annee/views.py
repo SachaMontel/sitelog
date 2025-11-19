@@ -93,35 +93,62 @@ def upload_photo(request):
     MAX_FILE_SIZE_MB = 5  # Taille maximale en Mo
     MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024  # Convertir en octets
     
-    if request.method == 'POST':
-        form = PhotoUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            photo = request.FILES['photo']
-            
-            # Vérification de la taille du fichier
-            if photo.size > MAX_FILE_SIZE_BYTES:
-                messages.error(request, f'Erreur : Le fichier est trop volumineux. Taille maximale autorisée : {MAX_FILE_SIZE_MB} Mo.')
+    try:
+        if request.method == 'POST':
+            if not request.FILES.get('photo'):
+                messages.error(request, 'Aucun fichier n\'a été sélectionné.')
                 return redirect('annee:wall')
             
-            # Créer le dossier s'il n'existe pas
-            photos_dir = os.path.join(settings.MEDIA_ROOT, 'annee', 'photos')
-            os.makedirs(photos_dir, exist_ok=True)
-            
-            # Générer un nom de fichier unique pour éviter les collisions
-            file_extension = os.path.splitext(photo.name)[1]
-            unique_filename = f"{uuid.uuid4()}{file_extension}"
-            photo_path = os.path.join(photos_dir, unique_filename)
-            
-            # Sauvegarder la photo
-            try:
-                with open(photo_path, 'wb+') as destination:
-                    for chunk in photo.chunks():
-                        destination.write(chunk)
-                messages.success(request, 'Photo ajoutée avec succès!')
-            except Exception as e:
-                messages.error(request, f'Erreur lors de l\'enregistrement de la photo : {str(e)}')
+            form = PhotoUploadForm(request.POST, request.FILES)
+            if form.is_valid():
+                photo = request.FILES['photo']
+                
+                # Vérification de la taille du fichier
+                if photo.size > MAX_FILE_SIZE_BYTES:
+                    messages.error(request, f'Erreur : Le fichier est trop volumineux. Taille maximale autorisée : {MAX_FILE_SIZE_MB} Mo.')
+                    return redirect('annee:wall')
+                
+                # Créer le dossier s'il n'existe pas
+                photos_dir = os.path.join(settings.MEDIA_ROOT, 'annee', 'photos')
+                try:
+                    os.makedirs(photos_dir, exist_ok=True)
+                except OSError as e:
+                    messages.error(request, f'Erreur : Impossible de créer le dossier de stockage. {str(e)}')
+                    return redirect('annee:wall')
+                
+                # Générer un nom de fichier unique pour éviter les collisions
+                file_extension = os.path.splitext(photo.name)[1]
+                if not file_extension:
+                    file_extension = '.jpg'  # Extension par défaut
+                unique_filename = f"{uuid.uuid4()}{file_extension}"
+                photo_path = os.path.join(photos_dir, unique_filename)
+                
+                # Sauvegarder la photo
+                try:
+                    with open(photo_path, 'wb+') as destination:
+                        for chunk in photo.chunks():
+                            destination.write(chunk)
+                    messages.success(request, 'Photo ajoutée avec succès!')
+                except IOError as e:
+                    messages.error(request, f'Erreur lors de l\'enregistrement de la photo : {str(e)}')
+                except Exception as e:
+                    messages.error(request, f'Erreur inattendue : {str(e)}')
+            else:
+                # Afficher les erreurs du formulaire
+                error_msg = 'Erreur lors de l\'upload de la photo. '
+                if form.errors:
+                    error_msg += ' '.join([str(err) for err_list in form.errors.values() for err in err_list])
+                else:
+                    error_msg += 'Vérifiez que le fichier est une image valide.'
+                messages.error(request, error_msg)
         else:
-            messages.error(request, 'Erreur lors de l\'upload de la photo. Vérifiez que le fichier est une image valide.')
+            messages.error(request, 'Méthode non autorisée.')
+    except Exception as e:
+        import traceback
+        print(f"Erreur dans upload_photo(): {e}")
+        print(traceback.format_exc())
+        messages.error(request, f'Une erreur est survenue : {str(e)}')
+    
     return redirect('annee:wall')
 
 def add_message(request):
