@@ -14,6 +14,36 @@ def create_deadline():
             camp.save()
             print(f"DL créé pour {camp}")
 
+def clear_all_deadlines():
+    """Vide toutes les deadlines de tous les documents pour tous les camps"""
+    from django.db import models
+    
+    # Récupérer tous les champs du modèle Camp qui se terminent par '_deadline'
+    deadline_fields = [
+        field.name for field in Camp._meta.get_fields()
+        if field.name.endswith('_deadline') and not field.auto_created
+    ]
+    
+    print(f"Champs deadline trouvés : {len(deadline_fields)}")
+    print(f"Liste des champs : {deadline_fields}")
+    
+    camps = Camp.objects.all()
+    total_camps = camps.count()
+    print(f"\nNombre de camps à traiter : {total_camps}")
+    
+    for camp in camps:
+        print(f"\nTraitement du camp : {camp.numero} ({camp.branche})")
+        for field_name in deadline_fields:
+            # Vider le champ deadline
+            setattr(camp, field_name, None)
+            print(f"  ✓ Deadline '{field_name}' vidée")
+        
+        camp.save()
+        print(f"  ✓ Camp {camp.numero} sauvegardé")
+    
+    print(f"\n✓ {total_camps} camps traités avec succès !")
+    print(f"✓ Toutes les deadlines ont été vidées pour tous les camps.")
+
 def create_mail():
     for camp in Camp.objects.all():
         camp.mail= 'camp.' + camp.numero.replace(' ','').lower() + '@eeif.org'
@@ -75,4 +105,5 @@ def add_link():
             camp.save()
             print(f"Link ajouté pour {camp}")
 
-create_deadline()
+# Décommenter la ligne suivante pour exécuter la fonction
+clear_all_deadlines()
