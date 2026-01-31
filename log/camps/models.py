@@ -75,6 +75,7 @@ NUMERO_CAMP_CHOICES = (
     ('BC 15', 'BC 15'),
     ('BC 16', 'BC 16'),
     ('BC 17', 'BC 17'),
+    ('BC 18', 'BC 18'),
     # BM
     ('BM 1', 'BM 1'),
     ('BM 2', 'BM 2'),
@@ -100,6 +101,7 @@ NUMERO_CAMP_CHOICES = (
     ('BM 22', 'BM 22'),
     ('BM 23', 'BM 23'),
     ('BM 24', 'BM 24'),
+    ('BM 25', 'BM 25'),
 
     # BP
     ('BP 1', 'BP 1'),

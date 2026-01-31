@@ -78,7 +78,7 @@
                     {% if user.is_authenticated %}
                         {% if is_superuser%}
                             <li><a href="{% url 'admin:index' %}">Espace Admin</a></li>
-                            <li><a href="{% url 'cga' %}">Espace Logistique</a></li>
+                            <li><a href="{% url 'logistique' %}">Espace Logistique</a></li>
                         {% elif is_in_anbm %}
                             <li><a href="{% url 'bm' %}">Espace ANBM</a></li>
                         {% elif is_in_anbc %}
@@ -86,15 +86,15 @@
                         {% elif is_in_anbp %}
                             <li><a href="{% url 'bp' %}">Espace ANBP</a></li>
                         {% elif is_in_anrgl %}
-                            <li><a href="{% url 'log' %}">Espace ANRGL</a></li>
+                            <li><a href="{% url 'logistique' %}">Espace ANRGL</a></li>
                         {% elif is_in_logistique %}
-                            <li><a href="{% url 'log' %}">Espace Logistique</a></li>
+                            <li><a href="{% url 'logistique' %}">Espace Logistique</a></li>
                         {% elif is_in_masai %}
-                            <li><a href="{% url 'cga' %}">Espace Masaï</a></li>
+                            <li><a href="{% url 'logistique' %}">Espace Masaï</a></li>
                         {% elif is_in_gl %}
                             <li><a href="{% url 'gl' %}">Espace GL</a></li>
                         {% elif is_in_cga %}
-                            <li><a href="{% url 'cga' %}">Espace CGA</a></li>
+                            <li><a href="{% url 'logistique' %}">Espace CGA</a></li>
                         {% else %}
                             <li><a href="{% url 'gl' %}">Espace GL</a></li>
                         {% endif %}
