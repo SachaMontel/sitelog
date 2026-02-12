@@ -45,6 +45,7 @@ urlpatterns = [
     path('delete_file_qg/<str:file_type>/<str:camp_id>/', views.delete_file_qg, name='delete_file_qg'),
     path('update_file_state/<str:file_type>/<str:camp_id>/', views.update_file_state, name='update_file_state'),
     path('update_file_state_cdc/<str:file_type>/<str:camp_id>/', views.update_file_state_cdc, name='update_file_state_cdc'),
+    path('update_date_jn/<str:camp_id>/', views.update_date_jn, name='update_date_jn'),
     path('modifier_commentaire/<str:file_type>/<str:camp_id>/', views.modifier_commentaire, name='modifier_commentaire'),
     path('change_etat/', views.change_etat, name='change_etat'),
     path('update_comment/', views.update_comment, name='update_comment'),

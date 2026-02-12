@@ -229,12 +229,12 @@ class Camp(models.Model):
     CR_prospe = models.FileField(upload_to='media/fichiers_camps/CR_prospe/', blank=True, null=True)
     CR_prospe_etat = models.CharField("État du CR prospection", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
     CR_prospe_commentaire = models.TextField("Commentaire du CR prospection", blank=True, null=True, default='')
-    CR_prospe_deadline = models.DateField("Date limite du CR prospection", blank=True, null=True)
+    CR_prospe_deadline = models.CharField("Date limite du CR prospection", max_length=50, blank=True, null=True, default='28 février')
 
     contrat_location = models.FileField(upload_to='media/fichiers_camps/contrat_location/', blank=True, null=True)
     contrat_location_etat = models.CharField("État du contrat de location", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
     contrat_location_commentaire = models.TextField("Commentaire du contrat de location", blank=True, null=True, default='')
-    contrat_location_deadline = models.CharField("Date limite du contrat de location",max_length=50,  blank=True, null=True, default='28 fevrier')
+    contrat_location_deadline = models.CharField("Date limite du contrat de location",max_length=50,  blank=True, null=True, default='28 février')
 
     Budget = models.FileField(upload_to='media/fichiers_camps/Budget/', blank=True, null=True)
     Budget_etat = models.CharField("État du budget", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
@@ -304,7 +304,7 @@ class Camp(models.Model):
     demande_prospe = models.FileField(upload_to='media/fichiers_camps/demande_prospe/', blank=True, null=True)
     demande_prospe_etat = models.CharField("État de la demande de prospe", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
     demande_prospe_commentaire = models.TextField("Commentaire de demande de prospe", blank=True, null=True, default='')
-    demande_prospe_deadline = models.CharField("Date limite demande de prospe", max_length=50, blank=True, null=True, default='30 Janvier')
+    demande_prospe_deadline = models.CharField("Date limite demande de prospe", max_length=50, blank=True, null=True, default='28 février')
 
     docACM = models.FileField(upload_to='media/fichiers_camps/docACM/', blank=True, null=True)
     docACM_etat = models.CharField("État de la demande de prospe", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
@@ -381,8 +381,102 @@ class Camp(models.Model):
     VFGC_commentaire = models.TextField("Commentaire de demande de prospe", blank=True, null=True, default='')
     VFGC_deadline = models.CharField("Date limite du VFGC", max_length=50, blank=True, null=True, default='30 Janvier')
 
-    
+    #2026
+    inscriptions_prio = models.CharField("Inscriptions prioritaires", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    inscriptions_prio_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    inscriptions_prio_etat = models.CharField("État des inscriptions prioritaires", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    inscriptions_prio_deadline = models.CharField("Date limite inscriptions prioritaires", max_length=50, blank=True, null=True, default='10 février')
 
+    budget_2026 = models.FileField(upload_to='media/fichiers_camps/budget_2026/', blank=True, null=True)
+    budget_2026_etat = models.CharField("État du budget 2026", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    budget_2026_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    budget_2026_deadline = models.CharField("Date limite budget 2026", max_length=50, blank=True, null=True, default='16 mars')
+
+    Budget_RDV = models.CharField("Budget RDV", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    Budget_RDV_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    Budget_RDV_etat = models.CharField("État du budget RDV", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    Budget_RDV_deadline = models.CharField("Date limite budget RDV", max_length=50, blank=True, null=True, default='23 au 29 mars')
+
+    JN_2026 = models.FileField(upload_to='media/fichiers_camps/jn_2026/', blank=True, null=True)
+    JN_2026_date = models.DateField("Date de JN choisie", blank=True, null=True)
+    JN_2026_etat = models.CharField("État du JN 2026", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    JN_2026_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    JN_2026_deadline = models.CharField("Date limite JN 2026", max_length=50, blank=True, null=True, default='mi-avril')
+
+    pppv1 = models.FileField(upload_to='media/fichiers_camps/pppv1/', blank=True, null=True)
+    pppv1_etat = models.CharField("État du PPPv1", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    pppv1_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    pppv1_deadline = models.CharField("Date limite PPPv1", max_length=50, blank=True, null=True, default='2 semaines avant les JN')
+
+    pav2 = models.FileField(upload_to='media/fichiers_camps/pav2/', blank=True, null=True)
+    pav2_etat = models.CharField("État du PAV2", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    pav2_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    pav2_deadline = models.CharField("Date limite PAV2", max_length=50, blank=True, null=True, default='2 semaines après les JN')
+
+    pvjv2 = models.FileField(upload_to='media/fichiers_camps/pvjv2/', blank=True, null=True)
+    pvjv2_etat = models.CharField("État du PVJV2", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    pvjv2_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    pvjv2_deadline = models.CharField("Date limite PVJV2", max_length=50, blank=True, null=True, default='2 semaines après les JN')
+
+    pvcv2 = models.FileField(upload_to='media/fichiers_camps/pvcv2/', blank=True, null=True)
+    pvcv2_etat = models.CharField("État du PVCv2", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    pvcv2_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    pvcv2_deadline = models.CharField("Date limite PVCv2", max_length=50, blank=True, null=True, default='2 semaines après les JN')
+
+    pavf = models.FileField(upload_to='media/fichiers_camps/pavf/', blank=True, null=True)
+    pavf_etat = models.CharField("État du PAVF", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    pavf_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    pavf_deadline = models.CharField("Date limite PAVF", max_length=50, blank=True, null=True, default='A définir')
+
+    pvjvf = models.FileField(upload_to='media/fichiers_camps/pvjvf/', blank=True, null=True)
+    pvjvf_etat = models.CharField("État du PVJVF", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    pvjvf_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    pvjvf_deadline = models.CharField("Date limite PVJVF", max_length=50, blank=True, null=True, default='A définir')
+
+    pvcvf = models.FileField(upload_to='media/fichiers_camps/pvcvf/', blank=True, null=True)
+    pvcvf_etat = models.CharField("État du PVCVF", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    pvcvf_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    pvcvf_deadline = models.CharField("Date limite PVCVF", max_length=50, blank=True, null=True, default='A définir')
+
+    grille_camp_2026 = models.FileField(upload_to='media/fichiers_camps/grille_camp_2026/', blank=True, null=True)
+    grille_camp_2026_etat = models.CharField("État de la grille camp 2026", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    grille_camp_2026_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    grille_camp_2026_deadline = models.CharField("Date limite grille camp 2026", max_length=50, blank=True, null=True, default='9 mars')
+    
+    maitrise_2026 = models.FileField(upload_to='media/fichiers_camps/maitrise_2026/', blank=True, null=True)
+    maitrise_2026_etat = models.CharField("État de la maitrise 2026", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    maitrise_2026_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    maitrise_2026_deadline = models.CharField("Date limite maitrise 2026", max_length=50, blank=True, null=True, default='5 avril')
+
+    sncf_2026 = models.FileField(upload_to='media/fichiers_camps/sncf_2026/', blank=True, null=True)
+    sncf_2026_etat = models.CharField("État de la sncf 2026", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    sncf_2026_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    sncf_2026_deadline = models.CharField("Date limite sncf 2026", max_length=50, blank=True, null=True, default='Dès que le contrat est signé')
+
+    grille_intendance_2026 = models.FileField(upload_to='media/fichiers_camps/grille_intendance_2026/', blank=True, null=True)
+    grille_intendance_2026_etat = models.CharField("État de la grille intendance 2026", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    grille_intendance_2026_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    grille_intendance_2026_deadline = models.CharField("Date limite grille intendance 2026", max_length=50, blank=True, null=True, default='23 mars')
+
+    commandes_intendance_2026 = models.FileField(upload_to='media/fichiers_camps/commandes_intendance_2026/', blank=True, null=True)
+    commandes_intendance_2026_etat = models.CharField("État de la commandes intendance 2026", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    commandes_intendance_2026_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    commandes_intendance_2026_deadline = models.CharField("Date limite commandes intendance 2026", max_length=50, blank=True, null=True, default='27 avril')
+
+    voiture_2026 = models.FileField(upload_to='media/fichiers_camps/voiture_2026/', blank=True, null=True)
+    voiture_2026_etat = models.CharField("État de la voiture 2026", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    voiture_2026_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    voiture_2026_deadline = models.CharField("Date limite voiture 2026", max_length=50, blank=True, null=True, default='18 mai')
+
+    assurance_2026 = models.FileField(upload_to='media/fichiers_camps/assurance_2026/', blank=True, null=True)
+    assurance_2026_etat = models.CharField("État de l'assurance 2026", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    assurance_2026_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    assurance_2026_deadline = models.CharField("Date limite assurance 2026", max_length=50, blank=True, null=True, default='15 avril')
+
+    billets_2026 = models.FileField(upload_to='media/fichiers_camps/billets_2026/', blank=True, null=True)
+    billets_2026_etat = models.CharField("État des billets 2026", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
+    billets_2026_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
+    billets_2026_deadline = models.CharField("Date limite billets 2026", max_length=50, blank=True, null=True, default='')
 
 
     def count_validated_files(self):
@@ -410,7 +504,26 @@ self.JN_etat,
 self.voiture_etat,
 self.projetvf_etat,
 self.Budgetreal_etat,
-self.docACM_etat
+self.docACM_etat, 
+self.inscriptions_prio_etat,
+self.budget_2026_etat,
+self.Budget_RDV_etat,
+self.JN_2026_etat,
+self.pppv1_etat,
+self.pav2_etat,
+self.pvjv2_etat,
+self.pvcv2_etat,
+self.pavf_etat,
+self.pvjvf_etat,
+self.pvcvf_etat,
+self.grille_camp_2026_etat,
+self.maitrise_2026_etat,
+self.sncf_2026_etat,
+self.grille_intendance_2026_etat,
+self.commandes_intendance_2026_etat,
+self.voiture_2026_etat,
+self.assurance_2026_etat,
+self.billets_2026_etat,
         ]
         return sum(1 for field in fields if field in valid_states) + (1 if self.PAF_etat == 'Rendu' else 0)
 
@@ -438,7 +551,26 @@ self.JN_etat,
 self.voiture_etat,
 self.projetvf_etat,
 self.Budgetreal_etat,
-self.docACM_etat
+self.docACM_etat, 
+self.inscriptions_prio_etat,
+self.budget_2026_etat,
+self.Budget_RDV_etat,
+self.JN_2026_etat,
+self.pppv1_etat,
+self.pav2_etat,
+self.pvjv2_etat,
+self.pvcv2_etat,
+self.pavf_etat,
+self.pvjvf_etat,
+self.pvcvf_etat,
+self.grille_camp_2026_etat,
+self.maitrise_2026_etat,
+self.sncf_2026_etat,
+self.grille_intendance_2026_etat,
+self.commandes_intendance_2026_etat,
+self.voiture_2026_etat,
+self.assurance_2026_etat,
+self.billets_2026_etat,
 
         ]
         return sum(1 for field in fields if field in rendered_states)
