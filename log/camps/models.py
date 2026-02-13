@@ -50,6 +50,8 @@ GL_CHOICES = (
     ('Dor Vador', 'Dor Vador'),
     ('Edmond Fleg', 'Edmond Fleg'),
     ('Neuilly Laurent Kern', 'Neuilly Laurent Kern'),
+    ('Charenton', 'Charenton'),
+    ('Neuilly LK', 'Neuilly LK'),
 )
 
 NUMERO_CAMP_CHOICES = (
