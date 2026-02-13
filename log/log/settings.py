@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'log',
     'fichiers',
     'annee',
+    'anymail',
 ]
 
 MIDDLEWARE = [
@@ -154,20 +155,12 @@ LOGIN_REDIRECT_URL = 'home'  # Remplacez 'home' par le nom de la vue ou URL de r
 # Redirection après logout
 LOGOUT_REDIRECT_URL = 'login'
 
-# Configuration Email
-# Pour le développement local, utilisez le backend console
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Configuration Email - Brevo (ex-Sendinblue)
+EMAIL_BACKEND = 'anymail.backends.brevo.EmailBackend'
 
-# Pour la production, utilisez le backend SMTP
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.rezel.net'
-EMAIL_PORT = 25
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = False
-EMAIL_HOST_USER = 'eeif@rezel.net'
-EMAIL_HOST_PASSWORD = ''  # Mot de passe si nécessaire
-DEFAULT_FROM_EMAIL = 'eeif@rezel.net'
-SERVER_EMAIL = 'eeif@rezel.net'
+ANYMAIL = {
+    'BREVO_API_KEY': os.environ.get('BREVO_API_KEY', ''),
+}
 
-# Timeout pour éviter les blocages
-EMAIL_TIMEOUT = 10
+DEFAULT_FROM_EMAIL = 'sacha.montel@eeif.org'
+SERVER_EMAIL = 'sacha.montel@eeif.org'

@@ -884,7 +884,7 @@ def upload_file(request, file_type, camp_id):
             subject='Un fichier a été téléversé',
             message=f'Un fichier de type "{file_label}" a été téléversé pour le camp {camp.numero}. '
                     f'Connectez-vous sur https://eeif.rezel.net/home/',
-            from_email='eeif@rezel.net',  # Remplacez par votre adresse e-mail
+            from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=receveur,
         )
 
@@ -974,7 +974,7 @@ def upload_file_qg(request, file_type, camp_id):
             subject='Retour QG',
             message=f'Un fichier de type "{file_label}" a été téléversé pour le camp {camp.numero}. '
                     f'Connectez-vous sur https://eeif.rezel.net/home/',
-            from_email='eeif@rezel.net',  # Remplacez par votre adresse e-mail
+            from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[camp.mail],
         )
 
@@ -1168,6 +1168,9 @@ def update_file_state_cdc(request, file_type, camp_id):
         if file_type not in slugs:
             return HttpResponse("Type de fichier invalide.", status=400)
 
+        # Récupérer l'ancien état
+        old_state = getattr(camp, f"{file_type}_etat", '')
+
         # Mettre à jour l'état du fichier dynamiquement
         setattr(camp, f"{file_type}_etat", new_state)
 
@@ -1175,6 +1178,33 @@ def update_file_state_cdc(request, file_type, camp_id):
         camp.save()
 
         # Envoi d'un email de notification
+        file_label = next((doc['name'] for doc in documents if doc['slug'] == file_type), file_type)
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+
+        # Destinataires : tous les utilisateurs du groupe 'cga'
+        recipients = list(User.objects.filter(groups__name='cga', email__isnull=False).exclude(email='').values_list('email', flat=True))
+
+        # Ajouter les utilisateurs du groupe anbc ou anbm selon la branche
+        if camp.branche == 'BC':
+            recipients += list(User.objects.filter(groups__name='anbc', email__isnull=False).exclude(email='').values_list('email', flat=True))
+        elif camp.branche == 'BM':
+            recipients += list(User.objects.filter(groups__name='anbm', email__isnull=False).exclude(email='').values_list('email', flat=True))
+
+        # Supprimer les doublons
+        recipients = list(set(recipients))
+
+        if recipients:
+            try:
+                send_mail(
+                    subject=f'Modification d\'état - Camp {camp.numero}',
+                    message=f'L\'état de l\'étape "{file_label}" du camp {camp.numero} a été modifié de "{old_state}" vers "{new_state}" par {request.user.first_name} {request.user.last_name}.\n\nConnectez-vous sur https://eeif.rezel.net/home/ pour voir les détails.',
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=recipients,
+                    fail_silently=True,
+                )
+            except Exception as e:
+                print(f"Erreur envoi mail update_file_state_cdc: {e}")
 
         return redirect('cdc')
 
@@ -1249,6 +1279,9 @@ def update_file_state(request, file_type, camp_id):
         if file_type not in slugs:
             return HttpResponse("Type de fichier invalide.", status=400)
 
+        # Récupérer l'ancien état
+        old_state = getattr(camp, f"{file_type}_etat", '')
+
         # Mettre à jour l'état du fichier dynamiquement
         setattr(camp, f"{file_type}_etat", new_state)
 
@@ -1256,12 +1289,31 @@ def update_file_state(request, file_type, camp_id):
         camp.save()
 
         # Envoi d'un email de notification
-        send_mail(
-            subject='Retour du QG',
-            message=f"L'état du fichier {file_type} a été modifié pour le camp {camp.numero}. Connectez-vous sur https://eeif.rezel.net/home",
-            from_email='eeif@rezel.net',  # Remplacez par votre adresse e-mail
-            recipient_list=[camp.mail],
-        )
+        file_label = next((doc['name'] for doc in documents if doc['slug'] == file_type), file_type)
+        recipients = []
+
+        # Email du camp
+        if camp.mail:
+            recipients.append(camp.mail)
+
+        # Emails des utilisateurs assignés au camp
+        assigned_emails = list(camp.users.filter(email__isnull=False).exclude(email='').values_list('email', flat=True))
+        recipients += assigned_emails
+
+        # Supprimer les doublons
+        recipients = list(set(recipients))
+
+        if recipients:
+            try:
+                send_mail(
+                    subject=f'Retour du QG - Camp {camp.numero}',
+                    message=f'L\'état de l\'étape "{file_label}" du camp {camp.numero} a été modifié de "{old_state}" vers "{new_state}" par {request.user.first_name} {request.user.last_name}.\n\nConnectez-vous sur https://eeif.rezel.net/home/ pour voir les détails.',
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=recipients,
+                    fail_silently=True,
+                )
+            except Exception as e:
+                print(f"Erreur envoi mail update_file_state: {e}")
 
         return redirect('camp_detail', numero=camp_id)
 
@@ -1331,12 +1383,31 @@ def modifier_commentaire(request, file_type, camp_id):
         camp.save()
 
         # Envoi d'un email de notification
-        send_mail(
-            subject='Retour du QG',
-            message=f"Le commentaire concernant le fichier {file_type} a été modifié pour le camp {camp.numero}. Connectez-vous sur https://eeif.rezel.net/home",
-            from_email='eeif@rezel.net',  # Remplacez par votre adresse e-mail
-            recipient_list=[camp.mail],
-        )
+        file_label = next((doc['name'] for doc in documents if doc['slug'] == file_type), file_type)
+        recipients = []
+
+        # Email du camp
+        if camp.mail:
+            recipients.append(camp.mail)
+
+        # Emails des utilisateurs assignés au camp
+        assigned_emails = list(camp.users.filter(email__isnull=False).exclude(email='').values_list('email', flat=True))
+        recipients += assigned_emails
+
+        # Supprimer les doublons
+        recipients = list(set(recipients))
+
+        if recipients:
+            try:
+                send_mail(
+                    subject=f'Retour du QG - Camp {camp.numero}',
+                    message=f'Le commentaire de l\'étape "{file_label}" du camp {camp.numero} a été modifié par {request.user.first_name} {request.user.last_name}.\n\nNouveau commentaire : {nouveau_commentaire}\n\nConnectez-vous sur https://eeif.rezel.net/home/ pour voir les détails.',
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=recipients,
+                    fail_silently=True,
+                )
+            except Exception as e:
+                print(f"Erreur envoi mail modifier_commentaire: {e}")
 
     # Rediriger vers la page principale après la mise à jour
     return redirect('camp_detail', numero=camp_id)

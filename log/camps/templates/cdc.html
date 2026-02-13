@@ -137,6 +137,8 @@
                     <td>{{ document.deadline|default:"Aucune date" }}</td>
                     <td>
                         {% if document.slug == "inscriptions_prio" or document.slug == "JN_2026" or document.slug == "Budget_RDV" or document.slug == "voiture_2026" %}
+                        {% elif document.slug == "budget_2026" %}
+                        Budget dans le drive et sheet à remplir ->
                         {% elif document.slug == "maitrise_2026" %}
                         <div style="display: flex; gap: 5px;">
                             <a href="#" target="_blank" class="drive-link"><span class="drive-title">1</span></a>
@@ -177,6 +179,20 @@
                         <a href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ26K1yzjpQfdH1TQ_Ps29PMDLcN0CCQZTAu0t6ebIy0ibo7prhDpEQyQvML45bRMJEofwrN9-Z6" target="_blank" class="drive-link">
                             <span class="drive-title">Prendre RDV</span>
                         </a>
+                        {% elif document.slug == "budget_2026" %}
+                        <div style="display: flex; gap: 5px;">
+                            <a href="{{ camp.drive }}" target="_blank" class="drive-link">
+                                <span class="drive-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                                    </svg>
+                                </span>
+                                <span class="drive-title">Drive du Camp</span>
+                            </a>
+                            <a href="https://docs.google.com/spreadsheets/d/1iM69ybu0W9jHFs4yIhDR8tM0wAI0tfBHrhECsTLM17s/edit?gid=0#gid=0" target="_blank" class="drive-link">
+                                <span class="drive-title">Parents trez</span>
+                            </a>
+                        </div>
                         {% elif document.slug == "voiture_2026" %}
                         <a href="#" target="_blank" class="drive-link">
                             <span class="drive-title">Sheet à remplir</span>
