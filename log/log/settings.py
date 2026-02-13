@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-sh9&9!w*1ts42)e_)=n!=4!^1y2_^z@=!9+-$r0c@gvi3qd8ro'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['eeif.rezel.net', '127.0.0.1', 'localhost']
 
@@ -157,10 +157,6 @@ LOGOUT_REDIRECT_URL = 'login'
 
 # Configuration Email - Brevo (ex-Sendinblue)
 EMAIL_BACKEND = 'anymail.backends.brevo.EmailBackend'
-
-ANYMAIL = {
-    'BREVO_API_KEY': os.environ.get('BREVO_API_KEY', ''),
-}
 
 DEFAULT_FROM_EMAIL = 'sacha.montel@eeif.org'
 SERVER_EMAIL = 'sacha.montel@eeif.org'
