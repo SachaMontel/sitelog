@@ -51,6 +51,7 @@
 </style>
 <body>
     <a href="{% url 'home' %}" class="home-button">Home</a>
+    <a href="{% url 'logistique' %}" class="home-button" style="left: 100px;">Logistique</a>
     <a href="{% url 'statbc' %}" class="stats-button">Statistiques</a>
     <header>
         <h1>Liste des Camps BC</h1>
@@ -63,6 +64,7 @@
                     <th>Chefs de Camp</th>
                     <th>Groupes Locaux</th>
                     <th>Étapes Rendues</th>
+                    <th>Retour Fait</th>
                     <th>Étapes Validées</th>
                 </tr>
             </thead>
@@ -92,6 +94,13 @@
                     etat-non-rendu
                     {% endif %}
                     ">{{ camp.fichiers_rendus|default_if_none:"" }}</td>
+                    <td class= "
+                    {% if camp.fichiers_retour_fait > 0 %}
+                    etat-retour
+                    {% else %}
+                    etat-non-rendu
+                    {% endif %}
+                    ">{{ camp.fichiers_retour_fait|default_if_none:"" }}</td>
                     <td class="color-scale" data-value="{{ camp.fichiers_valides }}">
                         {{ camp.fichiers_valides|default_if_none:"" }}
                     </td>                    

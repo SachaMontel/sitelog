@@ -576,8 +576,56 @@ self.billets_2026_etat,
         return sum(1 for field in fields if field in rendered_states)
 
 
+    def count_retour_fait_files(self):
+        """Compter le nombre de fichiers avec retour fait."""
+        retour_states = ['Retour fait']
+        fields = [self.fil_rouge_etat,
+self.fil_bleu_etat,
+self.fil_vert_etat,
+self.CR_prospe_etat,
+self.grille_assurance_etat,
+self.grille_ddcs_etat,
+self.grille_intendance_etat,
+self.fiche_sncf_etat,
+self.procuration_banque_etat,
+self.recepisse_etat,
+self.chemins_explo_etat,
+self.contrat_location_etat,
+self.Budget_etat,
+self.grille_camp_etat,
+self.demande_prospe_etat,
+self.projetv1_etat,
+self.intendance2_etat,
+self.JN_etat,
+self.voiture_etat,
+self.projetvf_etat,
+self.Budgetreal_etat,
+self.docACM_etat,
+self.inscriptions_prio_etat,
+self.budget_2026_etat,
+self.Budget_RDV_etat,
+self.JN_2026_etat,
+self.pppv1_etat,
+self.pav2_etat,
+self.pvjv2_etat,
+self.pvcv2_etat,
+self.pavf_etat,
+self.pvjvf_etat,
+self.pvcvf_etat,
+self.grille_camp_2026_etat,
+self.maitrise_2026_etat,
+self.sncf_2026_etat,
+self.grille_intendance_2026_etat,
+self.commandes_intendance_2026_etat,
+self.voiture_2026_etat,
+self.assurance_2026_etat,
+self.billets_2026_etat,
+        ]
+        return sum(1 for field in fields if field in retour_states)
+
     fichiers_valides = property(count_validated_files)
     fichiers_rendus = property(count_rendered_files)
+    fichiers_retour_fait = property(count_retour_fait_files)
 
     def delete_old_file(self, field_name):
         """Supprime l'ancien fichier avant d'enregistrer un nouveau fichier."""
