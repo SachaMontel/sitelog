@@ -242,8 +242,7 @@ def cdc(request):
             {'name': 'Grille intendance', 'slug': 'grille_intendance_2026', 'deadline': camp.grille_intendance_2026_deadline, 'file': camp.grille_intendance_2026, 'state': camp.grille_intendance_2026_etat, 'comment': camp.grille_intendance_2026_commentaire},
             {'name': 'Commandes intendance', 'slug': 'commandes_intendance_2026', 'deadline': camp.commandes_intendance_2026_deadline, 'file': camp.commandes_intendance_2026, 'state': camp.commandes_intendance_2026_etat, 'comment': camp.commandes_intendance_2026_commentaire},
             {'name': 'Voiture', 'slug': 'voiture_2026', 'deadline': camp.voiture_2026_deadline, 'file': camp.voiture_2026, 'state': camp.voiture_2026_etat, 'comment': camp.voiture_2026_commentaire},
-            {'name': 'Assurance', 'slug': 'assurance_2026', 'deadline': camp.assurance_2026_deadline, 'file': camp.assurance_2026, 'state': camp.assurance_2026_etat, 'comment': camp.assurance_2026_commentaire},
-            {'name': 'Billets', 'slug': 'billets_2026', 'deadline': camp.billets_2026_deadline, 'file': camp.billets_2026, 'state': camp.billets_2026_etat, 'comment': camp.billets_2026_commentaire},
+            {'name': 'Billets SNCF', 'slug': 'billets_2026', 'deadline': camp.billets_2026_deadline, 'file': camp.billets_2026, 'state': camp.billets_2026_etat, 'comment': camp.billets_2026_commentaire},
         ]
     elif camp.branche == 'BP':
         # Nouveaux documents ajoutés
@@ -321,8 +320,7 @@ def statbb(request):
         {'name': 'Grille intendance', 'slug': 'grille_intendance_2026'},
         {'name': 'Commandes intendance', 'slug': 'commandes_intendance_2026'},
         {'name': 'Voiture', 'slug': 'voiture_2026'},
-        {'name': 'Assurance', 'slug': 'assurance_2026'},
-        {'name': 'Billets', 'slug': 'billets_2026'},
+        {'name': 'Billets SNCF', 'slug': 'billets_2026'},
         # {'name': 'Upload des prio', 'slug': 'PAF'},
         # {'name': 'Maitrise', 'slug': 'grille_ddcs'},
         # {'name': 'Grille de Camp', 'slug': 'grille_camp'},
@@ -406,8 +404,7 @@ def statbc(request):
         {'name': 'Grille intendance', 'slug': 'grille_intendance_2026'},
         {'name': 'Commandes intendance', 'slug': 'commandes_intendance_2026'},
         {'name': 'Voiture', 'slug': 'voiture_2026'},
-        {'name': 'Assurance', 'slug': 'assurance_2026'},
-        {'name': 'Billets', 'slug': 'billets_2026'},
+        {'name': 'Billets SNCF', 'slug': 'billets_2026'},
         # {'name': 'Maitrise', 'slug': 'grille_ddcs'},
         # {'name': 'Grille de Camp', 'slug': 'grille_camp'},
         # {'name': 'Projet pédagogique V1', 'slug': 'projetv1'},
@@ -628,8 +625,7 @@ def statbm(request):
         {'name': 'Grille intendance', 'slug': 'grille_intendance_2026'},
         {'name': 'Commandes intendance', 'slug': 'commandes_intendance_2026'},
         {'name': 'Voiture', 'slug': 'voiture_2026'},
-        {'name': 'Assurance', 'slug': 'assurance_2026'},
-        {'name': 'Billets', 'slug': 'billets_2026'},
+        {'name': 'Billets SNCF', 'slug': 'billets_2026'},
         # {'name': 'Maitrise', 'slug': 'grille_ddcs'},
         # {'name': 'Grille de Camp', 'slug': 'grille_camp'},
         # {'name': 'Projet pédagogique V1', 'slug': 'projetv1'},
@@ -761,8 +757,7 @@ def camp_detail(request, numero):
             {'name': 'Grille intendance', 'slug': 'grille_intendance_2026', 'deadline': camp.grille_intendance_2026_deadline, 'file': camp.grille_intendance_2026, 'state': camp.grille_intendance_2026_etat, 'comment': camp.grille_intendance_2026_commentaire},
             {'name': 'Commandes intendance', 'slug': 'commandes_intendance_2026', 'deadline': camp.commandes_intendance_2026_deadline, 'file': camp.commandes_intendance_2026, 'state': camp.commandes_intendance_2026_etat, 'comment': camp.commandes_intendance_2026_commentaire},
             {'name': 'Voiture', 'slug': 'voiture_2026', 'deadline': camp.voiture_2026_deadline, 'file': camp.voiture_2026, 'state': camp.voiture_2026_etat, 'comment': camp.voiture_2026_commentaire},
-            {'name': 'Assurance', 'slug': 'assurance_2026', 'deadline': camp.assurance_2026_deadline, 'file': camp.assurance_2026, 'state': camp.assurance_2026_etat, 'comment': camp.assurance_2026_commentaire},
-            {'name': 'Billets', 'slug': 'billets_2026', 'deadline': camp.billets_2026_deadline, 'file': camp.billets_2026, 'state': camp.billets_2026_etat, 'comment': camp.billets_2026_commentaire},
+            {'name': 'Billets SNCF', 'slug': 'billets_2026', 'deadline': camp.billets_2026_deadline, 'file': camp.billets_2026, 'state': camp.billets_2026_etat, 'comment': camp.billets_2026_commentaire},
         ]
     elif camp.branche == 'BP':
         documents=[{'name': 'Budget prévisionnel', 'slug': 'BP', 'deadline': '4 Février', 'file': camp.BP, 'state': camp.BP_etat, 'comment': camp.BP_commentaire},
@@ -845,8 +840,7 @@ def upload_file(request, file_type, camp_id):
             {'name': 'Grille intendance 2026', 'slug': 'grille_intendance_2026'},
             {'name': 'Commandes intendance 2026', 'slug': 'commandes_intendance_2026'},
             {'name': 'Voiture 2026', 'slug': 'voiture_2026'},
-            {'name': 'Assurance 2026', 'slug': 'assurance_2026'},
-            {'name': 'Billets 2026', 'slug': 'billets_2026'},
+            {'name': 'Billets SNCF', 'slug': 'billets_2026'},
         ]
 
         # Vérification du fichier envoyé
@@ -950,8 +944,7 @@ def upload_file_qg(request, file_type, camp_id):
             {'name': 'Grille intendance 2026', 'slug': 'grille_intendance_2026'},
             {'name': 'Commandes intendance 2026', 'slug': 'commandes_intendance_2026'},
             {'name': 'Voiture 2026', 'slug': 'voiture_2026'},
-            {'name': 'Assurance 2026', 'slug': 'assurance_2026'},
-            {'name': 'Billets 2026', 'slug': 'billets_2026'},
+            {'name': 'Billets SNCF', 'slug': 'billets_2026'},
         ]
 
         # Vérification du fichier envoyé
@@ -1029,8 +1022,7 @@ def delete_file(request, file_type, camp_id):
         {'name': 'Grille intendance 2026', 'slug': 'grille_intendance_2026'},
         {'name': 'Commandes intendance 2026', 'slug': 'commandes_intendance_2026'},
         {'name': 'Voiture 2026', 'slug': 'voiture_2026'},
-        {'name': 'Assurance 2026', 'slug': 'assurance_2026'},
-        {'name': 'Billets 2026', 'slug': 'billets_2026'},
+        {'name': 'Billets SNCF', 'slug': 'billets_2026'},
     ]
 
     # Vérifier si le type de fichier est valide
@@ -1092,8 +1084,7 @@ def delete_file_qg(request, file_type, camp_id):
         {'name': 'Grille intendance 2026', 'slug': 'grille_intendance_2026'},
         {'name': 'Commandes intendance 2026', 'slug': 'commandes_intendance_2026'},
         {'name': 'Voiture 2026', 'slug': 'voiture_2026'},
-        {'name': 'Assurance 2026', 'slug': 'assurance_2026'},
-        {'name': 'Billets 2026', 'slug': 'billets_2026'},
+        {'name': 'Billets SNCF', 'slug': 'billets_2026'},
     ]
 
     # Vérifier si le type de fichier est valide
@@ -1159,8 +1150,7 @@ def update_file_state_cdc(request, file_type, camp_id):
             {'name': 'Grille intendance 2026', 'slug': 'grille_intendance_2026'},
             {'name': 'Commandes intendance 2026', 'slug': 'commandes_intendance_2026'},
             {'name': 'Voiture 2026', 'slug': 'voiture_2026'},
-            {'name': 'Assurance 2026', 'slug': 'assurance_2026'},
-            {'name': 'Billets 2026', 'slug': 'billets_2026'},
+            {'name': 'Billets SNCF', 'slug': 'billets_2026'},
         ]
 
         # Vérifier si le type de fichier est valide
@@ -1270,8 +1260,7 @@ def update_file_state(request, file_type, camp_id):
             {'name': 'Grille intendance 2026', 'slug': 'grille_intendance_2026'},
             {'name': 'Commandes intendance 2026', 'slug': 'commandes_intendance_2026'},
             {'name': 'Voiture 2026', 'slug': 'voiture_2026'},
-            {'name': 'Assurance 2026', 'slug': 'assurance_2026'},
-            {'name': 'Billets 2026', 'slug': 'billets_2026'},
+            {'name': 'Billets SNCF', 'slug': 'billets_2026'},
         ]
 
         # Vérifier si le type de fichier est valide
@@ -1367,8 +1356,7 @@ def modifier_commentaire(request, file_type, camp_id):
             {'name': 'Grille intendance 2026', 'slug': 'grille_intendance_2026'},
             {'name': 'Commandes intendance 2026', 'slug': 'commandes_intendance_2026'},
             {'name': 'Voiture 2026', 'slug': 'voiture_2026'},
-            {'name': 'Assurance 2026', 'slug': 'assurance_2026'},
-            {'name': 'Billets 2026', 'slug': 'billets_2026'},
+            {'name': 'Billets SNCF', 'slug': 'billets_2026'},
         ]
 
         # Vérifier si le type de fichier est valide

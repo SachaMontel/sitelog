@@ -141,11 +141,11 @@
                         Budget dans le drive et sheet à remplir ->
                         {% elif document.slug == "maitrise_2026" %}
                         <div style="display: flex; gap: 5px;">
-                            <a href="#" target="_blank" class="drive-link"><span class="drive-title">1</span></a>
-                            <a href="#" target="_blank" class="drive-link"><span class="drive-title">2</span></a>
-                            <a href="#" target="_blank" class="drive-link"><span class="drive-title">3</span></a>
-                            <a href="#" target="_blank" class="drive-link"><span class="drive-title">4</span></a>
-                            <a href="#" target="_blank" class="drive-link"><span class="drive-title">5</span></a>
+                            <a href="https://docs.google.com/spreadsheets/d/19-XhnNWgz25q8s983eGOCPkvjDsN_IJanGVI04Mgxu4/edit?usp=share_link" target="_blank" class="drive-link"><span class="drive-title">1</span></a>
+                            <a href="https://docs.google.com/spreadsheets/d/1ElePnAQrr1uE5F1W63wnI943VU9ZbUow1BORJp0CyAY/edit?usp=sharing" target="_blank" class="drive-link"><span class="drive-title">2</span></a>
+                            <a href="https://docs.google.com/spreadsheets/d/1iM69ybu0W9jHFs4yIhDR8tM0wAI0tfBHrhECsTLM17s/edit?gid=0#gid=0" target="_blank" class="drive-link"><span class="drive-title">3</span></a>
+                            <a href="https://docs.google.com/spreadsheets/d/12SELA0up3A7cUBDJ2x_xfePyoUhA78JI_IY41eV1LuU/edit?gid=782440481#gid=782440481" target="_blank" class="drive-link"><span class="drive-title">4</span></a>
+                            <a href="https://docs.google.com/spreadsheets/d/1YW7fUb1vDT59qZoZwWWS26d5CM4WDUyzuNQLR380NYo/edit?usp=sharing" target="_blank" class="drive-link"><span class="drive-title">5</span></a>
                         </div>
                         {% elif camp.branche == "BC" %}
                         {% if document.slug != 'PAF' %}
@@ -205,6 +205,10 @@
                                 </svg>
                             </span>
                             <span class="drive-title">Drive du Camp</span>
+                        </a>
+                        {% elif document.slug == "grille_intendance_2026" or document.slug == "commandes_intendance_2026" %}
+                        <a href="https://intendancei.vercel.app" target="_blank" class="drive-link">
+                            <span class="drive-title">IntendancEI</span>
                         </a>
                         {% elif document.slug == "JN_2026" %}
                         <form method="post" action="{% url 'update_date_jn' camp.numero %}" class="state-form">

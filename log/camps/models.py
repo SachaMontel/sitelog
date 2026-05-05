@@ -458,12 +458,12 @@ class Camp(models.Model):
     grille_intendance_2026 = models.FileField(upload_to='media/fichiers_camps/grille_intendance_2026/', blank=True, null=True)
     grille_intendance_2026_etat = models.CharField("État de la grille intendance 2026", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
     grille_intendance_2026_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
-    grille_intendance_2026_deadline = models.CharField("Date limite grille intendance 2026", max_length=50, blank=True, null=True, default='23 mars')
+    grille_intendance_2026_deadline = models.CharField("Date limite grille intendance 2026", max_length=50, blank=True, null=True, default='24 avril')
 
     commandes_intendance_2026 = models.FileField(upload_to='media/fichiers_camps/commandes_intendance_2026/', blank=True, null=True)
     commandes_intendance_2026_etat = models.CharField("État de la commandes intendance 2026", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
     commandes_intendance_2026_commentaire = models.TextField("Commentaire", blank=True, null=True, default='')
-    commandes_intendance_2026_deadline = models.CharField("Date limite commandes intendance 2026", max_length=50, blank=True, null=True, default='27 avril')
+    commandes_intendance_2026_deadline = models.CharField("Date limite commandes intendance 2026", max_length=50, blank=True, null=True, default='4 mai')
 
     voiture_2026 = models.FileField(upload_to='media/fichiers_camps/voiture_2026/', blank=True, null=True)
     voiture_2026_etat = models.CharField("État de la voiture 2026", max_length=50, choices=ETAT_CHOICES, blank=True, null=True, default='Non rendu')
