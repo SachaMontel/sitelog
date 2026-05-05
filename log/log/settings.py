@@ -157,6 +157,5 @@ LOGOUT_REDIRECT_URL = 'login'
 
 # Configuration Email - Brevo (ex-Sendinblue)
 EMAIL_BACKEND = 'anymail.backends.brevo.EmailBackend'
-
 DEFAULT_FROM_EMAIL = 'sacha.montel@eeif.org'
 SERVER_EMAIL = 'sacha.montel@eeif.org'
