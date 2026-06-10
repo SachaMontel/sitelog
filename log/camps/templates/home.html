@@ -165,14 +165,12 @@
                             </a>
                         </div>
                         <!-- Ajoutez plus de fichiers si nécessaire -->
-                        {% if user.is_authenticated %}
                         <div class="file-item">
                             <a href="{% url 'fichiers:upload_excel' %}" aria-label="Référentiel">
                                 <img src="{% static 'images/excel.png' %}" alt="Link">
                                 <p>Export fiches sanitaires</p>
                             </a>
                         </div>
-                        {% endif %}
                     </div>
                 </div>
             </div>
