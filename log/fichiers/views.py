@@ -1,37 +1,36 @@
 import os
+import shutil
+import tempfile
+
 import pandas as pd
 import requests
-import shutil
+from django.http import FileResponse
 from django.shortcuts import render
-from django.http import HttpResponse
-from .forms import UploadFileForm
 from urllib.parse import urlparse, parse_qs
 import mimetypes
 
-# Dossier temporaire pour stocker les fichiers téléchargés
-DOSSIER_TEMP = "media/fiches_sanitaires"
-ZIP_PATH = "media/fiches_sanitaires.zip"
+from .forms import UploadFileForm
 
 # Nom exact de la colonne contenant les liens
-COLONNE_FICHES = "Fiche sanitaire - A télécharger dans le menu  [ Accueil > Documents ]"
+COLONNE_FICHES = "Fiche sanitaire (nouvelle) - A télécharger dans le menu  [ Accueil > Documents ]"
 
-# Assurer que le dossier existe avant toute opération
-if not os.path.exists(DOSSIER_TEMP):
-    os.makedirs(DOSSIER_TEMP, exist_ok=True)
+# Délai max (en secondes) pour télécharger une fiche
+TIMEOUT_TELECHARGEMENT = 30
+
 
 # Fonction pour télécharger les fichiers
-def telecharger_fichier(url, dossier):
+def telecharger_fichier(url, dossier, index):
     try:
         parsed_url = urlparse(url)
         query_params = parse_qs(parsed_url.query)
         nom_fichier = query_params.get("id", [None])[0]  # Prend l'ID du document comme nom de fichier
 
         if not nom_fichier:
-            nom_fichier = os.path.basename(parsed_url.path)
+            nom_fichier = os.path.basename(parsed_url.path) or f"fiche_{index}"
 
         chemin_fichier = os.path.join(dossier, nom_fichier)
 
-        response = requests.get(url, stream=True)
+        response = requests.get(url, stream=True, timeout=TIMEOUT_TELECHARGEMENT)
         response.raise_for_status()
 
         content_type = response.headers.get("Content-Type", "")
@@ -44,15 +43,22 @@ def telecharger_fichier(url, dossier):
         elif "png" in content_type:
             extension = ".png"
 
-        chemin_fichier += extension
+        if extension and not chemin_fichier.lower().endswith(extension.lower()):
+            chemin_fichier += extension
+
+        # Évite d'écraser un fichier déjà téléchargé portant le même nom
+        if os.path.exists(chemin_fichier):
+            base, ext = os.path.splitext(chemin_fichier)
+            chemin_fichier = f"{base}_{index}{ext}"
 
         with open(chemin_fichier, "wb") as fichier:
-            for chunk in response.iter_content(chunk_size=1024):
+            for chunk in response.iter_content(chunk_size=8192):
                 fichier.write(chunk)
 
         return chemin_fichier
-    except Exception as e:
+    except Exception:
         return None
+
 
 # Vue Django pour traiter l'upload
 def upload_excel(request):
@@ -61,40 +67,72 @@ def upload_excel(request):
         if form.is_valid():
             fichier_excel = request.FILES["fichier"]
 
-            df = pd.read_excel(fichier_excel, engine="openpyxl")
+            try:
+                df = pd.read_excel(fichier_excel, engine="openpyxl")
+            except ImportError:
+                return render(request, "upload.html", {
+                    "form": form,
+                    "error": "Le module openpyxl n'est pas installé sur le serveur. "
+                             "Exécuter : pip install openpyxl, puis redémarrer le service.",
+                })
+            except Exception:
+                return render(request, "upload.html", {
+                    "form": form,
+                    "error": "Impossible de lire ce fichier. Vérifie qu'il s'agit bien d'un export Excel (.xlsx).",
+                })
 
             if COLONNE_FICHES not in df.columns:
-                return HttpResponse(f"Erreur : Colonne '{COLONNE_FICHES}' introuvable.", status=400)
+                return render(request, "upload.html", {
+                    "form": form,
+                    "error": f"Colonne « {COLONNE_FICHES} » introuvable dans le fichier. "
+                             "Vérifie que c'est bien l'export contenant les fiches sanitaires.",
+                })
 
             liens = df[COLONNE_FICHES].dropna().unique()
-            fichiers_telecharges = []
 
-            for lien in liens:
-                if isinstance(lien, str) and lien.startswith("http"):
-                    fichier = telecharger_fichier(lien, DOSSIER_TEMP)
-                    if fichier:
-                        fichiers_telecharges.append(fichier)
+            # Dossier temporaire propre à cette requête (pas de collision entre
+            # deux utilisateurs, pas de dépendance au répertoire courant du process)
+            dossier_temp = tempfile.mkdtemp(prefix="fiches_sanitaires_")
+            try:
+                nb_total = 0
+                nb_ok = 0
+                for index, lien in enumerate(liens):
+                    if isinstance(lien, str) and lien.startswith("http"):
+                        nb_total += 1
+                        if telecharger_fichier(lien, dossier_temp, index):
+                            nb_ok += 1
 
-            # Créer un fichier ZIP du dossier téléchargé
-            chemin_zip = shutil.make_archive(DOSSIER_TEMP, "zip", DOSSIER_TEMP)
+                if nb_total == 0:
+                    return render(request, "upload.html", {
+                        "form": form,
+                        "error": "Aucun lien de fiche sanitaire trouvé dans la colonne.",
+                    })
 
-            with open(chemin_zip, "rb") as f:
-                response = HttpResponse(f.read(), content_type="application/zip")
-                response["Content-Disposition"] = f'attachment; filename="fiches_sanitaires.zip"'
-            
-            # Supprimer le contenu du dossier sans supprimer le dossier lui-même
-            for fichier in os.listdir(DOSSIER_TEMP):
-                fichier_path = os.path.join(DOSSIER_TEMP, fichier)
-                if os.path.isfile(fichier_path) or os.path.islink(fichier_path):
-                    os.unlink(fichier_path)
-                elif os.path.isdir(fichier_path):
-                    shutil.rmtree(fichier_path)
-            
-            # Supprimer le fichier ZIP après téléchargement
-            if os.path.exists(ZIP_PATH):
-                os.remove(ZIP_PATH)
-            
-            return response
+                if nb_ok == 0:
+                    return render(request, "upload.html", {
+                        "form": form,
+                        "error": f"Aucun des {nb_total} fichiers n'a pu être téléchargé. "
+                                 "Les liens ont peut-être expiré ou nécessitent une connexion.",
+                    })
+
+                # Créer le ZIP dans un emplacement temporaire distinct du dossier source
+                base_zip = tempfile.mktemp(prefix="fiches_sanitaires_")
+                chemin_zip = shutil.make_archive(base_zip, "zip", dossier_temp)
+
+                # On ouvre le ZIP puis on le supprime du disque : le descripteur
+                # reste valide et FileResponse diffuse le contenu sans le charger en mémoire
+                zip_file = open(chemin_zip, "rb")
+                os.remove(chemin_zip)
+
+                response = FileResponse(
+                    zip_file,
+                    content_type="application/zip",
+                    as_attachment=True,
+                    filename="fiches_sanitaires.zip",
+                )
+                return response
+            finally:
+                shutil.rmtree(dossier_temp, ignore_errors=True)
 
     else:
         form = UploadFileForm()

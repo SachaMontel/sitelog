@@ -16,6 +16,11 @@
                 <i class="fas fa-file-excel"></i>
             </div>
             <h2>Uploader un fichier Excel</h2>
+            {% if error %}
+            <p style="color: #c0392b; background: #fdecea; border: 1px solid #c0392b; border-radius: 6px; padding: 10px; font-size: 14px;">
+                {{ error }}
+            </p>
+            {% endif %}
             <form action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="file-upload-wrapper">
