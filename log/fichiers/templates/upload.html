@@ -7,6 +7,39 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/upload.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <title>Upload Fichier Excel</title>
+    <style>
+        .error-box {
+            color: #c0392b;
+            background: #fdecea;
+            border: 1px solid #c0392b;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 14px;
+        }
+        #progress-zone {
+            display: none;
+            margin-top: 18px;
+        }
+        .progress-track {
+            width: 100%;
+            height: 14px;
+            background: #e8e8f0;
+            border-radius: 7px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #7c5cdb, #9b59f6);
+            border-radius: 7px;
+            transition: width 0.4s ease;
+        }
+        #progress-label {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
     <a href="{% url 'home' %}" class="home-button">Home</a>
@@ -16,12 +49,8 @@
                 <i class="fas fa-file-excel"></i>
             </div>
             <h2>Uploader un fichier Excel</h2>
-            {% if error %}
-            <p style="color: #c0392b; background: #fdecea; border: 1px solid #c0392b; border-radius: 6px; padding: 10px; font-size: 14px;">
-                {{ error }}
-            </p>
-            {% endif %}
-            <form action="" method="post" enctype="multipart/form-data">
+            <p id="error-box" class="error-box" style="display: none;"></p>
+            <form id="upload-form" action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="file-upload-wrapper">
                     <label for="file-upload" class="custom-file-upload">
@@ -30,16 +59,92 @@
                     </label>
                     {{ form.as_p }}
                 </div>
-                <button type="submit">
+                <button type="submit" id="submit-btn">
                     <i class="fas fa-download"></i>
                     Télécharger les fichiers
                 </button>
             </form>
+            <div id="progress-zone">
+                <div class="progress-track">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <p id="progress-label">Préparation…</p>
+            </div>
             <div class="upload-info">
                 <p>Formats acceptés: .xlsx, .xls</p>
                 <p>Taille maximale: 10 MB</p>
             </div>
         </div>
     </div>
+
+    <script>
+        const form = document.getElementById('upload-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const errorBox = document.getElementById('error-box');
+        const progressZone = document.getElementById('progress-zone');
+        const progressFill = document.getElementById('progress-fill');
+        const progressLabel = document.getElementById('progress-label');
+
+        function montrerErreur(message) {
+            errorBox.textContent = message;
+            errorBox.style.display = 'block';
+            progressZone.style.display = 'none';
+            submitBtn.disabled = false;
+        }
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            errorBox.style.display = 'none';
+            submitBtn.disabled = true;
+            progressZone.style.display = 'block';
+            progressFill.style.width = '0%';
+            progressLabel.textContent = 'Envoi du fichier Excel…';
+
+            let data;
+            try {
+                const response = await fetch('', { method: 'POST', body: new FormData(form) });
+                data = await response.json();
+            } catch (e) {
+                montrerErreur('Erreur de communication avec le serveur.');
+                return;
+            }
+            if (data.erreur) {
+                montrerErreur(data.erreur);
+                return;
+            }
+            suivreProgression(data.job_id);
+        });
+
+        async function suivreProgression(jobId) {
+            let progression;
+            try {
+                const response = await fetch('progress/' + jobId + '/');
+                progression = await response.json();
+            } catch (e) {
+                montrerErreur('Erreur de communication avec le serveur.');
+                return;
+            }
+
+            if (progression.erreur || progression.statut === 'erreur') {
+                montrerErreur(progression.erreur || progression.message);
+                return;
+            }
+
+            const pourcentage = progression.total ? Math.round(100 * progression.fait / progression.total) : 0;
+            progressFill.style.width = pourcentage + '%';
+            progressLabel.textContent = progression.fait + ' / ' + progression.total + ' fiches téléchargées';
+
+            if (progression.statut === 'termine') {
+                const rates = progression.total - progression.ok;
+                progressLabel.textContent = 'Terminé : ' + progression.ok + ' fiches dans le ZIP'
+                    + (rates > 0 ? ' (' + rates + ' liens en échec)' : '');
+                submitBtn.disabled = false;
+                window.location.href = 'download/' + jobId + '/';
+                return;
+            }
+
+            setTimeout(() => suivreProgression(jobId), 800);
+        }
+    </script>
 </body>
 </html>
